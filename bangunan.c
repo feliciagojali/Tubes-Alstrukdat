@@ -9,32 +9,32 @@ void MakeBangunan(Bangunan *B, POINT T, jns J, noMilik player){
 	Ordinat(Titik(*B))=Ordinat(T);
 	Jenis(*B)=J;
 	Pemilik(*B)=player;
-	lvl(*B)=1;
+	Lvl(*B)=1;
 	if(J='C'){
 		NTbhPskn(*B)=10;
-		MxTmPskn(B)(*B)=40;
+		MxTmPskn(*B)=40;
 		Defense(*B)=false;
 		AwalPskn(*B)=40;
 	}
 	else if(J='T'){
 		NTbhPskn(*B)=5;
-		MxTmPskn(B)(*B)=20;
+		MxTmPskn(*B)=20;
 		Defense(*B)=true;
 		AwalPskn(*B)=30;
 	}
 	else if(J='F'){
 		NTbhPskn(*B)=10;
-		MxTmPskn(B)(*B)=20;
+		MxTmPskn(*B)=20;
 		Defense(*B)=false;
 		AwalPskn(*B)=80;
 	}
 	else if(J='V'){
 		NTbhPskn(*B)=5;
-		MxTmPskn(B)(*B)=20;
+		MxTmPskn(*B)=20;
 		Defense(*B)=false;
 		AwalPskn(*B)=20;
 	}
-	NPskn(*B)=MxTmPskn(B);
+	NPskn(*B)=MxTmPskn(*B);
 }
 
 /* *****UBAH JUMLAH A,M,P***** */
@@ -46,11 +46,11 @@ void UbahBangunan(Bangunan *B, psknType A, psknType M, defense P){
 
 /* *****LEVEL UP***** */
 void LvlUp(Bangunan *B){
-	if (NPskn(*B)<MaksPskn(*B)){
+	if (NPskn(*B)<MxTmPskn(*B)){
 		printf("Jumlah pasukan <> kurang untuk level up\n");
 	}
 	else{
-		NPskn(*B)-=(MaksPskn(*B)/2);
+		NPskn(*B)-=(MxTmPskn(*B)/2);
 		if(Lvl(*B)==1){
 			Lvl(*B)=2;
 			if(Jenis(*B)=='C'){
