@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "mesinkata.h"
+#include "mesinkata.c"
 #include "boolean.h"
-#include "point.h"
-#include "listlinier.h"
+#include "point.c"
+#include "listlinier.c"
+#include "bangunan.c"
+#include "mesinkar.c"
 
 boolean isSuccess(int OwnArmy , int OwnEnemy) {
     if (OwnArmy < OwnEnemy) {
@@ -14,44 +16,62 @@ boolean isSuccess(int OwnArmy , int OwnEnemy) {
     }
 }
 
+void PrintJenisBangunan(Bangunan A) {
+    if (Jenis(Info(Y)) == 'C' ) {
+        printf("Castle ");
+    } else if (Jenis(Info(Y)) == 'F') {
+        printf("Fort ");
+    } else if (Jenis(Info(Y)) == 'T') {
+        printf("Tower ");
+    } else {
+        printf("Village ");
+    }
+
+
+}
 
 void PrintBangunan (List L){
     address Y = First(L);
-    if (!IsEmpty(L)) {
+    if (!IsEmptyList(L)) {
         int i = 1;
-        while(Y != Nil) {
+        while(Next(Y) != Nil) {
             printf("%d. ",i);
-            if (Jenis(Info(Y)) == 'C' ) {
-                printf('Castle ');
-            } else if (Jenis(Info(Y)) == 'F') {
-                printf('Fort ');
-            } else if (Jenis(Info(Y)) == 'T') {
-                printf('Tower ');
-            } else {
-                printf('Village ');
-            }
+            PrintJenisBangunan(Info(Y));
             TulisPOINT(Titik(Info(Y)));
             printf(" %d",NPskn(Info(Y)));
-            printf(' lvl. %d',Lvl(Info(Y)));
+            printf(" lvl. %d \n",Lvl(Info(Y)));
             i++;
             Y = Next(Y);
 
         } 
+    }
+}
 
 void ATTACK(){
-    int numOwn,numEnemy,army;
-    int X,Y;
+    int pasukan,numOwn,numEnemy,army;
+    List L1,L2;
+    Bangunan X,Y;
     printf("Daftar bangunan: \n"); //buat procedure aja kali ya
-    print();
     // ngeprint list bangunan yng ada menggunakan adt list
     scanf("Bangunan yang digunakan untuk menyerang: %d ",&numOwn);
     printf("Daftar bangunan yang dapat diserang: \n");
     // ngeprint list bangunan yang dapat diserang
     scanf("Bangunan yang diserang: %d",&numEnemy);
     scanf("Jumlah pasukan: %d",&army);
-    if (isSuccess(X,Y)) {
+
+    X = getBangunan(L1,numOwn);
+    Y = getBangunan(L2,numEnemy);
+    if (Defense(Y)) {
+        pasukan = (3*NPskn(X)/4);
+    } else {
+        pasukan = NPskn(X);
+    }
+
+    if (pasukan < NPskn(Y) ) {
+        NPskn(Y) -= pasukan;
         printf("Bangunan gagal direbut \n");
     } else {
+        Del
         printf("Bangunan menjadi milikmu! \n");
     }
 }
@@ -59,22 +79,54 @@ void ATTACK(){
 
 // bikin boolean cek ada yg bisa diserang atau ga
 // buat fungsi mengurangi pasukan 
+boolean isCanLevel (Bangunan A) {
+    int x = MxTmPskn(A);
+    if (NPskn(A) > x/2) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+boolean canHijack(Bangunan A, Bangunan B) {
+    if Defense(B) {
+
+    }
+    
+}
+
+int attackPasukan(Bangunan A,Bangunan B){
+    
 
 
-void LEVEL_UP(){
+
+}
+Bangunan getBangunan(List L,int num){
+    int i = 1;
+    address P = First(L);
+    while(i < num){
+        P = Next(P);
+    }
+    return (Info(P));
+
+}
+void LEVEL_UP(List L){
     printf("LEVEL UP");
-    // int numBuilding;
-    // printf("Daftar bangunan: \n");
+    int numBuilding;
+    printf("Daftar bangunan: \n");
+    PrintBangunan(L);
     // // print list bangunan yang dimiliki
-    // printf("Bangunan yang akan di level up: ");
-    // scanf("%d", &numBuilding);
-    // if(isCanLevel(building, army)){
-    //     // level building naik
-    //     printf("Level (jenis bangunan)-mu meningkat menjadi level (level yang baru)");
-    // }
-    // else{
-    //     printf("Jumlah pasukan (jenis bangunan) kurang untuk level up");
-    // }
+    printf("Bangunan yang akan di level up: ");
+    scanf("%d", &numBuilding);
+    A = getBangunan(L,numBuilding);
+
+    if(isCanLevel(A)){
+        Lvl(A) += 1;
+    } else {
+        printf("Jumlah pasukan ");
+        PrintJenisBangunan(A);
+        printf("kurang untuk level up");
+    }
 }
 
 void SKILL(){
@@ -150,7 +202,19 @@ void inputCommand(){ // nanti ganti void INPUT_COMMAND()
 
 }
 
-void print(){
+void InsListPlayer(List *L, Bangunan A) {
+
+    // memasukan bangunan dengan pemilik 1 ke list A dan pemilik 2 ke list B
+    if (Pemilik(A) == 1) {
+        InsVFirst(L,A);
+    } else {
+        InsVFirst(L,B);
+    }
+
+
+}
+
+int main(){
     // kamus
     List L;
     Bangunan A,B,C;
@@ -162,10 +226,10 @@ void print(){
     MakeBangunan(&B,P2,'V',1);
     MakeBangunan(&C,P3,'T',1);
 
-    InsertVFirst(&L,A);
-    InsertVFirst(&L,B);
-    InsertVFirst(&L,C);
+    InsVFirst(&L,A);
+    InsVFirst(&L,B);
+    InsVFirst(&L,C);
 
     PrintBangunan(L);
-
+return 0;
 }

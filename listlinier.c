@@ -80,7 +80,7 @@ void DelVLast (List *L, infotype *X){
     if(NbElmt(*L) == 1){
         *X = Info(P);
         Next(P) = Nil;
-        CreateEmpty(L);
+        CreateEmptyList(L);
     }
     else{
         while(Next(P) != Nil){
@@ -113,7 +113,7 @@ void InsertAfter (List *L, address P, address Prec){
 /* F.S. Insert P sebagai elemen sesudah elemen beralamat Prec */
 void InsertLast (List *L, address P){
     address Y = First(*L);
-    if(IsEmpty(*L)){
+    if(IsEmptyList(*L)){
         InsertFirst(L, P);
     }
     else{
@@ -185,8 +185,8 @@ int NbElmt (List L){
 /****************** PROSES TERHADAP LIST ******************/
 void Konkat1 (List *L1, List *L2, List *L3){
     address P;
-    CreateEmpty(L3);
-    if(!IsEmpty(*L1) && !IsEmpty(*L2)){
+    CreateEmptyList(L3);
+    if(!IsEmptyList(*L1) && !IsEmptyList(*L2)){
         First(*L3) = First(*L1);
         P = First(*L3);
         while(Next(P) != Nil){
@@ -194,14 +194,14 @@ void Konkat1 (List *L1, List *L2, List *L3){
         }
         Next(P) = First(*L2);
     }
-    else if(IsEmpty(*L1) && !IsEmpty(*L2)){
+    else if(IsEmptyList(*L1) && !IsEmptyList(*L2)){
         First(*L3) = First(*L2);
     }
-    else if(!IsEmpty(*L1) && IsEmpty(*L2)){
+    else if(!IsEmptyList(*L1) && IsEmptyList(*L2)){
         First(*L3) = First(*L1);
     }
-    CreateEmpty(L1);
-    CreateEmpty(L2);
+    CreateEmptyList(L1);
+    CreateEmptyList(L2);
 }
 /* I.S. L1 dan L2 sembarang */
 /* F.S. L1 dan L2 kosong, L3 adalah hasil konkatenasi L1 & L2 */

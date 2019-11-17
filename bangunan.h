@@ -7,7 +7,7 @@
 #include "point.h"
 
 typedef char jns;			//tipe jenis bangunan 'C','T','F','V'
-typedef int noMilik;		//tipe kepemilikan
+typedef int noMilik;		//tipe kepemilikan, player 1 '1', player 2 '2'
 typedef int psknType;		//tipe jumlah pasukan
 typedef int lvl;			//tipe lvl bangunan
 typedef boolean defense;	//tipe pertahanan
