@@ -17,6 +17,11 @@ void IgnoreBlank()
     }
 }
 
+void STARTKATA_KEYBOARD(char *str){
+    printf("ENTER COMMAND: ");
+    gets(str);
+}
+
 void STARTKATA()
 /* I.S. : CC sembarang
    F.S. : EndKata = true, dan CC = MARK;

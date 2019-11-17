@@ -183,42 +183,30 @@ void EXIT(){
 }
 
 void inputCommand(){ // nanti ganti void INPUT_COMMAND()
-    char cmd[10];
-    boolean is = true;
-    List L;
-    do { gets(cmd);
-    
-        if (strcmp(cmd, "ATTACK") == 0) {
-            ATTACK();
-            is = true;
-        }
-        else if(strcmp(cmd, "LEVEL_UP") == 0){
-            LEVEL_UP(L);
-            is = true;
-        }
-        else if(strcmp(cmd, "SKILL") == 0){
-            SKILL();
-            is = true;
-        }
-        else if(strcmp(cmd, "UNDO") == 0){
-            UNDO();
-            is = true;
-        }
-        else if(strcmp(cmd, "END_TURN") == 0){
-            END_TURN();
-            is = true;
-        }
-        else if(strcmp(cmd, "SAVE") == 0){
-            SAVE();
-            is = true;
-        }
-
-        else{
-            printf("Check your spelling please\n");
-            is = false;
-        }
-    }while (!is);
-
+    char str[50];
+    STARTKATA_KEYBOARD(str); 
+    if (isCommandSame(str, "ATTACK")) {
+        ATTACK();
+    }
+    else if(isCommandSame(str, "LEVEL_UP")){
+        LEVEL_UP();
+    }
+    else if(isCommandSame(str, "SKILL")){
+        SKILL();
+    }
+    else if(isCommandSame(str, "UNDO")){
+        UNDO();
+    }
+    else if(isCommandSame(str, "END_TURN")){
+        END_TURN();
+    }
+    else if(isCommandSame(str, "SAVE")){
+        SAVE();
+    }
+    else{
+        printf("Check your spelling please...\n");
+        INPUT_COMMAND();
+    }
 }
 
 void InsListPlayer(List *L, Bangunan A) {
@@ -232,24 +220,4 @@ void InsListPlayer(List *L, Bangunan A) {
     }
 
 
-}
-
-int main(){
-    // kamus
-    List L;
-    Bangunan A,B,C;
-    POINT P = MakePOINT(2,5);
-    POINT P2 = MakePOINT(1,4);
-    POINT P3 = MakePOINT(8,8);
-
-    MakeBangunan(&A,P,'C',1);
-    MakeBangunan(&B,P2,'V',1);
-    MakeBangunan(&C,P3,'T',1);
-
-    InsVFirst(&L,A);
-    InsVFirst(&L,B);
-    InsVFirst(&L,C);
-
-    PrintBangunan(L);
-return 0;
 }

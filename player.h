@@ -1,0 +1,23 @@
+#ifndef player_H
+#define player_H
+
+#include "boolean.h"
+#include "player.h"
+#include "listlinier.h"
+#include "bangunan.h"
+
+typedef struct {
+    int ID;
+    List listBangunan;
+} Player;
+
+#define ID(P) (P)->ID
+#define listB(P) (P)->listBangunan
+
+Player initPlayer(int id);
+
+void PrintBangunan(int id);
+
+void PrintJenisBangunan(Bangunan A);
+
+#endif
