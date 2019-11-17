@@ -92,9 +92,15 @@ void DelVLast (List *L, infotype *X){
         DealokasiList(&P);
     }    
 }
-/* I.S. list tidak kosong */
-/* F.S. Elemen terakhir list dihapus: nilai info disimpan pada X */
-/*      dan alamat elemen terakhir di-dealokasi */
+void DelBangunan(List *L, address X){
+    address P = First(*L);
+
+    while (Next(P) != Nil && Next(P) != X){
+        P = Next(P);
+    }
+    address A = Next(Next(P));
+    Next(P) = A;
+}
 
 /****************** PRIMITIF BERDASARKAN ALAMAT ******************/
 /*** PENAMBAHAN ELEMEN BERDASARKAN ALAMAT ***/
