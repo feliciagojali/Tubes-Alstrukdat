@@ -97,6 +97,7 @@ void ATTACK(){
     } else {
         DelBangunan(&L2,getAdrsBangunan(L2,numEnemy));
         InsVLast(&L1,Y);
+        NPskn(Y) = pasukan - NPskn(Y);
         printf("Bangunan menjadi milikmu! \n");
     }
 }
