@@ -8,6 +8,7 @@
 #include "bangunan.c"
 #include "mesinkar.c"
 #include "player.c"
+#include "arraydin.c"
 
 boolean isSuccess(int OwnArmy , int OwnEnemy) {
     if (OwnArmy < OwnEnemy) {
@@ -49,7 +50,7 @@ void assignBangunan(List L, int num, Bangunan *B){
 
 }
 
-void ATTACK(Player *P1, Player *P2, boolean *atkup){
+void ATTACK(Player *P1, Player *P2, boolean *atkup, boolean *critical){
     int pasukan,numOwn,numEnemy,army;
     printf("Daftar bangunan: \n"); //buat procedure aja kali ya
     // ngeprint list bangunan yng ada menggunakan adt list
@@ -245,9 +246,10 @@ boolean GAME_OVER(Player P1, Player P2){
 }
 
 void inputCommand(Player *P1, Player *P2){ // nanti ganti void INPUT_COMMAND()
+
     boolean move = true;
     boolean extra = false;
-    boolean atkup = false;
+    boolean atkup,critical = false;
     char str[50];
     StartSkills(P1);
     StartSkills(P2);
@@ -257,7 +259,7 @@ void inputCommand(Player *P1, Player *P2){ // nanti ganti void INPUT_COMMAND()
         while(act(*P1) == 1){
             STARTKATA_KEYBOARD(str); 
             if (isCommandSame(str, "ATTACK")) {
-                ATTACK(P1,P2,&atkup);
+                ATTACK(P1,P2,&atkup,&critical);
             }
             else if(isCommandSame(str, "LEVEL_UP")){
                 LEVEL_UP(P1);

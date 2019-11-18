@@ -10,7 +10,7 @@
 #include "bangunan.h"
 
 
-typedef Bangunan infotypeB;
+typedef int infotypeB;
 typedef struct tElmtlist *addressB;
 typedef struct tElmtlist {
 	infotypeB info;
