@@ -6,6 +6,7 @@
 #include "skills.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "arraydin.h"
 //NOTE
 
 
@@ -59,7 +60,7 @@ void StartSkills(Queue *Q)
         Add(Q,1);
     }
 
-void UseSkills(Queue *Q, Stack *S)
+void UseSkills(Queue *Q, Stack *S, boolean *IsExtraTurn)
 //Pemain mungkin tidak memiliki skill (queue kosong)
 //Prosedur yang digunakan untuk menggunakan skills yang dimiliki pemain
 // Q dan S telah terdefinisi sebelumnya
@@ -98,7 +99,7 @@ void UseSkills(Queue *Q, Stack *S)
                 }
                 else if (X == 3)
                 {
-                    ExtraTurn();
+                    ExtraTurn(IsExtraTurn);
                 }
                 else if (X == 4)
                 {
@@ -149,17 +150,21 @@ void InputSkills(Queue *Q,int X)
         }
     }
 
-void InstantUpgrade()
+void InstantUpgrade(//List atau arraydin pemain)
 //Pada stackt dan Queue int 1
 //Bangunan akan naik 1 level
 //Skill hanya ada di daftar skill awal
 //PARAMETER TERGNTUNG INPUT BANGUNAN
-
+//Masih bingung adt bangunannyaa maksudnya apa, gaada penjelasannya di ADT NYA
     {
-        /*Castle.Level = 1;
-        Tower.Level = 1;
-        Fort.Level = 1;
-        Village.Level = 1;*/
+        //Lopping bangunan di list/ arraydin
+        //Levelup tanpa ngeliat pasukannya
+        /*while (X != NULL)
+        {
+            Lvl(Info(X)) += 1;
+            X = Next(X);
+        }*/
+        
     }
 void Shield() //-->Bonus
 //Pada stackt dan Queue int 2
@@ -169,13 +174,14 @@ void Shield() //-->Bonus
 {
 
 }
-void ExtraTurn()
+
+void ExtraTurn(boolean *IsExTurn)
 //Pada stackt dan Queue int 3
 //Ketika diaktifkan, setelah gilirannya berakhir
 //pemain selanjutnya tetap pemain yang sama
 //Pemain mendapat skill ini jika Fort pemain tersebut direbut lawan
 {
-
+    IsExTurn = true;
 }
 void AttackUp() //-->Bonus
 //Pada stackt dan Queue int 4

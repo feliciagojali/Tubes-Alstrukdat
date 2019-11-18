@@ -8,6 +8,7 @@
 #include "boolean.h"
 #include "stackt.h"
 #include "Queue.h"
+#include "bangunan.h"
 
 #ifndef skills_H
 #define skills_H
@@ -22,7 +23,7 @@ void StartSkills(Queue *Q);
 //Membuat Queue berisi skill untuk pemain
 //PARAMETERNYA NANTI TYPE BANGUNAN
 
-void UseSkills(Queue *Q, Stack *S);
+void UseSkills(Queue *Q, Stack *S, boolean *IsExtraTurn);
 //Pemain mungkin tidak memiliki skill (queue kosong)
 //Prosedur yang digunakan untuk menggunakan skills yang dimiliki pemain
 //Ketika command skill di input
@@ -47,7 +48,7 @@ void Shield(); //-->Bonus
 //jika digunakan 2 kali berturut turut, durasi tidak bertambah
 //Namun nilai maksimum
 
-void ExtraTurn();
+void ExtraTurn(boolean *IsExTurn);
 //Pada stackt dan Queue int 3
 //Ketika diaktifkan, setelah gilirannya berakhir
 //pemain selanjutnya tetap pemain yang sama
