@@ -17,9 +17,9 @@ boolean isSuccess(int OwnArmy , int OwnEnemy) {
     }
 }
 
-address getAdrsBangunan(List L,int num){
+addressB getAdrsBangunan(List L,int num){
     int i = 1;
-    address P = First(L);
+    addressB P = First(L);
     while(i<num){
         P = Next(P);
     }
@@ -27,7 +27,7 @@ address getAdrsBangunan(List L,int num){
 }
 void assignBangunan(List L, int num, Bangunan *B){
     int i = 1;
-    address P = First(L);
+    addressB P = First(L);
     while(i<num){
         P = Next(P);
     }
@@ -43,18 +43,19 @@ void assignBangunan(List L, int num, Bangunan *B){
     AwalPskn(*B) = AwalPskn(Info(P));
 
 }
-void ATTACK(Player *P){
+void ATTACK(Player *P1, Player *P2){
     int pasukan,numOwn,numEnemy,army;
     Bangunan X,Y;
     printf("Daftar bangunan: \n"); //buat procedure aja kali ya
     // ngeprint list bangunan yng ada menggunakan adt list
+    PrintBangunan(*P1);
     scanf("Bangunan yang digunakan untuk menyerang: %d ",&numOwn);
     printf("Daftar bangunan yang dapat diserang: \n");
     // ngeprint list bangunan yang dapat diserang
     scanf("Bangunan yang diserang: %d",&numEnemy);
     scanf("Jumlah pasukan: %d",&army);
-    assignBangunan(L1,numOwn,&X);
-    assignBangunan(L2,numEnemy,&Y);
+    assignBangunan(listB(*P1),numOwn,&X);
+    assignBangunan(listB(*P2),numEnemy,&Y);
     if (Defense(Y)) {
         pasukan = (3*NPskn(X)/4);
     } else {
@@ -65,14 +66,31 @@ void ATTACK(Player *P){
         NPskn(Y) -= pasukan;
         printf("Bangunan gagal direbut \n");
     } else {
-        DelBangunan(&L2,getAdrsBangunan(L2,numEnemy));
-        InsVLast(&L1,Y);
+        DelBangunan(&listB(*P2),getAdrsBangunan(listB(*P2),numEnemy));
+        InsVLast(&listB(*P1),Y);
         NPskn(Y) = pasukan - NPskn(Y);
         printf("Bangunan menjadi milikmu! \n");
     }
 }
 
-
+boolean isCommandSame(char *strg1, char *strg2)
+{
+    while( ( *strg1 != '\0' && *strg2 != '\0' ) && *strg1 == *strg2 )
+    {
+        strg1++;
+        strg2++;
+    }
+ 
+    if(*strg1 == *strg2)
+    {
+        return true; // strings are identical
+    }
+ 
+    else
+    {
+        return *strg1 - *strg2;
+    }
+}
 // bikin boolean cek ada yg bisa diserang atau ga
 // buat fungsi mengurangi pasukan 
 boolean isCanLevel (Bangunan A) {
@@ -86,17 +104,16 @@ boolean isCanLevel (Bangunan A) {
 
 
 
-void LEVEL_UP(List L){
+void LEVEL_UP(Player *P){
     printf("LEVEL UP");
     int numBuilding;
     printf("Daftar bangunan: \n");
-    PrintBangunan(L);
+    PrintBangunan(*P);
     // // print list bangunan yang dimiliki
     printf("Bangunan yang akan di level up: ");
     scanf("%d", &numBuilding);
-    address P = getAdrsBangunan(L,numBuilding);
     Bangunan A; 
-    assignBangunan(L,numBuilding,&A);
+    assignBangunan(listB(*P),numBuilding,&A);
 
 
     if(isCanLevel(A)){
@@ -145,17 +162,19 @@ void EXIT(){
 
 void inputCommand(Player *P1, Player *P2){ // nanti ganti void INPUT_COMMAND()
     char str[50];
+    int i =1;
+    act(*P1) = 1;
     STARTKATA_KEYBOARD(str); 
     if (isCommandSame(str, "ATTACK")) {
-        if(act(P1) == 1){
-            ATTACK(P1);
+        if(act(*P1) == 1){
+            ATTACK(P1,P2);
         }
         else{
-            ATTACK(P2);
+            ATTACK(P2,P1);
         }
     }
     else if(isCommandSame(str, "LEVEL_UP")){
-        LEVEL_UP();
+        LEVEL_UP(P1);
     }
     else if(isCommandSame(str, "SKILL")){
         SKILL();
@@ -171,10 +190,7 @@ void inputCommand(Player *P1, Player *P2){ // nanti ganti void INPUT_COMMAND()
     }
     else{
         printf("Check your spelling please...\n");
-        INPUT_COMMAND();
     }
 }
 
 
-
-}

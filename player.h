@@ -25,7 +25,7 @@ void PrintJenisBangunan(Bangunan A);
 
 void PrintBangunan(Player P);
 
-void InsBangunan(Player *P);
+void InsBangunan(Bangunan A, Player *P);
 
 void StartSkills(Player *P);
 //Prosedur yang digunakan saat pertama kali game diaktifkan
