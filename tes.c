@@ -24,7 +24,7 @@ int main(){
    MakeBangunan(&D,Po,'C',2);
    MakeBangunan(&E,Po2,'V',2);
    MakeBangunan(&F,Po3,'T',2);
-   
+
    AddAsLastEl(&TabBangunan,A);
    AddAsLastEl(&TabBangunan,B);
    AddAsLastEl(&TabBangunan,C);
@@ -32,7 +32,13 @@ int main(){
    AddAsLastEl(&TabBangunan,E);
    AddAsLastEl(&TabBangunan,F);
 
-   
+   for (int i = GetFirstIdx(TabBangunan); i<= GetLastIdx(TabBangunan); i++) {
+      if (Pemilik(Elmt(TabBangunan,i)) == 1) {
+         InsVLast(&listB(P1),i);
+      } else if (Pemilik(Elmt(TabBangunan,i)) == 2) {
+         InsVLast(&listB(P2),i);
+      }
+   }
    printf("Bangunan milik Player 1:\n");
    PrintBangunan(P1);
    printf("Bangunan milik Player 2:\n");
