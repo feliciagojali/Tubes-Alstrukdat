@@ -27,7 +27,7 @@ void PrintBangunan(Player P);
 
 void InsBangunan(Bangunan A, Player *P);
 
-int countTower (Player *P);
+int countTower (Player P);
 
 void StartSkills(Player *P);
 //Prosedur yang digunakan saat pertama kali game diaktifkan

@@ -90,7 +90,9 @@ void ATTACK(Player *P1, Player *P2, boolean *atkup){
         InsVLast(&listB(*P1),Info(Y));
         NPskn(Info(Y)) = army - NPskn(Info(Y));
     }
-    // if (Jenis(Info(Y) == 'T')) && noMilik(Info(Y)) != 0 && 
+    if ((Jenis(Info(Y)) == 'T') && (Pemilik(Info(Y)) != 0) && (countTower(*P1) == 3)) {
+        InputSkills(P1,4);
+    }
     printf("daftar : \n");
     PrintBangunan(*P1);
     printf("daftar : \n");

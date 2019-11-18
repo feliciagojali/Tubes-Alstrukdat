@@ -45,10 +45,10 @@ void InsBangunan(Bangunan A,Player *P)
 {
     InsVLast(&listB(*P), A);
 }
-int countTower(Player *P){
+int countTower(Player P){
 
     int jumlah = 0;
-    addressB X = First(listB(*P));
+    addressB X = First(listB(P));
     while (X != NULL) {
         if (Jenis(Info(X)) == 'T') {
             jumlah +=1;
