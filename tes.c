@@ -4,10 +4,12 @@
 #include "player.h"
 #include "bangunan.h"
 #include "listlinier.h"
-
+#include "arraydin.h"
 int main(){
    // INPUT_COMMAND();
-   
+   TabInt TabBangunan;
+   MakeEmpty(&TabBangunan,50);
+
     // kamus
    Player P1 = initPlayer(1);
    Player P2 = initPlayer(2);
@@ -22,15 +24,15 @@ int main(){
    MakeBangunan(&D,Po,'C',2);
    MakeBangunan(&E,Po2,'V',2);
    MakeBangunan(&F,Po3,'T',2);
+   
+   AddAsLastEl(&TabBangunan,A);
+   AddAsLastEl(&TabBangunan,B);
+   AddAsLastEl(&TabBangunan,C);
+   AddAsLastEl(&TabBangunan,D);
+   AddAsLastEl(&TabBangunan,E);
+   AddAsLastEl(&TabBangunan,F);
 
-   InsVFirst(&listB(P1),A);
-   InsVFirst(&listB(P1),B);
-   InsVFirst(&listB(P1),C);
-
-   InsVFirst(&listB(P2),F);
-   InsVFirst(&listB(P2),F);
-   InsVFirst(&listB(P2),F);  
-
+   
    printf("Bangunan milik Player 1:\n");
    PrintBangunan(P1);
    printf("Bangunan milik Player 2:\n");
