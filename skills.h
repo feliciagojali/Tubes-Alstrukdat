@@ -12,12 +12,18 @@
 #ifndef skills_H
 #define skills_H
 
+void PrintSkills(Queue *Q, int X);
+//Prosedur untuk print infoHead untuk skill dari QUEUE
+//Skill dimasukan kedalam stack dalam bentuk integer
+// 1-7
+
 void StartSkills(Queue *Q);
 //Prosedur yang digunakan saat pertama kali game diaktifkan
 //Membuat Queue berisi skill untuk pemain
 //PARAMETERNYA NANTI TYPE BANGUNAN
 
 void UseSkills(Queue *Q, Stack *S);
+//Pemain mungkin tidak memiliki skill (queue kosong)
 //Prosedur yang digunakan untuk menggunakan skills yang dimiliki pemain
 //Ketika command skill di input
 //Skill yang dapat digunakan adalah skill di head queue

@@ -7,13 +7,49 @@
 #include <stdlib.h>
 #include <stdio.h>
 //NOTE
-//KEPEMILIKANNYA GIMANA BLOM TAU
+
 
 
 //Kamus
 int Max_Queue = 10;
 
 //Algoritma
+void PrintSkills(Queue *Q, int X)
+//Prosedur untuk print infoHead untuk skill dari QUEUE
+//Skill dimasukan kedalam stack dalam bentuk integer
+// 1-7
+    {
+        if (X == 1)
+        {
+            printf("InstantUpgrade");
+
+        }
+        else if (X == 2)
+        {
+            printf("Shield");
+        }
+        else if (X == 3)
+        {
+            printf("ExtraTurn");
+        }
+        else if (X == 4)
+        {
+            printf("AttackUp");
+        }
+        else if (X == 5)
+        {
+            printf("CriticalHit");
+        }
+        else if (X == 6)
+        {
+            printf("InstantReinforcement");
+        }
+        else if (X == 7)
+        {
+            printf("Barrage");
+        }
+    }
+
 void StartSkills(Queue *Q)
 //Prosedur yang digunakan saat pertama kali game diaktifkan
 //Membuat Queue berisi skill untuk pemain
@@ -24,6 +60,7 @@ void StartSkills(Queue *Q)
     }
 
 void UseSkills(Queue *Q, Stack *S)
+//Pemain mungkin tidak memiliki skill (queue kosong)
 //Prosedur yang digunakan untuk menggunakan skills yang dimiliki pemain
 // Q dan S telah terdefinisi sebelumnya
 //Ketika command skill di input
@@ -33,83 +70,82 @@ void UseSkills(Queue *Q, Stack *S)
     {
         //Kamus Lokal
         int X;
+        char Answer;
 
         //Algoritma
-        if (IsEmpty_Queue (&Q))
+        if (IsEmpty_Queue (*Q))
         {
-            printf("Kamu tidak memiliki skill lagi");
+            printf("Kamu tidak memiliki skill\n");
         }
-        
-        while (!IsEmpty_Queue (&Q))
-        {        
-            Del(&Q, &X);
-            Push(&S, X);
-            if (X == 1)
+        else
+        {   
+            printf("Skill yang dapat kamu gunakan sekarang :\n");
+            PrintSkills(Q, InfoHead(*Q));
+            printf("\n \n");
+            printf("Apakah kamu akan menggunakan skill tersebut? (Y, N)\n");
+            scanf("\n%c",&Answer);
+            if (Answer == 'Y')
             {
-                InstantUpgrade();
+                Del(Q, &X);
+                //Kosongin stactk
+                if (X == 1)
+                {
+                    InstantUpgrade();
+                }
+                else if (X == 2)
+                {
+                    Shield();
+                }
+                else if (X == 3)
+                {
+                    ExtraTurn();
+                }
+                else if (X == 4)
+                {
+                    AttackUp();
+                }
+                else if (X == 5)
+                {
+                    CriticalHit();
+                }
+                else if (X == 6)
+                {
+                    InstantReinforcement();
+                }
+                else if (X == 7)
+                {
+                    Barrage();
+                }
+                printf("Kamu berhasil menggunakan skill ");
+                PrintSkills(Q,X);
+                printf("\n");
             }
-            else if (X == 2)
+            else if (Answer == 'N')
             {
-                Shield();
+                printf("Kamu tidak menggunakan skill apapun! silahkan lanjut bermain!! \n");
             }
-            else if (X == 3)
-            {
-                ExtraTurn();
-            }
-            else if (X == 4)
-            {
-                AttackUp();
-            }
-            else if (X == 5)
-            {
-                CriticalHit();
-            }
-            else if (X == 6)
-            {
-                InstantReinforcement();
-            }
-            else if (X == 7)
-            {
-                Barrage();
-            }
+            
         }
     }
 
 void InputSkills(Queue *Q,int X)
+//Queue skill mungkin penuh
 //Prosedur yang digunakan untuk nambahin skill ke Queue
 //Queue berisikan integer
 //digunain di main program saat ada keadaan
 //dimana membuat seorang pemain mendapatkan skills tertentu
 //int yang terdefinisi adalah 2-7
-    {
-        if (X >=2 && X <= 6)
+    {   
+        if (IsFull_Queue (*Q))
+        {
+            printf("Skill hangus! Kamu masih memiliki 10 Skill!");
+        }
+        else if (X >=2 && X <= 6)
         {
             Add(Q,X);
-            printf("Selamat Anda mendapatkan Skill ");
-            if (X == 2)
-            {
-                printf("Shield\n");
-            }
-            else if (X == 3)
-            {
-                printf("ExtraTurn\n");
-            }
-            else if (X == 4)
-            {
-                printf("AttackUp\n");
-            }
-            else if (X == 5)
-            {
-                printf("CriticalHit\n");
-            }
-            else if (X == 6)
-            {
-                printf("InstantReinforcement\n");
-            }
-            else if (X == 7)
-            {
-                printf("Barrage\n");
-            }
+            printf("Selamat Anda berhasil menambahkan Skill ");
+            PrintSkills(Q,X);
+            printf("ke dalam daftar skillmu! \n");
         }
     }
 
