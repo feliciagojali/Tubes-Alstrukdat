@@ -27,19 +27,21 @@ void PrintBangunan(Player P);
 
 void InsBangunan(Bangunan A, Player *P);
 
+int countTower (Player *P);
+
 void StartSkills(Player *P);
 //Prosedur yang digunakan saat pertama kali game diaktifkan
 //Membuat Queue berisi skill untuk pemain
 //PARAMETERNYA NANTI TYPE BANGUNAN
 
-void UseSkills(Queue *Q, Stack *S);
+void UseSkills(Player *P, boolean *extra, boolean *atkup);
 //Prosedur yang digunakan untuk menggunakan skills yang dimiliki pemain
 //Ketika command skill di input
 //Skill yang dapat digunakan adalah skill di head queue
 //input berupa integer karena setiap skill dilambangkan dengan
 //integer 1-7
 
-void InputSkills(Queue *Q,int X);
+void InputSkills(Player *P,int X);
 //Prosedur yang digunakan untuk nambahin skill ke Queue
 //Queue berisikan integer
 //digunain di main program saat ada keadaan

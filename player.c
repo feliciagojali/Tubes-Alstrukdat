@@ -45,8 +45,39 @@ void InsBangunan(Bangunan A,Player *P)
 {
     InsVLast(&listB(*P), A);
 }
+int countTower(Player *P){
 
-//Algoritma
+    int jumlah = 0;
+    addressB X = First(listB(*P));
+    while (X != NULL) {
+        if (Jenis(Info(X)) == 'T') {
+            jumlah +=1;
+        }
+    }
+    return jumlah;
+}
+/* ---- BAGIAN SKILL ---- */
+void printHeadSkills(Player *P) 
+// prosedur mengeluarkan skill yang ada di Head dari queue
+{
+    printf("Skill Available : ");
+    int x = Head(skill(*P));
+    if (x == 1){
+        printf("Instant Upgrade \n");
+    } else if (x == 2) {
+        printf("Shield \n");
+    } else if (x == 3) {
+        printf("Extra Turn \n");
+    } else if (x == 4) {
+        printf("Attack Up \n");
+    } else if (x == 5) {
+        printf("Critical Hit \n");
+    } else if (x == 6) {
+        printf("Instant Reinforcement \n");
+    } else if (x == 7) {
+        printf("Barrage \n");
+    }
+}
 void StartSkills(Player *P)
 //Prosedur yang digunakan saat pertama kali game diaktifkan
 //Membuat Queue berisi skill untuk pemain
@@ -56,7 +87,7 @@ void StartSkills(Player *P)
         Add(&skill(*P),1);
     }
 
-void UseSkills(Queue *Q, Stack *S)
+void UseSkills(Player *P, boolean *extra, boolean *atkup)
 //Prosedur yang digunakan untuk menggunakan skills yang dimiliki pemain
 // Q dan S telah terdefinisi sebelumnya
 //Ketika command skill di input
@@ -68,39 +99,42 @@ void UseSkills(Queue *Q, Stack *S)
         int X;
 
         //Algoritma
-        Del(Q, &X);
-        Push(S, X);
-        if (X == 1)
-        {
-            InstantUpgrade();
-        }
-        else if (X == 2)
-        {
-            Shield();
-        }
-        else if (X == 3)
-        {
-            ExtraTurn();
-        }
-        else if (X == 4)
-        {
-            AttackUp();
-        }
-        else if (X == 5)
-        {
-            CriticalHit();
-        }
-        else if (X == 6)
-        {
-            InstantReinforcement();
-        }
-        else if (X == 7)
-        {
-            Barrage();
+        if (IsEmpty_Queue(skill(*P))) {
+            printf("Kamu tidak memiliki skill apapun ! \n");
+        } else {
+            Del(&skill(*P), &X);
+            if (X == 1)
+            {
+                InstantUpgrade();
+            }
+            else if (X == 2)
+            {
+                Shield();
+            }
+            else if (X == 3)
+            {
+                (*extra) = true;
+            }
+            else if (X == 4)
+            {
+                (*atkup) = true;
+            }
+            else if (X == 5)
+            {
+                CriticalHit();
+            }
+            else if (X == 6)
+            {
+                InstantReinforcement();
+            }
+            else if (X == 7)
+            {
+                Barrage();
+            }
         }
     }
 
-void InputSkills(Queue *Q,int X)
+void InputSkills(Player *P,int X)
 //Prosedur yang digunakan untuk nambahin skill ke Queue
 //Queue berisikan integer
 //digunain di main program saat ada keadaan
@@ -109,7 +143,7 @@ void InputSkills(Queue *Q,int X)
     {
         if (X >=2 && X <= 6)
         {
-            Add(Q,X);
+            Add(&skill(*P),X);
             printf("Selamat Anda mendapatkan Skill ");
             if (X == 2)
             {
@@ -138,18 +172,20 @@ void InputSkills(Queue *Q,int X)
         }
     }
 
-void InstantUpgrade()
+void InstantUpgrade(Player *P)
 //Pada stackt dan Queue int 1
 //Bangunan akan naik 1 level
 //Skill hanya ada di daftar skill awal
 //PARAMETER TERGNTUNG INPUT BANGUNAN
-
-    {
-        /*Castle.Level = 1;
-        Tower.Level = 1;
-        Fort.Level = 1;
-        Village.Level = 1;*/
+{
+    addressB X = First(listB(*P));
+    while (X != NULL){
+        Lvl(Info(X)) += 1;
+        X = Next(X);
     }
+}
+
+    
 void Shield() //-->Bonus
 //Pada stackt dan Queue int 2
 //Seluruh bangunan akan memiliki pertahanan selama 2 turn

@@ -48,7 +48,8 @@ void assignBangunan(List L, int num, Bangunan *B){
     AwalPskn(*B) = AwalPskn(Info(P));
 
 }
-void ATTACK(Player *P1, Player *P2){
+
+void ATTACK(Player *P1, Player *P2, boolean *atkup){
     int pasukan,numOwn,numEnemy,army;
     printf("Daftar bangunan: \n"); //buat procedure aja kali ya
     // ngeprint list bangunan yng ada menggunakan adt list
@@ -70,10 +71,14 @@ void ATTACK(Player *P1, Player *P2){
         Y = Next(Y);
         i++;
     }
-    
-    if (Defense(Info(Y))) {
-        army = (3*NPskn(Info(X)))/4;
-        printf("X");
+
+    if ((Jenis(Info(Y)) == 'F') && (Pemilik(Info(Y)) != 0 )){
+         InputSkills(P2,3);   
+    }
+    if (!(*atkup)) { 
+        if (Defense(Info(Y))) {
+            army = (3*NPskn(Info(X)))/4;
+        } 
     } 
     
     if (army < NPskn(Info(Y))) {
@@ -85,6 +90,7 @@ void ATTACK(Player *P1, Player *P2){
         InsVLast(&listB(*P1),Info(Y));
         NPskn(Info(Y)) = army - NPskn(Info(Y));
     }
+    // if (Jenis(Info(Y) == 'T')) && noMilik(Info(Y)) != 0 && 
     printf("daftar : \n");
     PrintBangunan(*P1);
     printf("daftar : \n");
@@ -164,18 +170,24 @@ void UNDO(){
 
 }
 
-void END_TURN(Player *P1, Player *P2){
+void END_TURN(Player *P1, Player *P2,boolean *extra, boolean *atkup){
     //ganti pemain berikutnya
-    if(act(*P1) == 1){
-        act(*P1) = 0;
-        act(*P2) = 1;
-        printf("Giliran P2\n");
+    if (!(*extra)) {
+        if(act(*P1) == 1){
+            act(*P1) = 0;
+            act(*P2) = 1;
+            printf("Sekarang giliran player 2 \n");
+        }
+        else{
+            act(*P1) = 1;
+            act(*P2) = 0;
+            printf("Sekarang giliran player 1 \n");
+        }
+    } else {
+        printf("Wah! Giliran kamu lagi! \n");
+        (*extra) = false;
     }
-    else{
-        act(*P1) = 1;
-        act(*P2) = 0;
-        printf("Giliran P1\n");
-    }
+    (*atkup) = false;
 }
 void SAVE(){
     printf("Lokasi save file: ");
@@ -225,34 +237,37 @@ void EXIT(){
 }
 
 boolean GAME_OVER(Player P1, Player P2){
-    printf("P1 = %d\n", IsEmptyList(listB(P1)));
-    printf("P2 = %d\n", IsEmptyList(listB(P2)));
+   
 
     return ((IsEmptyList(listB(P1))) || (IsEmptyList(listB(P2))));
 }
 
 void inputCommand(Player *P1, Player *P2){ // nanti ganti void INPUT_COMMAND()
     boolean move = true;
+    boolean extra = false;
+    boolean atkup = false;
     char str[50];
+    StartSkills(P1);
+    StartSkills(P2);
     int i =1;
     act(*P1) = 1;
     while(!GAME_OVER(*P1,*P2)){
         while(act(*P1) == 1){
             STARTKATA_KEYBOARD(str); 
             if (isCommandSame(str, "ATTACK")) {
-                ATTACK(P1,P2);
+                ATTACK(P1,P2,&atkup);
             }
             else if(isCommandSame(str, "LEVEL_UP")){
                 LEVEL_UP(P1);
             }
             else if(isCommandSame(str, "SKILL")){
-                SKILL();
+                UseSkills(P1,&extra,&atkup);
             }
             else if(isCommandSame(str, "UNDO")){
                 UNDO();
             }
             else if(isCommandSame(str, "END_TURN")){
-                END_TURN(P1, P2);
+                END_TURN(P1, P2, &extra, &atkup);
             }
             else if(isCommandSame(str, "SAVE")){
                 SAVE();
@@ -273,22 +288,23 @@ void inputCommand(Player *P1, Player *P2){ // nanti ganti void INPUT_COMMAND()
                 printf("Check your spelling please...\n");
             }
         }
-        while(act(*P2) == 1){
+        while(act(*P2) == 1){            
+
             STARTKATA_KEYBOARD(str); 
             if (isCommandSame(str, "ATTACK")) {
-                ATTACK(P2,P1);
+                ATTACK(P2,P1,&atkup);
             }
             else if(isCommandSame(str, "LEVEL_UP")){
                 LEVEL_UP(P2);
             }
             else if(isCommandSame(str, "SKILL")){
-                SKILL();
+                UseSkills(P2,&extra,&atkup);
             }
             else if(isCommandSame(str, "UNDO")){
                 UNDO();
             }
             else if(isCommandSame(str, "END_TURN")){
-                END_TURN(P1, P2);
+                END_TURN(P1, P2,&extra, &atkup);
             }
             else if(isCommandSame(str, "EXIT")){
                 EXIT();
