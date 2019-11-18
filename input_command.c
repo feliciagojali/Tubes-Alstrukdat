@@ -121,11 +121,21 @@ boolean isCanLevel (Bangunan A) {
     }
 }
 
-
+void changeLevel(Player *P, int num){
+    int i = 1;
+    addressB temp = First(listB(*P));
+    while(i<num){
+        temp = Next(temp);
+        i++;
+    }
+    Lvl(Info(temp)) += 1;
+    NPskn(Info(temp)) -= (MxTmPskn(Info(temp))/2);
+    PrintBangunan(*P);
+}
 
 void LEVEL_UP(Player *P){
-    printf("LEVEL UP");
     int numBuilding;
+    
     printf("Daftar bangunan: \n");
     PrintBangunan(*P);
     // // print list bangunan yang dimiliki
@@ -134,9 +144,8 @@ void LEVEL_UP(Player *P){
     Bangunan A; 
     assignBangunan(listB(*P),numBuilding,&A);
 
-
     if(isCanLevel(A)){
-        Lvl(A) += 1;
+        changeLevel(P, numBuilding);
     } else {
         printf("Jumlah pasukan ");
         PrintJenisBangunan(A);
@@ -155,11 +164,19 @@ void UNDO(){
 
 }
 
-void END_TURN(){
+void END_TURN(Player *P1, Player *P2){
     //ganti pemain berikutnya
-    printf("END_TURN");
+    if(act(*P1) == 1){
+        act(*P1) = 0;
+        act(*P2) = 1;
+        printf("Giliran P2\n");
+    }
+    else{
+        act(*P1) = 1;
+        act(*P2) = 0;
+        printf("Giliran P1\n");
+    }
 }
-
 void SAVE(){
     printf("Lokasi save file: ");
     //nama file
@@ -179,36 +196,66 @@ void EXIT(){
     printf("EXIT");
 }
 
+boolean GAME_OVER(Player P1, Player P2){
+    printf("P1 = %d\n", IsEmptyList(listB(P1)));
+    printf("P2 = %d\n", IsEmptyList(listB(P2)));
+
+    return ((IsEmptyList(listB(P1))) || (IsEmptyList(listB(P2))));
+}
+
 void inputCommand(Player *P1, Player *P2){ // nanti ganti void INPUT_COMMAND()
     char str[50];
     int i =1;
     act(*P1) = 1;
-    STARTKATA_KEYBOARD(str); 
-    if (isCommandSame(str, "ATTACK")) {
-        if(act(*P1) == 1){
-            ATTACK(P1,P2);
+    while(!GAME_OVER(*P1,*P2)){
+        while(act(*P1) == 1){
+            STARTKATA_KEYBOARD(str); 
+            if (isCommandSame(str, "ATTACK")) {
+                ATTACK(P1,P2);
+            }
+            else if(isCommandSame(str, "LEVEL_UP")){
+                LEVEL_UP(P1);
+            }
+            else if(isCommandSame(str, "SKILL")){
+                SKILL();
+            }
+            else if(isCommandSame(str, "UNDO")){
+                UNDO();
+            }
+            else if(isCommandSame(str, "END_TURN")){
+                END_TURN(P1, P2);
+            }
+            else if(isCommandSame(str, "SAVE")){
+                SAVE();
+            }
+            else{
+                printf("Check your spelling please...\n");
+            }
         }
-        else{
-            ATTACK(P2,P1);
+        while(act(*P2) == 1){
+            STARTKATA_KEYBOARD(str); 
+            if (isCommandSame(str, "ATTACK")) {
+                ATTACK(P2,P1);
+            }
+            else if(isCommandSame(str, "LEVEL_UP")){
+                LEVEL_UP(P2);
+            }
+            else if(isCommandSame(str, "SKILL")){
+                SKILL();
+            }
+            else if(isCommandSame(str, "UNDO")){
+                UNDO();
+            }
+            else if(isCommandSame(str, "END_TURN")){
+                END_TURN(P1, P2);
+            }
+            else if(isCommandSame(str, "SAVE")){
+                SAVE();
+            }
+            else{
+                printf("Check your spelling please...\n");
+            }
         }
-    }
-    else if(isCommandSame(str, "LEVEL_UP")){
-        LEVEL_UP(P1);
-    }
-    else if(isCommandSame(str, "SKILL")){
-        SKILL();
-    }
-    else if(isCommandSame(str, "UNDO")){
-        UNDO();
-    }
-    else if(isCommandSame(str, "END_TURN")){
-        END_TURN();
-    }
-    else if(isCommandSame(str, "SAVE")){
-        SAVE();
-    }
-    else{
-        printf("Check your spelling please...\n");
     }
 }
 
