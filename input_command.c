@@ -43,10 +43,9 @@ void assignBangunan(List L, int num, Bangunan *B){
     AwalPskn(*B) = AwalPskn(Info(P));
 
 }
-void ATTACK(Player P){
+void ATTACK(Player *P){
     int pasukan,numOwn,numEnemy,army;
     Bangunan X,Y;
-    if p
     printf("Daftar bangunan: \n"); //buat procedure aja kali ya
     // ngeprint list bangunan yng ada menggunakan adt list
     scanf("Bangunan yang digunakan untuk menyerang: %d ",&numOwn);
@@ -144,11 +143,16 @@ void EXIT(){
     printf("EXIT");
 }
 
-void inputCommand(){ // nanti ganti void INPUT_COMMAND()
+void inputCommand(Player *P1, Player *P2){ // nanti ganti void INPUT_COMMAND()
     char str[50];
     STARTKATA_KEYBOARD(str); 
     if (isCommandSame(str, "ATTACK")) {
-        ATTACK();
+        if(act(P1) == 1){
+            ATTACK(P1);
+        }
+        else{
+            ATTACK(P2);
+        }
     }
     else if(isCommandSame(str, "LEVEL_UP")){
         LEVEL_UP();

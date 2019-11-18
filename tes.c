@@ -32,5 +32,6 @@ int main(){
    PrintBangunan(P1);
    printf("Bangunan milik Player 2:\n");
    PrintBangunan(P2);
+   
    return 0;
 }

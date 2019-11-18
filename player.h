@@ -25,6 +25,8 @@ void PrintJenisBangunan(Bangunan A);
 
 void PrintBangunan(Player P);
 
+void InsBangunan(Player *P);
+
 void StartSkills(Player *P);
 //Prosedur yang digunakan saat pertama kali game diaktifkan
 //Membuat Queue berisi skill untuk pemain
