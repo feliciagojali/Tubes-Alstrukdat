@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-// #include "input_command.c"
+#include "input_command.c"
 #include "player.h"
 #include "bangunan.h"
 #include "listlinier.h"
@@ -28,10 +28,6 @@ int main(){
    InsVFirst(&listB(P2),B);
    InsVFirst(&listB(P2),A);  
 
-   printf("Bangunan milik Player 1:\n");
-   PrintBangunan(P1);
-   printf("Bangunan milik Player 2:\n");
-   PrintBangunan(P2);
-   
+   inputCommand(&P1,&P2);
    return 0;
 }

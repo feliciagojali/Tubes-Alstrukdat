@@ -17,6 +17,7 @@ boolean isSuccess(int OwnArmy , int OwnEnemy) {
     }
 }
 
+
 addressB getAdrsBangunan(List L,int num){
     int i = 1;
     addressB P = First(L);
@@ -24,6 +25,10 @@ addressB getAdrsBangunan(List L,int num){
         P = Next(P);
     }
     return P;
+}
+Bangunan getBangunan (List L, int num){
+    addressB P = getAdrsBangunan(L,num);
+    return(Info(P));
 }
 void assignBangunan(List L, int num, Bangunan *B){
     int i = 1;
@@ -45,32 +50,46 @@ void assignBangunan(List L, int num, Bangunan *B){
 }
 void ATTACK(Player *P1, Player *P2){
     int pasukan,numOwn,numEnemy,army;
-    Bangunan X,Y;
     printf("Daftar bangunan: \n"); //buat procedure aja kali ya
     // ngeprint list bangunan yng ada menggunakan adt list
     PrintBangunan(*P1);
-    scanf("Bangunan yang digunakan untuk menyerang: %d ",&numOwn);
+    printf("Bangunan yang digunakan untuk menyerang: "); scanf("%d",&numOwn);
     printf("Daftar bangunan yang dapat diserang: \n");
-    // ngeprint list bangunan yang dapat diserang
-    scanf("Bangunan yang diserang: %d",&numEnemy);
-    scanf("Jumlah pasukan: %d",&army);
-    assignBangunan(listB(*P1),numOwn,&X);
-    assignBangunan(listB(*P2),numEnemy,&Y);
-    if (Defense(Y)) {
-        pasukan = (3*NPskn(X)/4);
-    } else {
-        pasukan = NPskn(X);
+    PrintBangunan(*P2);
+    printf("Bangunan yang diserang: "); scanf("%d",&numEnemy);
+    printf("Jumlah pasukan: "); scanf("%d",&army);
+    int i = 1;
+    addressB X = First(listB(*P1));
+    addressB Y = First(listB(*P2));
+    while(i<numOwn){
+        X = Next(X);
+        i++;
     }
+    i = 1;
+    while(i<numEnemy){
+        Y = Next(Y);
+        i++;
+    }
+    printf("%d\n",NPskn(Info(X)));
+    if (Defense(Info(Y))) {
+        army = (3*NPskn(Info(X)))/4;
+        printf("X");
+    } 
+    
+    if (army < NPskn(Info(Y))) {
+        printf("Bangunan gagal direbut\n");
+        NPskn(Info(Y)) -= army;
+    } else {
+        printf("Bangunan menjadi milikmu!\n");
+        DelBangunan(&listB(*P2),Y);
+        InsVLast(&listB(*P1),Info(Y));
+        NPskn(Info(Y)) = army - NPskn(Info(Y));
+    }
+    printf("daftar : \n");
+    PrintBangunan(*P1);
+    printf("daftar : \n");
 
-    if (pasukan < NPskn(Y) ) {
-        NPskn(Y) -= pasukan;
-        printf("Bangunan gagal direbut \n");
-    } else {
-        DelBangunan(&listB(*P2),getAdrsBangunan(listB(*P2),numEnemy));
-        InsVLast(&listB(*P1),Y);
-        NPskn(Y) = pasukan - NPskn(Y);
-        printf("Bangunan menjadi milikmu! \n");
-    }
+    PrintBangunan(*P2);
 }
 
 boolean isCommandSame(char *strg1, char *strg2)
