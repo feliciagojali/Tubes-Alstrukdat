@@ -7,6 +7,7 @@
 
 #include "boolean.h"
 #include "stackt.h"
+#include "bangunan.h"
 #include "Queue.h"
 
 #ifndef skills_H

@@ -112,10 +112,7 @@ void InstantUpgrade()
 //PARAMETER TERGNTUNG INPUT BANGUNAN
 
     {
-        /*Castle.Level = 1;
-        Tower.Level = 1;
-        Fort.Level = 1;
-        Village.Level = 1;*/
+        MakeBangunan()
     }
 void Shield() //-->Bonus
 //Pada stackt dan Queue int 2
