@@ -7,17 +7,19 @@
 #include "boolean.h"
 #include "mesinkar.h"
 
-#define NMax 50
 #define BLANK ' '
 
 typedef struct {
-  char TabKata[NMax+1]; /* container penyimpan kata, indeks yang dipakai [1..NMax] */
+  char TabKata[51]; /* container penyimpan kata, indeks yang dipakai [1..50] */
     int Length;
 } Kata;
 
 /* State Mesin Kata */
 extern boolean EndKata;
 extern Kata CKata;
+
+void STARTKATA_KEYBOARD(char *str);
+/* baca input dari keyboard */
 
 void IgnoreBlank();
 /* Mengabaikan satu atau beberapa BLANK
@@ -43,6 +45,6 @@ void SalinKata();
    F.S. : CKata berisi kata yang sudah diakuisisi;
           CC = BLANK atau CC = MARK;
           CC adalah karakter sesudah karakter terakhir yang diakuisisi.
-          Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
+          Jika panjang kata melebihi 50, maka sisa kata "dipotong" */
 
 #endif

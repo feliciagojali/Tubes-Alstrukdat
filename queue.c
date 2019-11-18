@@ -19,7 +19,7 @@ boolean IsFull_Queue (Queue Q)
 /* Mengirim true jika tabel penampung elemen Q sudah penuh */
 /* yaitu mengandung elemen sebanyak MaxEl */
 {
-    return(NBElmt_Queue(Q)==MaxEl(Q));
+    return(NBElmt_Queue(Q)==MaxElQ(Q));
 }
 int NBElmt_Queue (Queue Q)
 /* Mengirimkan banyaknya elemen queue. Mengirimkan 0 jika Q kosong. */
@@ -31,7 +31,7 @@ int NBElmt_Queue (Queue Q)
     }
     else if (Head(Q) > Tail(Q))
     {
-        hasil = (MaxEl(Q) -(Head(Q) - Tail(Q)) +1);
+        hasil = (MaxElQ(Q) -(Head(Q) - Tail(Q)) +1);
     }
     else 
     {
@@ -52,14 +52,14 @@ void CreateEmpty_Queue (Queue * Q, int Max)
 
     if ((*Q).T == NULL)
     {
-        MaxEl(*Q) = 0;
+        MaxElQ(*Q) = 0;
         
     }
     else 
     {
         Head(*Q) = Nil;
         Tail(*Q) = Nil;
-        MaxEl(*Q) = Max;
+        MaxElQ(*Q) = Max;
     }
 
 }
@@ -69,7 +69,7 @@ void DeAlokasi_Queue(Queue * Q)
 /* I.S. Q pernah dialokasi */
 /* F.S. Q menjadi tidak terdefinisi lagi, MaxEl(Q) diset 0 */
 {
-    MaxEl(*Q) = 0;
+    MaxElQ(*Q) = 0;
     free((*Q).T);
 }
 
@@ -85,7 +85,7 @@ void Add (Queue * Q, infotype X)
         Tail(*Q) +=1;
         InfoTail(*Q) = X;
     }
-    else if (Tail(*Q)== MaxEl(*Q))
+    else if (Tail(*Q)== MaxElQ(*Q))
     {
         Tail(*Q)=1;
         InfoTail(*Q)=X;
@@ -108,7 +108,7 @@ void Del (Queue * Q, infotype * X)
         Head(*Q) =Nil;
         Tail(*Q) =Nil;
     }
-    else if (Tail(*Q)== MaxEl(*Q))
+    else if (Tail(*Q)== MaxElQ(*Q))
     {
         Head(*Q)=1;
     }
