@@ -4,7 +4,7 @@
 
 Player initPlayer(int id){
     Player P;
-    ID(&P) = id;
+    ID(P) = id;
     CreateEmptyList(&listB(P));
     return P;  
 }
@@ -25,7 +25,7 @@ void PrintBangunan(Player P){
     address Y = First(listB(P));
     if (!IsEmptyList(listB(P))) {
         int i = 1;
-        while(Next(Y) != Nil) {
+        while(Y != Nil) {
             printf("%d. ",i);
             PrintJenisBangunan(Info(Y));
             TulisPOINT(Titik(Info(Y)));

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 // #include "input_command.c"
 #include "player.c"
+#include "player.h"
 
 int main(){
    // INPUT_COMMAND();
@@ -10,13 +11,13 @@ int main(){
    Player P1 = initPlayer(1);
    Player P2 = initPlayer(2);
    Bangunan A,B,C;
-   POINT P = MakePOINT(2,5);
-   POINT P2 = MakePOINT(1,4);
-   POINT P3 = MakePOINT(8,8);
+   POINT Po = MakePOINT(2,5);
+   POINT Po2 = MakePOINT(1,4);
+   POINT Po3 = MakePOINT(8,8);
 
-   MakeBangunan(&A,P,'C',1);
-   MakeBangunan(&B,P2,'V',1);
-   MakeBangunan(&C,P3,'T',1);
+   MakeBangunan(&A,Po,'C',1);
+   MakeBangunan(&B,Po2,'V',1);
+   MakeBangunan(&C,Po3,'T',1);
 
    InsVFirst(&listB(P1),A);
    InsVFirst(&listB(P1),B);
@@ -26,7 +27,9 @@ int main(){
    InsVFirst(&listB(P2),B);
    InsVFirst(&listB(P2),A);  
 
-
-   PrintBangunan();
+   printf("Bangunan milik Player 1:\n");
+   PrintBangunan(P1);
+   printf("Bangunan milik Player 2:\n");
+   PrintBangunan(P2);
    return 0;
 }
