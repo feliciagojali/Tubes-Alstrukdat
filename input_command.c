@@ -70,7 +70,7 @@ void ATTACK(Player *P1, Player *P2){
         Y = Next(Y);
         i++;
     }
-    printf("%d\n",NPskn(Info(X)));
+    
     if (Defense(Info(Y))) {
         army = (3*NPskn(Info(X)))/4;
         printf("X");
@@ -107,7 +107,7 @@ boolean isCommandSame(char *strg1, char *strg2)
  
     else
     {
-        return *strg1 - *strg2;
+        return false;
     }
 }
 // bikin boolean cek ada yg bisa diserang atau ga
@@ -182,11 +182,39 @@ void SAVE(){
     //nama file
 }
 
-void MOVE(){
-    printf("MOVE");
-    // print list bangunan
-    // pilih bangunan
-    // daftar bangunan terdekat (graph)
+void MOVE(Player *P1, Player *P2){
+    printf("Daftar Bangunan: \n");
+    PrintBangunan(*P1);
+    int num,numrcv,army;
+    printf("Pilih Bangunan : "); scanf("%d",&num);
+    printf("Daftar Bangunan terdekat : \n");
+    // print bangunan terdekat
+    PrintBangunan(*P2);
+    printf("Bangungan yang menerima : "); scanf("%d",&numrcv);
+    printf("Jumlah Pasukan : "); scanf("%d",&army);
+    addressB X = First(listB(*P1));
+    addressB Y = First(listB(*P2));
+    int i =1;
+    while(i<num){
+        X = Next(X);
+        i++;
+    }
+    i = 1;
+    while(i<numrcv){
+        Y = Next(Y);
+        i++;
+    }
+
+    if (NPskn(Info(X)) < army) {
+        printf("Jumlah pasukan tidak cukup! \n");
+    } else {
+        if (army + NPskn(Info(Y)) > MxTmPskn(Info(Y))) {
+            NPskn(Info(Y)) = MxTmPskn(Info(Y));
+        } else{
+            NPskn(Info(Y)) += army;
+        }
+        NPskn(Info(X)) -= army;
+    }
     // pilih bangunan target
     // masukan jumlah pasukan
     // tulis status: (jumlah_pasukan) pasukan dari (jenis building) (koordinat) telah berpindah ke (jenis building) (koordinat)
@@ -204,6 +232,7 @@ boolean GAME_OVER(Player P1, Player P2){
 }
 
 void inputCommand(Player *P1, Player *P2){ // nanti ganti void INPUT_COMMAND()
+    boolean move = true;
     char str[50];
     int i =1;
     act(*P1) = 1;
@@ -228,6 +257,15 @@ void inputCommand(Player *P1, Player *P2){ // nanti ganti void INPUT_COMMAND()
             else if(isCommandSame(str, "SAVE")){
                 SAVE();
             }
+            else if(isCommandSame(str, "MOVE")){
+                if(move){
+                    MOVE(P1,P2);
+                    move = false;
+                } else {
+                    printf("Kau sudah melakukan MOVE untuk giliran ini! \n");
+                    printf("Tunggu giliran berikutnya!\n");
+                }
+            }
             else{
                 printf("Check your spelling please...\n");
             }
@@ -251,6 +289,14 @@ void inputCommand(Player *P1, Player *P2){ // nanti ganti void INPUT_COMMAND()
             }
             else if(isCommandSame(str, "SAVE")){
                 SAVE();
+            }else if(isCommandSame(str, "MOVE")){
+                if(move){
+                    MOVE(P1,P2);
+                    move = false;
+                } else {
+                    printf("Kau sudah melakukan MOVE untuk giliran ini! \n");
+                    printf("Tunggu giliran berikutnya!\n");
+                }
             }
             else{
                 printf("Check your spelling please...\n");
