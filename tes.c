@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 // #include "input_command.c"
-#include "player.c"
 #include "player.h"
+#include "bangunan.h"
+#include "listlinier.h"
 
 int main(){
    // INPUT_COMMAND();

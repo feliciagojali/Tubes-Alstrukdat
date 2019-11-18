@@ -1,10 +1,9 @@
 //ADT BANGUNAN
-
+#include "point.h"
+#include "boolean.h"
 #ifndef bangunan_H
 #define bangunan_H
 
-#include "boolean.h"
-#include "point.h"
 
 typedef char jns;			//tipe jenis bangunan 'C','T','F','V'
 typedef int noMilik;		//tipe kepemilikan, player 1 '1', player 2 '2'

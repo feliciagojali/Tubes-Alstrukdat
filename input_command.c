@@ -4,9 +4,10 @@
 #include "mesinkata.c"
 #include "boolean.h"
 #include "point.c"
-#include "listlinier.h"
+#include "listlinier.c"
 #include "bangunan.c"
 #include "mesinkar.c"
+#include "player.c"
 
 boolean isSuccess(int OwnArmy , int OwnEnemy) {
     if (OwnArmy < OwnEnemy) {
@@ -16,36 +17,6 @@ boolean isSuccess(int OwnArmy , int OwnEnemy) {
     }
 }
 
-void PrintJenisBangunan(Bangunan A) {
-    if (Jenis(A) == 'C' ) {
-        printf("Castle ");
-    } else if (Jenis(A) == 'F') {
-        printf("Fort ");
-    } else if (Jenis(A) == 'T') {
-        printf("Tower ");
-    } else {
-        printf("Village ");
-    }
-
-
-}
-
-void PrintBangunan (List L){
-    address Y = First(L);
-    if (!IsEmptyList(L)) {
-        int i = 1;
-        while(Next(Y) != Nil) {
-            printf("%d. ",i);
-            PrintJenisBangunan(Info(Y));
-            TulisPOINT(Titik(Info(Y)));
-            printf(" %d",NPskn(Info(Y)));
-            printf(" lvl. %d \n",Lvl(Info(Y)));
-            i++;
-            Y = Next(Y);
-
-        } 
-    }
-}
 address getAdrsBangunan(List L,int num){
     int i = 1;
     address P = First(L);
@@ -72,10 +43,10 @@ void assignBangunan(List L, int num, Bangunan *B){
     AwalPskn(*B) = AwalPskn(Info(P));
 
 }
-void ATTACK(){
+void ATTACK(Player P){
     int pasukan,numOwn,numEnemy,army;
-    List L1,L2;
     Bangunan X,Y;
+    if p
     printf("Daftar bangunan: \n"); //buat procedure aja kali ya
     // ngeprint list bangunan yng ada menggunakan adt list
     scanf("Bangunan yang digunakan untuk menyerang: %d ",&numOwn);
@@ -112,15 +83,6 @@ boolean isCanLevel (Bangunan A) {
     } else {
         return false;
     }
-}
-
-
-
-int attackPasukan(Bangunan A,Bangunan B){
-    
-
-
-
 }
 
 
@@ -209,15 +171,6 @@ void inputCommand(){ // nanti ganti void INPUT_COMMAND()
     }
 }
 
-void InsListPlayer(List *L, Bangunan A) {
-    List L1,L2;
-
-    // memasukan bangunan dengan pemilik 1 ke list A dan pemilik 2 ke list B
-    if (Pemilik(A) == 1) {
-        InsVFirst(&L1,A);
-    } else {
-        InsVFirst(&L2,A);
-    }
 
 
 }

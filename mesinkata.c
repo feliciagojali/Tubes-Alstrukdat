@@ -62,10 +62,10 @@ void SalinKata()
    F.S. : CKata berisi kata yang sudah diakuisisi;
           CC = BLANK atau CC = MARK;
           CC adalah karakter sesudah karakter terakhir yang diakuisisi.
-          Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
+          Jika panjang kata melebihi 50, maka sisa kata "dipotong" */
 {
     int i = 1;
-    while ((CC != MARK) && (CC!= MARK) && (i<= NMax )) {
+    while ((CC != MARK) && (CC != MARK) && (i <= 50 )) {
         CKata.TabKata[i] = CC;
         ADV();
         i++;
