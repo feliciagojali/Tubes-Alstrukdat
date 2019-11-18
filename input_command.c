@@ -221,7 +221,7 @@ void MOVE(Player *P1, Player *P2){
 }
 
 void EXIT(){
-    printf("EXIT");
+    exit(0);
 }
 
 boolean GAME_OVER(Player P1, Player P2){
@@ -257,6 +257,9 @@ void inputCommand(Player *P1, Player *P2){ // nanti ganti void INPUT_COMMAND()
             else if(isCommandSame(str, "SAVE")){
                 SAVE();
             }
+            else if(isCommandSame(str, "EXIT")){
+                EXIT();
+            }
             else if(isCommandSame(str, "MOVE")){
                 if(move){
                     MOVE(P1,P2);
@@ -286,6 +289,9 @@ void inputCommand(Player *P1, Player *P2){ // nanti ganti void INPUT_COMMAND()
             }
             else if(isCommandSame(str, "END_TURN")){
                 END_TURN(P1, P2);
+            }
+            else if(isCommandSame(str, "EXIT")){
+                EXIT();
             }
             else if(isCommandSame(str, "SAVE")){
                 SAVE();
