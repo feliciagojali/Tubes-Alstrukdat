@@ -174,7 +174,7 @@ void InputSkills(Player *P,int X)
         else if (X >=2 && X <= 6)
         {
             Add(&skill(*P),X);
-            printf("Selamat Anda mendapatkan Skill ");
+            printf("Selamat P%d, Anda mendapatkan Skill ", ID(*P));
             if (X == 2)
             {
                 printf("Shield\n");
@@ -229,14 +229,7 @@ void Shield() //-->Bonus
 
 }
 
-void AttackUp() //-->Bonus
-//Pada stackt dan Queue int 4
-//Pertahanan bangunan musuh tidak mempengaruhi penyerangan
-//Skill didapatkan jika baru saja serang Tower lawan
-//dan jumlah towernya menjadi 3
-{
 
-}
 void CriticalHit() //-->Bonus
 //Pada stackt dan Queue int 5 
 //Penyerangan setelah pengaktifan skillini

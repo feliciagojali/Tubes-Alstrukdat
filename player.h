@@ -62,12 +62,6 @@ void Shield(); //-->Bonus
 //jika digunakan 2 kali berturut turut, durasi tidak bertambah
 //Namun nilai maksimum
 
-void AttackUp(); //-->Bonus
-//Pada stackt dan Queue int 4
-//Pertahanan bangunan musuh tidak mempengaruhi penyerangan
-//Skill didapatkan jika baru saja serang Tower lawan
-//dan jumlah towernya menjadi 3
-
 void CriticalHit(); //-->Bonus
 //Pada stackt dan Queue int 5 
 //Penyerangan setelah pengaktifan skillini

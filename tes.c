@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "input_command.c"
-// #include "player.h"
-// #include "bangunan.h"
-// #include "listlinier.h"
-// #include "arraydin.h"
+#include "player.h"
+#include "bangunan.h"
+#include "listlinier.h"
+#include "arraydin.h"
 int main(){
    // INPUT_COMMAND();
    TabInt TabBangunan;
