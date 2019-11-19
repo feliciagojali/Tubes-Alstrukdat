@@ -38,7 +38,7 @@ void StartSkills(Player *P);
 //Membuat Queue berisi skill untuk pemain
 //PARAMETERNYA NANTI TYPE BANGUNAN
 
-void UseSkills(Player *P, boolean *extra, boolean *atkup);
+void UseSkills(Player *P, boolean *extra, boolean *atkup, TabInt *T, int *isShield);
 //Prosedur yang digunakan untuk menggunakan skills yang dimiliki pemain
 //Ketika command skill di input
 //Skill yang dapat digunakan adalah skill di head queue
@@ -51,7 +51,7 @@ void InputSkills(Player *P,int X);
 //digunain di main program saat ada keadaan
 //dimana membuat seorang pemain mendapatkan skills tertentu
 
-void InstantUpgrade();
+void InstantUpgrade(Player *P, TabInt *T);
 //Pada stackt dan Queue int 1
 //Bangunan akan naik 1 level
 //Skill hanya ada di daftar skill awal
@@ -72,18 +72,23 @@ void CriticalHit(); //-->Bonus
 //hanya berkurang 1/2 dari jumlah seharusnya
 
 
-void InstantReinforcement();
+void InstantReinforcement(Player *P, TabInt *T);
 //Pada stackt dan Queue int 6
 //Seluruh bangunan pasukan +5
 //Skill didapat jika bangunan yang dimiliki pemain
 //seluruhnya telah level 4
 //didapatkan diakhir gilirannya
 
-void Barrage();
+void Barrage(Player *P, TabInt *T);
 //Pada stackt dan Queue int 7
 //Jumlah pasukan musuh berkurang 10 di seluruh bangunannya
 //Skill didapat jika lawan baru saja bertambah bangunannya
 //menjadi 10 bangunan
 
+int CountBangunan(Player *P, TabInt *T);
+//fungsi hitung banyaknya bangunan yang dimiliki oleh suatu player
+
+boolean IsLevelFour(Player *P, TabInt *T);
+//boolean cek apakah seluruh bangunan pemain levelnya 4
 
 #endif
