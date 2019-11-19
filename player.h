@@ -56,11 +56,20 @@ void InstantUpgrade();
 //Bangunan akan naik 1 level
 //Skill hanya ada di daftar skill awal
 
-void Shield(); //-->Bonus
+void Shield(Player P, TabInt *T, int *isShield); //-->Bonus
 //Pada stackt dan Queue int 2
 //Seluruh bangunan akan memiliki pertahanan selama 2 turn
 //jika digunakan 2 kali berturut turut, durasi tidak bertambah
 //Namun nilai maksimum
+
+void ShieldDown(Player P, TabInt *T);
+// me-non-aktifkan efek Shield
+
+void ExtraTurn();
+//Pada stackt dan Queue int 3
+//Ketika diaktifkan, setelah gilirannya berakhir
+//pemain selanjutnya tetap pemain yang sama
+//Pemain mendapat skill ini jika Fort pemain tersebut direbut lawan
 
 void CriticalHit(); //-->Bonus
 //Pada stackt dan Queue int 5 

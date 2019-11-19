@@ -75,6 +75,7 @@ int countTower(Player P, TabInt T){
         if (Jenis(Elmt(T, Info(X))) == 'T') {
             jumlah +=1;
         }
+        X = Next(X);
     }
     return jumlah;
 }
@@ -220,11 +221,41 @@ void InstantUpgrade(Player *P, TabInt *T)
 }
 
     
-void Shield() //-->Bonus
+void Shield(Player P, TabInt *T, int *isShield) //-->Bonus
 //Pada stackt dan Queue int 2
 //Seluruh bangunan akan memiliki pertahanan selama 2 turn
 //jika digunakan 2 kali berturut turut, durasi tidak bertambah
 //Namun nilai maksimum
+{
+    addressB B = First(listB(P));
+
+    while(B != Nil){
+        Defense(Elmt(*T,Info(B))) = true;
+        B = Next(B);
+    }
+    (*isShield) = 2;
+    printf("Your buildings' defenses have been updated!\n");
+}
+
+void ShieldDown(Player P, TabInt *T)
+// untuk mengembalikan bangunan seperti semula setelah efek shield habis
+{
+    addressB B = First(listB(P));
+
+    while(B != Nil){
+        if(Jenis(Elmt(*T, Info(B))) == 'C' || Jenis(Elmt(*T, Info(B))) == 'V' || (Jenis(Elmt(*T, Info(B))) == 'F' && Lvl(Elmt(*T, Info(B))) <= 2)){
+            Defense(Elmt(*T, Info(B))) = false;
+        }
+        B = Next(B);
+    }
+    printf("The effect of 'shield' ran out! Your buildings' defenses are back to normal.\n");
+}
+
+void ExtraTurn()
+//Pada stackt dan Queue int 3
+//Ketika diaktifkan, setelah gilirannya berakhir
+//pemain selanjutnya tetap pemain yang sama
+//Pemain mendapat skill ini jika Fort pemain tersebut direbut lawan
 {
 
 }

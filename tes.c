@@ -24,7 +24,7 @@ int main(){
    POINT Po6 = MakePOINT(9,7);
 
    MakeBangunan(&A,Po1,'C',1);
-   MakeBangunan(&B,Po2,'V',1);
+   MakeBangunan(&B,Po2,'T',1);
    MakeBangunan(&C,Po3,'T',1);
    MakeBangunan(&D,Po4,'T',2);
    MakeBangunan(&E,Po5,'F',2);
@@ -37,13 +37,7 @@ int main(){
    AddAsLastEl(&TabBangunan,E);
    AddAsLastEl(&TabBangunan,F);
 
-   for (int i = GetFirstIdx(TabBangunan); i<= GetLastIdx(TabBangunan); i++) {
-      if (Pemilik(Elmt(TabBangunan,i)) == 1) {
-         InsVLast(&listB(P1),i);
-      } else if (Pemilik(Elmt(TabBangunan,i)) == 2) {
-         InsVLast(&listB(P2),i);
-      }
-   }
+   splitToPlayerList(&P1, &P2, TabBangunan);
    // }
    // printf("Bangunan milik Player 1:\n");
    // PrintBangunan(P1,TabBangunan);
@@ -60,5 +54,6 @@ int main(){
    // PrintBangunan(P2, TabBangunan);
 
    LEVEL_UP(&P1,&TabBangunan);
+   // INPUT_COMMAND(&P1, &P2, &TabBangunan);
    return 0;
 }
