@@ -33,12 +33,14 @@ boolean cariBangunan(Bangunan A,Player *P,TabInt T);
 
 int countTower (Player P, TabInt T);
 
+void printHeadSkills(Player P);
+
 void StartSkills(Player *P);
 //Prosedur yang digunakan saat pertama kali game diaktifkan
 //Membuat Queue berisi skill untuk pemain
 //PARAMETERNYA NANTI TYPE BANGUNAN
 
-void UseSkills(Player *P, boolean *extra, boolean *atkup, TabInt *T, int *isShield);
+void UseSkills(Player *P, boolean *extra, boolean *atkup, boolean *critical, TabInt *T,int *isShield);
 //Prosedur yang digunakan untuk menggunakan skills yang dimiliki pemain
 //Ketika command skill di input
 //Skill yang dapat digunakan adalah skill di head queue
@@ -65,13 +67,6 @@ void Shield(Player P, TabInt *T, int *isShield); //-->Bonus
 void ShieldDown(Player P, TabInt *T);
 // me-non-aktifkan efek Shield
 
-void CriticalHit(); //-->Bonus
-//Pada stackt dan Queue int 5 
-//Penyerangan setelah pengaktifan skillini
-//Jumlah pasukan pada bangunan yang melakukan serangan
-//hanya berkurang 1/2 dari jumlah seharusnya
-
-
 void InstantReinforcement(Player *P, TabInt *T);
 //Pada stackt dan Queue int 6
 //Seluruh bangunan pasukan +5
@@ -79,7 +74,7 @@ void InstantReinforcement(Player *P, TabInt *T);
 //seluruhnya telah level 4
 //didapatkan diakhir gilirannya
 
-void Barrage(Player *P, TabInt *T);
+void Barrage(Player *P,TabInt *T);
 //Pada stackt dan Queue int 7
 //Jumlah pasukan musuh berkurang 10 di seluruh bangunannya
 //Skill didapat jika lawan baru saja bertambah bangunannya

@@ -81,11 +81,11 @@ int countTower(Player P, TabInt T){
     return jumlah;
 }
 /* ---- BAGIAN SKILL ---- */
-void printHeadSkills(Player *P) 
+void printHeadSkills(Player P) 
 // prosedur mengeluarkan skill yang ada di Head dari queue
 {
     printf("Skill Available : ");
-    int x = Head(skill(*P));
+    int x = InfoHead(skill(P));
     if (x == 1){
         printf("Instant Upgrade \n");
     } else if (x == 2) {
@@ -111,7 +111,7 @@ void StartSkills(Player *P)
         Add(&skill(*P),1);
     }
 
-void UseSkills(Player *P, boolean *extra, boolean *atkup, TabInt *T, int *isShield)
+void UseSkills(Player *P, boolean *extra, boolean *atkup, boolean *critical, TabInt *T,int *isShield)
 //Prosedur yang digunakan untuk menggunakan skills yang dimiliki pemain
 // Q dan S telah terdefinisi sebelumnya
 //Ketika command skill di input
@@ -133,11 +133,11 @@ void UseSkills(Player *P, boolean *extra, boolean *atkup, TabInt *T, int *isShie
             //Kosongin stactk
             if (X == 1)
             {
-                InstantUpgrade(P, T);
+                InstantUpgrade(P,T);
             }
             else if (X == 2)
             {
-                Shield(*P, T, isShield);
+                Shield(*P,T, isShield);
             }
             else if (X == 3)
             {
@@ -149,17 +149,19 @@ void UseSkills(Player *P, boolean *extra, boolean *atkup, TabInt *T, int *isShie
             }
             else if (X == 5)
             {
-                CriticalHit();
+                (*critical) = true;
             }
             else if (X == 6)
             {
-                InstantReinforcement(P, T);
+                InstantReinforcement(P,T);
             }
             else if (X == 7)
             {
-                Barrage(P, T);
+                Barrage(P,T);
             }
         }
+    printf("daftar : \n");
+    PrintBangunan(*P,*T);
     }
 
 void InputSkills(Player *P,int X)
@@ -252,14 +254,7 @@ void ShieldDown(Player P, TabInt *T)
     printf("The effect of 'shield' ran out! Your buildings' defenses are back to normal.\n");
 }
 
-void CriticalHit() //-->Bonus
-//Pada stackt dan Queue int 5 
-//Penyerangan setelah pengaktifan skillini
-//Jumlah pasukan pada bangunan yang melakukan serangan
-//hanya berkurang 1/2 dari jumlah seharusnya
-{
 
-}
 
 void InstantReinforcement(Player *P, TabInt *T)
 //Pada stackt dan Queue int 6
