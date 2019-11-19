@@ -93,7 +93,6 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
         NPskn(Elmt(*TabBangunan,Info(Y))) = army - NPskn(Elmt(*TabBangunan,Info(Y)));
         int x = Info(Y);
         if (cariBangunan(Elmt(*TabBangunan,Info(Y)),P2,*TabBangunan)) {
-            printf("hello\n");
             DelP(&listB(*P2),x);
         }
         InsVFirst(&listB(*P1),x);
@@ -128,46 +127,47 @@ boolean isCommandSame(char *strg1, char *strg2)
 }
 // bikin boolean cek ada yg bisa diserang atau ga
 // buat fungsi mengurangi pasukan 
-// boolean isCanLevel (Bangunan A) {
-//     int x = MxTmPskn(A);
-//     if (NPskn(A) > x/2) {
-//         return true;
-//     } else {
-//         return false;
-//     }
-// }
+boolean isCanLevel (Bangunan A) {
+    int x = MxTmPskn(A);
+    if (NPskn(A) > x/2) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
-// void changeLevel(Player *P, int num){
-//     int i = 1;
-//     addressB temp = First(listB(*P));
-//     while(i<num){
-//         temp = Next(temp);
-//         i++;
-//     }
-//     Lvl(Info(temp)) += 1;
-//     NPskn(Info(temp)) -= (MxTmPskn(Info(temp))/2);
-//     PrintBangunan(*P);
-// }
+void changeLevel(Player *P, TabInt *T, addressB numInList){
+    Lvl(Elmt(*T,Info(numInList))) += 1;
+    NPskn(Elmt(*T,Info(numInList))) -= (MxTmPskn(Elmt(*T,Info(numInList)))/2);
+}
 
-// void LEVEL_UP(Player *P){
-//     int numBuilding;
+void LEVEL_UP(Player *P, TabInt *T){
+    int numBuilding;
     
-//     printf("Daftar bangunan: \n");
-//     PrintBangunan(*P);
-//     // // print list bangunan yang dimiliki
-//     printf("Bangunan yang akan di level up: ");
-//     scanf("%d", &numBuilding);
-//     Bangunan A; 
-//     assignBangunan(listB(*P),numBuilding,&A);
+    printf("Daftar bangunan: \n");
 
-//     if(isCanLevel(A)){
-//         changeLevel(P, numBuilding);
-//     } else {
-//         printf("Jumlah pasukan ");
-//         PrintJenisBangunan(A);
-//         printf("kurang untuk level up");
-//     }
-// }
+    PrintBangunan(*P, *T);
+    // // print list bangunan yang dimiliki
+    printf("Bangunan yang akan di level up: ");
+    scanf("%d", &numBuilding); 
+    addressB NumInList = First(listB(*P));
+    int i = 1;
+    while(i < numBuilding){
+        NumInList = Next(NumInList);
+        i ++;
+    }
+    // assignBangunan(listB(*P),numBuilding,&A);
+
+    if(isCanLevel(Elmt(*T, Info(NumInList)))){
+        changeLevel(P, T, NumInList);
+        printf("Your building has been updated!\n");
+        PrintBangunan(*P, *T);
+    } else {
+        printf("Jumlah pasukan ");
+        PrintJenisBangunan(Elmt(*T, Info(NumInList)));
+        printf("kurang untuk level up");
+    }
+}
 
 // void SKILL(){
 //  // queue

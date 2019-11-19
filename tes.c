@@ -57,7 +57,7 @@ int main(){
    // PrintBangunan(P2,TabBangunan);
 
 
-   ATTACK(&TabBangunan,&P1,&P2,&atk,&ctrl);
+   LEVEL_UP(&P1, &TabBangunan);
    
    return 0;
 }
