@@ -73,8 +73,10 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
         Y = Next(Y);
         i++;
     }
-
+    
     if ((Jenis(Elmt(*TabBangunan, Info(Y))) == 'F') && (cariBangunan(Elmt(*TabBangunan,Info(Y)),P2,*TabBangunan))){
+            printf("%c",Jenis(Elmt(*TabBangunan, Info(Y))));
+
          InputSkills(P2,3);   
     }
     NPskn(Elmt(*TabBangunan,Info(X))) -= army;
@@ -158,15 +160,60 @@ void LEVEL_UP(Player *P, TabInt *T){
     }
     // assignBangunan(listB(*P),numBuilding,&A);
 
-    if(isCanLevel(Elmt(*T, Info(NumInList)))){
-        changeLevel(P, T, NumInList);
-        printf("Your building has been updated!\n");
-        PrintBangunan(*P, *T);
-    } else {
+    if(!isCanLevel(Elmt(*T, Info(NumInList)))){
         printf("Jumlah pasukan ");
         PrintJenisBangunan(Elmt(*T, Info(NumInList)));
         printf("kurang untuk level up");
-    }
+        
+    } else {
+        Lvl(Elmt(*T,Info(NumInList))) += 1;
+        NPskn(Elmt(*T,Info(NumInList))) -= (MxTmPskn(Elmt(*T,Info(NumInList)))/2);
+        printf("Your building has been updated!\n");
+        PrintBangunan(*P, *T);
+        if(Lvl(Elmt(*T,Info(NumInList))) == 2){
+			if(Jenis(Elmt(*T,Info(NumInList)))=='C'){
+				UbahBangunan(&Elmt(*T,Info(NumInList)),15,60,false);
+			}
+			else if(Jenis(Elmt(*T,Info(NumInList)))=='T'){
+				UbahBangunan(&Elmt(*T,Info(NumInList)),10,30,true);
+			}
+			else if(Jenis(Elmt(*T,Info(NumInList)))=='F'){
+				UbahBangunan(&Elmt(*T,Info(NumInList)),20,40,false);
+			}
+			else if(Jenis(Elmt(*T,Info(NumInList)))=='V'){
+				UbahBangunan(&Elmt(*T,Info(NumInList)),10,30,false);
+			}
+		}
+		else if(Lvl(Elmt(*T,Info(NumInList))) == 3){
+			if(Jenis(Elmt(*T,Info(NumInList))) =='C'){
+				UbahBangunan(&Elmt(*T,Info(NumInList)),20,80,false);
+			}
+			else if(Jenis(Elmt(*T,Info(NumInList)))=='T'){
+				UbahBangunan(&Elmt(*T,Info(NumInList)),20,40,true);
+			}
+			else if(Jenis(Elmt(*T,Info(NumInList)))=='F'){
+				UbahBangunan(&Elmt(*T,Info(NumInList)),30,60,true);
+			}
+			else if(Jenis(Elmt(*T,Info(NumInList)))=='V'){
+				UbahBangunan(&Elmt(*T,Info(NumInList)),15,40,false);
+			}
+		}
+		else if(Lvl(Elmt(*T,Info(NumInList))) == 4){
+			if(Jenis(Elmt(*T,Info(NumInList)))=='C'){
+				UbahBangunan(&Elmt(*T,Info(NumInList)),25,100,false);
+			}
+			else if(Jenis(Elmt(*T,Info(NumInList)))=='T'){
+				UbahBangunan(&Elmt(*T,Info(NumInList)),30,50,true);
+			}
+			else if(Jenis(Elmt(*T,Info(NumInList)))=='F'){
+				UbahBangunan(&Elmt(*T,Info(NumInList)),40,80,true);
+			}
+			else if(Jenis(Elmt(*T,Info(NumInList)))=='V'){
+				UbahBangunan(&Elmt(*T,Info(NumInList)),20,50,false);
+			}
+		}
+	}
+
 }
 
 // void SKILL(){

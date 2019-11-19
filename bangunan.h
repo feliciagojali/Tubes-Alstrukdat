@@ -40,10 +40,4 @@ void MakeBangunan(Bangunan *B, POINT T, jns J, noMilik player);
 /* *****UBAH JUMLAH A,M,P***** */
 void UbahBangunan(Bangunan *B, psknType A, psknType M, defense P);
 
-/* *****LEVEL UP***** */
-void LvlUp(Bangunan *B);
-
-/* *****MOVE***** */
-void Move(Bangunan *B1, Bangunan *B2, psknType n);
-
 #endif
