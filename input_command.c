@@ -51,7 +51,7 @@ boolean isSuccess(int OwnArmy , int OwnEnemy) {
 
 // }
 
-void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean *critical){
+void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean *critical, Stack *undo){
     int pasukan,numOwn,numEnemy,army;
     boolean claim = false;
     printf("Daftar bangunan: \n"); //buat procedure aja kali ya
@@ -112,12 +112,13 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
     if ((Jenis(Elmt(*TabBangunan, x)) == 'T') && (Pemilik(Elmt(*TabBangunan,x)) != 0) && (countTower(*P1,*TabBangunan) == 3) && (claim)) {
         InputSkills(P1,4);
     }
-    printf("daftar : \n");
+    printf("Daftar P1: \n");
     PrintBangunan(*P1,*TabBangunan);
-    printf("daftar : \n");
+    printf("Daftar P2: \n");
 
     PrintBangunan(*P2,*TabBangunan);
     (*critical) = true;
+    Push(undo, *TabBangunan);
 }
 boolean isCommandSame(char *strg1, char *strg2)
 {
@@ -153,7 +154,7 @@ void changeLevel(Player *P, TabInt *T, addressB numInList){
     NPskn(Elmt(*T,Info(numInList))) -= (MxTmPskn(Elmt(*T,Info(numInList)))/2);
 }
 
-void LEVEL_UP(Player *P, TabInt *T){
+void LEVEL_UP(Player *P, TabInt *T, Stack *undo){
     int numBuilding;
     
     printf("Daftar bangunan: \n");
@@ -223,7 +224,7 @@ void LEVEL_UP(Player *P, TabInt *T){
 			}
 		}
 	}
-
+    Push(undo, *T);
 }
 
 // void SKILL(){
@@ -231,11 +232,11 @@ void LEVEL_UP(Player *P, TabInt *T){
 //     printf("SKILL");
 // }
 
-// void UNDO(){
-//     //stack 
-//     printf("UNDO");
-
-// }
+void UNDO(Player P, Stack *undo, TabInt *T){
+    Pop(undo, T), 
+    printf("Undo done. The buildings have been updated!\n");
+    PrintBangunan(P, *T);
+}
 
 void END_TURN(Player *P1, Player *P2, TabInt *T, boolean *extra, boolean *atkup){
     //ganti pemain berikutnya
@@ -265,7 +266,7 @@ void END_TURN(Player *P1, Player *P2, TabInt *T, boolean *extra, boolean *atkup)
 //     //nama file
 // }
 
-void MOVE(Player P, TabInt *T){
+void MOVE(Player P, TabInt *T, Stack *undo){
     printf("Daftar Bangunan: \n");
     PrintBangunan(P, *T);
 
@@ -311,6 +312,7 @@ void MOVE(Player P, TabInt *T){
             printf("Perpindahan GAGAL!\n");
         }
     }
+    Push(undo, *T);
     // pilih bangunan target
     // masukan jumlah pasukan
     // tulis status: (jumlah_pasukan) pasukan dari (jenis building) (koordinat) telah berpindah ke (jenis building) (koordinat)
@@ -342,30 +344,34 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
     int isShieldP2 = 0;
     act(*P1) = 1;
     act(*P2) = 0;
+    Stack undo;
+    CreateEmpty_Stackt(&undo);
+
+    Push(&undo, *T);
     
     while(!GAME_OVER(*P1, *P2, *T)){
         if(act(*P1) == 1){
             printHeadSkills(*P1);
             STARTKATA_KEYBOARD(str); 
             if (isCommandSame(str, "ATTACK")) {
-                ATTACK(T, P1, P2, &atkup, &critical);
+                ATTACK(T, P1, P2, &atkup, &critical, &undo);
             }
             else if(isCommandSame(str, "LEVEL_UP")){
-                LEVEL_UP(P1, T);
+                LEVEL_UP(P1, T, &undo);
             }
             else if(isCommandSame(str, "SKILL")){
                 if (InfoHead(skill(*P1)) == 3) {
                     UseSkills(P1, &extra, &atkup,&critical,T, &isShieldP1);
                     InputSkills(P1,5);
                 } else {
-                    UseSkills(P1, &extra, &atkup,&critical,T, &isShieldP1);
+                    UseSkills(P1, T, &extra, &atkup,&critical, &isShieldP1);
 
                 }
                 
             }
-            // else if(isCommandSame(str, "UNDO")){
-            //     UNDO();
-            // }
+            else if(isCommandSame(str, "UNDO")){
+                UNDO(*P1, &undo, T);
+            }
             else if(isCommandSame(str, "END_TURN")){
                 END_TURN(P1, P2, T, &extra, &atkup);
                 move = true;
@@ -383,7 +389,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
             }
             else if(isCommandSame(str, "MOVE")){
                 if(move){
-                    MOVE(*P1, T);
+                    MOVE(*P1, T, &undo);
                     move = false;
                 } else {
                     printf("Kau sudah melakukan MOVE untuk giliran ini! \n");
@@ -395,13 +401,14 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
             }
         }
         else if(act(*P2) == 1){
+            CreateEmpty_Stackt(&undo);
             printHeadSkills(*P2);
             STARTKATA_KEYBOARD(str); 
             if (isCommandSame(str, "ATTACK")) {
-                ATTACK(T,P2,P1,&atkup,&critical);
+                ATTACK(T, P2, P1, &atkup, &critical, &undo);
             }
             else if(isCommandSame(str, "LEVEL_UP")){
-                LEVEL_UP(P2, T);
+                LEVEL_UP(P2, T, &undo);
             }
             else if(isCommandSame(str, "SKILL")){
                 // UseSkills(P1, T, &extra, &atkup, &isShieldP2);
@@ -434,7 +441,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
             }
             else if(isCommandSame(str, "MOVE")){
                 if(move){
-                    MOVE(*P2, T);
+                    MOVE(*P2, T, &undo);
                     move = false;
                 } else {
                     printf("Kau sudah melakukan MOVE untuk giliran ini! \n");
