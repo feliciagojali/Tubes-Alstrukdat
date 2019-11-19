@@ -53,6 +53,7 @@ boolean isSuccess(int OwnArmy , int OwnEnemy) {
 
 void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean *critical){
     int pasukan,numOwn,numEnemy,army;
+    boolean claim = false;
     printf("Daftar bangunan: \n"); //buat procedure aja kali ya
     // ngeprint list bangunan yng ada menggunakan adt list
     PrintBangunan(*P1, *TabBangunan);
@@ -75,8 +76,6 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
     }
     
     if ((Jenis(Elmt(*TabBangunan, Info(Y))) == 'F') && (cariBangunan(Elmt(*TabBangunan,Info(Y)),P2,*TabBangunan))){
-            printf("%c",Jenis(Elmt(*TabBangunan, Info(Y))));
-
          InputSkills(P2,3);   
     }
     NPskn(Elmt(*TabBangunan,Info(X))) -= army;
@@ -86,23 +85,24 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
             army = 3*army/4;
         } 
     } 
+    int x = Info(Y);
 
     if (army < NPskn(Elmt(*TabBangunan,Info(Y)))) {
         printf("Bangunan gagal direbut\n");
-        NPskn(Elmt(*TabBangunan,Info(Y))) -= army;
+        NPskn(Elmt(*TabBangunan,x)) -= army;
     } else {
         printf("Bangunan menjadi milikmu!\n");
-        NPskn(Elmt(*TabBangunan,Info(Y))) = army - NPskn(Elmt(*TabBangunan,Info(Y)));
-        int x = Info(Y);
-        if (cariBangunan(Elmt(*TabBangunan,Info(Y)),P2,*TabBangunan)) {
+        NPskn(Elmt(*TabBangunan,x)) = army - NPskn(Elmt(*TabBangunan,x));
+        if (cariBangunan(Elmt(*TabBangunan,x),P2,*TabBangunan)) {
             DelP(&listB(*P2),x);
         }
         InsVFirst(&listB(*P1),x);
-
+        claim = true;
     }
-    // if ((Jenis(Elmt(*TabBangunan, Info(Y))) == 'T') && (Pemilik(Elmt(*TabBangunan,Info(Y))) != 0) && (countTower(*P1,*TabBangunan) == 3)) {
-    //     InputSkills(P1,4);
-    // }
+   
+    if ((Jenis(Elmt(*TabBangunan, x)) == 'T') && (Pemilik(Elmt(*TabBangunan,x)) != 0) && (countTower(*P1,*TabBangunan) == 3) && (claim)) {
+        InputSkills(P1,4);
+    }
     printf("daftar : \n");
     PrintBangunan(*P1,*TabBangunan);
     printf("daftar : \n");

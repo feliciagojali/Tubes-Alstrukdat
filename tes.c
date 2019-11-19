@@ -24,7 +24,7 @@ int main(){
    POINT Po6 = MakePOINT(9,7);
 
    MakeBangunan(&A,Po1,'C',1);
-   MakeBangunan(&B,Po2,'V',1);
+   MakeBangunan(&B,Po2,'T',1);
    MakeBangunan(&C,Po3,'T',1);
    MakeBangunan(&D,Po4,'T',2);
    MakeBangunan(&E,Po5,'F',2);

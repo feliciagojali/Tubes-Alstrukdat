@@ -75,6 +75,7 @@ int countTower(Player P, TabInt T){
         if (Jenis(Elmt(T, Info(X))) == 'T') {
             jumlah +=1;
         }
+        X = Next(X);
     }
     return jumlah;
 }
