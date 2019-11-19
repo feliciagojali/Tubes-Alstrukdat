@@ -37,13 +37,7 @@ int main(){
    AddAsLastEl(&TabBangunan,E);
    AddAsLastEl(&TabBangunan,F);
 
-   for (int i = GetFirstIdx(TabBangunan); i<= GetLastIdx(TabBangunan); i++) {
-      if (Pemilik(Elmt(TabBangunan,i)) == 1) {
-         InsVLast(&listB(P1),i);
-      } else if (Pemilik(Elmt(TabBangunan,i)) == 2) {
-         InsVLast(&listB(P2),i);
-      }
-   }
+   splitToPlayerList(&P1, &P2, TabBangunan);
    // }
    // printf("Bangunan milik Player 1:\n");
    // PrintBangunan(P1,TabBangunan);
@@ -60,5 +54,6 @@ int main(){
    // PrintBangunan(P2, TabBangunan);
 
    LEVEL_UP(&P1,&TabBangunan);
+   // INPUT_COMMAND(&P1, &P2, &TabBangunan);
    return 0;
 }

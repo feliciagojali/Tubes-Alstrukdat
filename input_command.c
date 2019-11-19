@@ -227,25 +227,24 @@ void LEVEL_UP(Player *P, TabInt *T){
 
 // }
 
-// void END_TURN(Player *P1, Player *P2,boolean *extra, boolean *atkup){
-//     //ganti pemain berikutnya
-//     if (!(*extra)) {
-//         if(act(*P1) == 1){
-//             act(*P1) = 0;
-//             act(*P2) = 1;
-//             printf("Sekarang giliran player 2 \n");
-//         }
-//         else{
-//             act(*P1) = 1;
-//             act(*P2) = 0;
-//             printf("Sekarang giliran player 1 \n");
-//         }
-//     } else {
-//         printf("Wah! Giliran kamu lagi! \n");
-//         (*extra) = false;
-//     }
-//     (*atkup) = false;
-// }
+void END_TURN(Player *P1, Player *P2, TabInt *T, boolean *extra, boolean *atkup){
+    //ganti pemain berikutnya
+    if (!(*extra)) {
+        if(act(*P1) == 1 && act(*P2) == 0){
+            act(*P1) = 0;
+            act(*P2) = 1;
+        }
+        else if(act(*P1) == 0 && act(*P2) == 1){
+            act(*P1) = 1;
+            act(*P2) = 0;
+        }
+    } else {
+        printf("Wah! Giliran kamu lagi! \n");
+        (*extra) = false;
+    }
+    (*atkup) = false;
+}
+
 // void SAVE(){
 //     printf("Lokasi save file: ");
 //     //nama file
@@ -306,94 +305,115 @@ void MOVE(Player P, TabInt *T){
 //     exit(0);
 // }
 
-// boolean GAME_OVER(Player P1, Player P2){
-//     return ((IsEmptyList(listB(P1))) || (IsEmptyList(listB(P2))));
-// }
+boolean GAME_OVER(Player P1, Player P2, TabInt T){
+    return ((IsEmptyList(listB(P1))) || (IsEmptyList(listB(P2))));
+}
 
-// void inputCommand(Player *P1, Player *P2){ // nanti ganti void INPUT_COMMAND()
+void splitToPlayerList(Player *P1, Player *P2, TabInt T){
+    for (int i = GetFirstIdx(T); i<= GetLastIdx(T); i++) {
+      if (Pemilik(Elmt(T,i)) == 1) {
+         InsVLast(&listB(*P1),i);
+      } else if (Pemilik(Elmt(T,i)) == 2) {
+         InsVLast(&listB(*P2),i);
+      }
+   }
+}
 
-//     boolean move = true;
-//     boolean extra = false;
-//     boolean atkup,critical = false;
-//     char str[50];
-//     StartSkills(P1);
-//     StartSkills(P2);
-//     int i =1;
-//     act(*P1) = 1;
-//     while(!GAME_OVER(*P1,*P2)){
-//         while(act(*P1) == 1){
-//             STARTKATA_KEYBOARD(str); 
-//             if (isCommandSame(str, "ATTACK")) {
-//                 ATTACK(P1,P2,&atkup,&critical);
-//             }
-//             else if(isCommandSame(str, "LEVEL_UP")){
-//                 LEVEL_UP(P1);
-//             }
-//             else if(isCommandSame(str, "SKILL")){
-//                 UseSkills(P1,&extra,&atkup);
-//             }
-//             else if(isCommandSame(str, "UNDO")){
-//                 UNDO();
-//             }
-//             else if(isCommandSame(str, "END_TURN")){
-//                 END_TURN(P1, P2, &extra, &atkup);
-//             }
-//             else if(isCommandSame(str, "SAVE")){
-//                 SAVE();
-//             }
-//             else if(isCommandSame(str, "EXIT")){
-//                 EXIT();
-//             }
-//             else if(isCommandSame(str, "MOVE")){
-//                 if(move){
-//                     MOVE(P1,P2);
-//                     move = false;
-//                 } else {
-//                     printf("Kau sudah melakukan MOVE untuk giliran ini! \n");
-//                     printf("Tunggu giliran berikutnya!\n");
-//                 }
-//             }
-//             else{
-//                 printf("Check your spelling please...\n");
-//             }
-//         }
-//         while(act(*P2) == 1){            
+void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
+    char str[50];
+    boolean atkup, critical, extra;
+    boolean move = true;
+    int isShieldP1 = 0;
+    int isShieldP2 = 0;
+    act(*P1) = 1;
+    act(*P2) = 0;
+    
+    while(!GAME_OVER(*P1, *P2, *T)){
+        if(act(*P1) == 1){
+            STARTKATA_KEYBOARD(str); 
+            if (isCommandSame(str, "ATTACK")) {
+                ATTACK(T, P1, P2, &atkup, &critical);
+            }
+            else if(isCommandSame(str, "LEVEL_UP")){
+                LEVEL_UP(*P1, T);
+            }
+            else if(isCommandSame(str, "SKILL")){
+                UseSkills(P1, T, &extra, &atkup, &isShieldP1);
+            }
+            // else if(isCommandSame(str, "UNDO")){
+            //     UNDO();
+            // }
+            else if(isCommandSame(str, "END_TURN")){
+                END_TURN(P1, P2, T, &extra, &atkup);
+                move = true;
+                isShieldP2 -= 1;
+                if(isShieldP1 == 0){
+                    ShieldDown(*P1, T);
+                }
+                printf("Player 2's turn.\n");
+            }
+            // else if(isCommandSame(str, "SAVE")){
+            //     SAVE();
+            // }
+            else if(isCommandSame(str, "EXIT")){
+                EXIT();
+            }
+            else if(isCommandSame(str, "MOVE")){
+                if(move){
+                    MOVE(*P1, T);
+                    move = false;
+                } else {
+                    printf("Kau sudah melakukan MOVE untuk giliran ini! \n");
+                    printf("Tunggu giliran berikutnya!\n");
+                }
+            }
+            else{
+                printf("Check your spelling please...\n");
+            }
+        }
+        else if(act(*P2) == 1){
+            STARTKATA_KEYBOARD(str); 
+            if (isCommandSame(str, "ATTACK")) {
+                ATTACK(T,P2,P1,&atkup,&critical);
+            }
+            else if(isCommandSame(str, "LEVEL_UP")){
+                LEVEL_UP(*P2, T);
+            }
+            else if(isCommandSame(str, "SKILL")){
+                // UseSkills(P1, T, &extra, &atkup, &isShieldP2);
+                Shield(*P1, T, &isShieldP2);
 
-//             STARTKATA_KEYBOARD(str); 
-//             if (isCommandSame(str, "ATTACK")) {
-//                 ATTACK(P2,P1,&atkup);
-//             }
-//             else if(isCommandSame(str, "LEVEL_UP")){
-//                 LEVEL_UP(P2);
-//             }
-//             else if(isCommandSame(str, "SKILL")){
-//                 UseSkills(P2,&extra,&atkup);
-//             }
-//             else if(isCommandSame(str, "UNDO")){
-//                 UNDO();
-//             }
-//             else if(isCommandSame(str, "END_TURN")){
-//                 END_TURN(P1, P2,&extra, &atkup);
-//             }
-//             else if(isCommandSame(str, "EXIT")){
-//                 EXIT();
-//             }
-//             else if(isCommandSame(str, "SAVE")){
-//                 SAVE();
-//             }else if(isCommandSame(str, "MOVE")){
-//                 if(move){
-//                     MOVE(P1,P2);
-//                     move = false;
-//                 } else {
-//                     printf("Kau sudah melakukan MOVE untuk giliran ini! \n");
-//                     printf("Tunggu giliran berikutnya!\n");
-//                 }
-//             }
-//             else{
-//                 printf("Check your spelling please...\n");
-//             }
-//         }
-//     }
-// }
-
-
+            }
+            // else if(isCommandSame(str, "UNDO")){
+            //     UNDO();
+            // }
+            else if(isCommandSame(str, "END_TURN")){
+                END_TURN(P2, P1, T, &extra, &atkup);
+                move = true;
+                isShieldP1 -= 1;
+                if(isShieldP1 == 0){
+                    ShieldDown(*P1, T);
+                }
+                printf("Player 1's turn.\n");
+            }
+            // else if(isCommandSame(str, "SAVE")){
+            //     SAVE();
+            // }
+            else if(isCommandSame(str, "EXIT")){
+                EXIT();
+            }
+            else if(isCommandSame(str, "MOVE")){
+                if(move){
+                    MOVE(*P2, T);
+                    move = false;
+                } else {
+                    printf("Kau sudah melakukan MOVE untuk giliran ini! \n");
+                    printf("Tunggu giliran berikutnya!\n");
+                }
+            }
+            else{
+                printf("Check your spelling please...\n");
+            }
+        }
+    }
+}
