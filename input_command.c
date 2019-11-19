@@ -73,8 +73,10 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
         Y = Next(Y);
         i++;
     }
-
+    
     if ((Jenis(Elmt(*TabBangunan, Info(Y))) == 'F') && (cariBangunan(Elmt(*TabBangunan,Info(Y)),P2,*TabBangunan))){
+            printf("%c",Jenis(Elmt(*TabBangunan, Info(Y))));
+
          InputSkills(P2,3);   
     }
     NPskn(Elmt(*TabBangunan,Info(X))) -= army;

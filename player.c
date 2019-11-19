@@ -2,14 +2,15 @@
 #include <stdlib.h>
 #include "player.h"
 
-int Max_Queue = 20;
+int Max_Queue = 10;
 
 Player initPlayer(int id){
     Player P;
     ID(P) = id;
     act(P) = 0;
-
+    CreateEmpty_Queue(&skill(P),Max_Queue);
     CreateEmptyList(&listB(P));
+    StartSkills(&P);
     return P;  
 }
 
@@ -162,7 +163,7 @@ void InputSkills(Player *P,int X)
 //dimana membuat seorang pemain mendapatkan skills tertentu
 //int yang terdefinisi adalah 2-7
     {
-        if (X >=2 && X <= 6)
+        if (X >=2 && X <= 7)
         {
             Add(&skill(*P),X);
             printf("Selamat Anda mendapatkan Skill ");
@@ -172,19 +173,19 @@ void InputSkills(Player *P,int X)
             }
             else if (X == 3)
             {
-                printf("ExtraTurn\n");
+                printf("Extra Turn\n");
             }
             else if (X == 4)
             {
-                printf("AttackUp\n");
+                printf("Attack Up\n");
             }
             else if (X == 5)
             {
-                printf("CriticalHit\n");
+                printf("Critical Hit\n");
             }
             else if (X == 6)
             {
-                printf("InstantReinforcement\n");
+                printf("Instant Reinforcement\n");
             }
             else if (X == 7)
             {

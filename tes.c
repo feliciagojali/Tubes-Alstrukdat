@@ -27,7 +27,7 @@ int main(){
    MakeBangunan(&B,Po2,'V',1);
    MakeBangunan(&C,Po3,'T',1);
    MakeBangunan(&D,Po4,'T',2);
-   MakeBangunan(&E,Po5,'T',2);
+   MakeBangunan(&E,Po5,'F',2);
    MakeBangunan(&F,Po6,'T',2);
 
    AddAsLastEl(&TabBangunan,A);
@@ -55,8 +55,7 @@ int main(){
    // InsIndeksB(A,&P2,TabBangunan);
    // printf("Bangunan milik Player 2:\n");
    // PrintBangunan(P2,TabBangunan);
-
-   // ATTACK(&TabBangunan, &P1, &P2, &atk, &ctrl);
+   ATTACK(&TabBangunan, &P1, &P2, &atk, &ctrl);
    // MOVE(P2, &TabBangunan);
    // PrintBangunan(P2, TabBangunan);
 
