@@ -1,47 +1,37 @@
-#ifndef player_H
-#define player_H
+//Name File:    skills.h
+//Tanggal:      25 oktober 2019
+//Deskripsi:    Berisikan header dari fungsi dan prosedur dari
+//              Skills yang dapat digunakan
+//Tubes Alstrukdat
 
 
-#include "listlinier.h"
-#include "bangunan.h"
-#include "queue.h"
+#include "boolean.h"
 #include "stackt.h"
+#include "Queue.h"
+#include "bangunan.h"
 
-typedef struct {
-    int active;
-    int ID;
-    List listBangunan;
-    Queue skill;
-} Player;
+#ifndef skills_H
+#define skills_H
 
-#define ID(P) (P).ID
-#define listB(P) (P).listBangunan
-#define act(P) (P).active // 1 jika turn dia dan 0 jika bukan turn dia
-#define skill(P) (P).skill // skill yang dimiliki oleh player
+void PrintSkills(Queue *Q, int X);
+//Prosedur untuk print infoHead untuk skill dari QUEUE
+//Skill dimasukan kedalam stack dalam bentuk integer
+// 1-7
 
-Player initPlayer(int id);
-
-void PrintJenisBangunan(Bangunan A);
-
-void PrintBangunan(Player P, listIdxBangunan L, TabInt T);
-
-void InsBangunan(Player *P, Bangunan B, listIdxBangunan *L, TabInt *T);
-
-int countTower (Player P);
-
-void StartSkills(Player *P);
+void StartSkills(Queue *Q);
 //Prosedur yang digunakan saat pertama kali game diaktifkan
 //Membuat Queue berisi skill untuk pemain
 //PARAMETERNYA NANTI TYPE BANGUNAN
 
-void UseSkills(Player *P, boolean *extra, boolean *atkup);
+void UseSkills(Queue *Q, Stack *S, boolean *IsExtraTurn);
+//Pemain mungkin tidak memiliki skill (queue kosong)
 //Prosedur yang digunakan untuk menggunakan skills yang dimiliki pemain
 //Ketika command skill di input
 //Skill yang dapat digunakan adalah skill di head queue
 //input berupa integer karena setiap skill dilambangkan dengan
 //integer 1-7
 
-void InputSkills(Player *P,int X);
+void InputSkills(Queue *Q,int X);
 //Prosedur yang digunakan untuk nambahin skill ke Queue
 //Queue berisikan integer
 //digunain di main program saat ada keadaan
@@ -58,7 +48,7 @@ void Shield(); //-->Bonus
 //jika digunakan 2 kali berturut turut, durasi tidak bertambah
 //Namun nilai maksimum
 
-void ExtraTurn();
+void ExtraTurn(boolean *IsExTurn);
 //Pada stackt dan Queue int 3
 //Ketika diaktifkan, setelah gilirannya berakhir
 //pemain selanjutnya tetap pemain yang sama
@@ -89,6 +79,5 @@ void Barrage();
 //Jumlah pasukan musuh berkurang 10 di seluruh bangunannya
 //Skill didapat jika lawan baru saja bertambah bangunannya
 //menjadi 10 bangunan
-
 
 #endif
