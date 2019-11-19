@@ -251,16 +251,6 @@ void ShieldDown(Player P, TabInt *T)
     printf("The effect of 'shield' ran out! Your buildings' defenses are back to normal.\n");
 }
 
-void ExtraTurn()
-//Pada stackt dan Queue int 3
-//Ketika diaktifkan, setelah gilirannya berakhir
-//pemain selanjutnya tetap pemain yang sama
-//Pemain mendapat skill ini jika Fort pemain tersebut direbut lawan
-{
-
-}
-
-
 void CriticalHit() //-->Bonus
 //Pada stackt dan Queue int 5 
 //Penyerangan setelah pengaktifan skillini

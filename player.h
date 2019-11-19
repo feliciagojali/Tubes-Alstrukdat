@@ -65,12 +65,6 @@ void Shield(Player P, TabInt *T, int *isShield); //-->Bonus
 void ShieldDown(Player P, TabInt *T);
 // me-non-aktifkan efek Shield
 
-void ExtraTurn();
-//Pada stackt dan Queue int 3
-//Ketika diaktifkan, setelah gilirannya berakhir
-//pemain selanjutnya tetap pemain yang sama
-//Pemain mendapat skill ini jika Fort pemain tersebut direbut lawan
-
 void CriticalHit(); //-->Bonus
 //Pada stackt dan Queue int 5 
 //Penyerangan setelah pengaktifan skillini
