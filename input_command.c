@@ -204,43 +204,56 @@ void LEVEL_UP(Player *P, TabInt *T){
 //     //nama file
 // }
 
-// void MOVE(Player *P1, Player *P2){
-//     printf("Daftar Bangunan: \n");
-//     PrintBangunan(*P1);
-//     int num,numrcv,army;
-//     printf("Pilih Bangunan : "); scanf("%d",&num);
-//     printf("Daftar Bangunan terdekat : \n");
-//     // print bangunan terdekat
-//     PrintBangunan(*P2);
-//     printf("Bangungan yang menerima : "); scanf("%d",&numrcv);
-//     printf("Jumlah Pasukan : "); scanf("%d",&army);
-//     addressB X = First(listB(*P1));
-//     addressB Y = First(listB(*P2));
-//     int i =1;
-//     while(i<num){
-//         X = Next(X);
-//         i++;
-//     }
-//     i = 1;
-//     while(i<numrcv){
-//         Y = Next(Y);
-//         i++;
-//     }
+void MOVE(Player P, TabInt *T){
+    printf("Daftar Bangunan: \n");
+    PrintBangunan(P, *T);
 
-//     if (NPskn(Info(X)) < army) {
-//         printf("Jumlah pasukan tidak cukup! \n");
-//     } else {
-//         if (army + NPskn(Info(Y)) > MxTmPskn(Info(Y))) {
-//             NPskn(Info(Y)) = MxTmPskn(Info(Y));
-//         } else{
-//             NPskn(Info(Y)) += army;
-//         }
-//         NPskn(Info(X)) -= army;
-//     }
-//     // pilih bangunan target
-//     // masukan jumlah pasukan
-//     // tulis status: (jumlah_pasukan) pasukan dari (jenis building) (koordinat) telah berpindah ke (jenis building) (koordinat)
-// }
+    int num,numrcv,army;
+
+    printf("Pilih Bangunan : "); scanf("%d",&num);
+    printf("Daftar Bangunan terdekat : \n"); // print bangunan terdekat
+    PrintBangunan(P, *T);
+    printf("Bangungan yang menerima : "); scanf("%d",&numrcv);
+    printf("Jumlah Pasukan : "); scanf("%d",&army);
+    
+    addressB X = First(listB(P));
+    addressB Y = First(listB(P));
+
+    int i =1;
+
+    while(i<num){
+        X = Next(X);
+        i++;
+    }
+
+    i = 1;
+    while(i<numrcv){
+        Y = Next(Y);
+        i++;
+    }
+
+    if (NPskn(Elmt(*T, Info(X))) < army) {
+        printf("Jumlah pasukan tidak cukup! \n");
+    } else {
+        if (army + NPskn(Elmt(*T, Info(Y))) <= MxTmPskn(Elmt(*T, Info(Y)))) {
+            NPskn(Elmt(*T, Info(Y))) = MxTmPskn(Elmt(*T, Info(Y)));
+            NPskn(Elmt(*T, Info(Y))) += army;
+            NPskn(Elmt(*T, Info(X))) -= army;
+            printf("%d pasukan dari "); PrintJenisBangunan(Elmt(*T, Info(X)));
+            TulisPOINT(Titik(Elmt(*T, Info(X))));
+            printf(" telah berpindah ke ");
+            PrintJenisBangunan(Elmt(*T, Info(Y)));
+            TulisPOINT(Titik(Elmt(*T, Info(Y))));
+            printf("\n");
+        } else{
+            printf("Building hanya mampu menampung %d pasukan.\n", MxTmPskn(Elmt(*T, Info(Y))));
+            printf("Perpindahan GAGAL!\n");
+        }
+    }
+    // pilih bangunan target
+    // masukan jumlah pasukan
+    // tulis status: (jumlah_pasukan) pasukan dari (jenis building) (koordinat) telah berpindah ke (jenis building) (koordinat)
+}
 
 // void EXIT(){
 //     exit(0);

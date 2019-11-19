@@ -56,8 +56,9 @@ int main(){
    // printf("Bangunan milik Player 2:\n");
    // PrintBangunan(P2,TabBangunan);
 
-
-   LEVEL_UP(&P1, &TabBangunan);
+   ATTACK(&TabBangunan, &P1, &P2, &atk, &ctrl);
+   MOVE(P2, &TabBangunan);
+   PrintBangunan(P2, TabBangunan);
    
    return 0;
 }
