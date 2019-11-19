@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "player.h"
+#include "boolean.h"
 
 int Max_Queue = 10;
 
@@ -110,7 +111,7 @@ void StartSkills(Player *P)
         Add(&skill(*P),1);
     }
 
-void UseSkills(Player *P, boolean *extra, boolean *atkup)
+void UseSkills(Player *P, boolean *extra, boolean *atkup, TabInt *T, int *isShield)
 //Prosedur yang digunakan untuk menggunakan skills yang dimiliki pemain
 // Q dan S telah terdefinisi sebelumnya
 //Ketika command skill di input
@@ -132,11 +133,11 @@ void UseSkills(Player *P, boolean *extra, boolean *atkup)
             //Kosongin stactk
             if (X == 1)
             {
-                InstantUpgrade();
+                InstantUpgrade(P, T);
             }
             else if (X == 2)
             {
-                Shield();
+                Shield(*P, T, isShield);
             }
             else if (X == 3)
             {
@@ -152,11 +153,11 @@ void UseSkills(Player *P, boolean *extra, boolean *atkup)
             }
             else if (X == 6)
             {
-                InstantReinforcement();
+                InstantReinforcement(P, T);
             }
             else if (X == 7)
             {
-                Barrage();
+                Barrage(P, T);
             }
         }
     }
@@ -288,7 +289,42 @@ void Barrage(Player *P, TabInt *T)
     X = First(listB(*P));
     while (X != NULL)
     {
-        NPskn(Elmt(*T,Info(X))) -= 5;
+        NPskn(Elmt(*T,Info(X))) -= 10;
         X = Next(X);
     }
+}
+
+int CountBangunan(Player *P, TabInt *T)
+//fungsi hitung banyaknya bangunan yang dimiliki oleh suatu player
+{
+    addressB X;
+    int Count;
+    
+    Count =0;
+    X = First(listB(*P));
+    while (X != NULL)
+    {
+        Count +=1;
+        X = Next(X);
+    }
+    return Count;
+}
+
+boolean IsLevelFour(Player *P, TabInt *T)
+//boolean cek apakah seluruh bangunan pemain levelnya 4
+{
+    addressB X;
+    boolean LevelFour;
+    
+    LevelFour = true;
+    X = First(listB(*P));
+    while ((X != NULL) && (LevelFour))
+    {
+        if (Lvl(Elmt(*T,Info(X))) != 4)
+        {
+            LevelFour = false;
+        }
+        X = Next(X);
+    }
+    return LevelFour;
 }

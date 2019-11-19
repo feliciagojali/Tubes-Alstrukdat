@@ -98,6 +98,11 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
         }
         InsVFirst(&listB(*P1),x);
         claim = true;
+        if (CountBangunan(P1, TabBangunan) == 10)
+        {
+            InputSkills(P2, 7);
+        }
+        
     }
    
     if ((Jenis(Elmt(*TabBangunan, x)) == 'T') && (Pemilik(Elmt(*TabBangunan,x)) != 0) && (countTower(*P1,*TabBangunan) == 3) && (claim)) {
@@ -243,6 +248,11 @@ void END_TURN(Player *P1, Player *P2, TabInt *T, boolean *extra, boolean *atkup)
         (*extra) = false;
     }
     (*atkup) = false;
+    if (IsLevelFour(P1, T))
+    {
+        InputSkills(P1, 6);
+    }
+    
 }
 
 // void SAVE(){
