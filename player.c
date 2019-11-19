@@ -228,14 +228,7 @@ void Shield() //-->Bonus
 {
 
 }
-void ExtraTurn()
-//Pada stackt dan Queue int 3
-//Ketika diaktifkan, setelah gilirannya berakhir
-//pemain selanjutnya tetap pemain yang sama
-//Pemain mendapat skill ini jika Fort pemain tersebut direbut lawan
-{
 
-}
 void AttackUp() //-->Bonus
 //Pada stackt dan Queue int 4
 //Pertahanan bangunan musuh tidak mempengaruhi penyerangan
@@ -253,33 +246,35 @@ void CriticalHit() //-->Bonus
 
 }
 
-void InstantReinforcement()
+void InstantReinforcement(Player *P, TabInt *T)
 //Pada stackt dan Queue int 6
 //Seluruh bangunan pasukan +5
 //Skill didapat jika bangunan yang dimiliki pemain
 //seluruhnya telah level 4
 //didapatkan diakhir gilirannya
-//PARAMETERNYA TYPE BANGUNAN dan kepemilikannya
 
 {
-    /*Castle.Pasukan += 5 ;
-    Tower.Pasukan += 5;
-    Fort.Pasukan += 5;
-    Village.Pasukan +=5;
-    */
+    addressB X;
+    
+    X = First(listB(*P));
+    while (X != NULL)
+    {
+        NPskn(Elmt(*T,Info(X))) += 5;
+        X = Next(X);
+    }
 }
-void Barrage()
+void Barrage(Player *P, TabInt *T)
 //Pada stackt dan Queue int 7
 //Jumlah pasukan musuh berkurang 10 di seluruh bangunannya
 //Skill didapat jika lawan baru saja bertambah bangunannya
 //menjadi 10 bangunan
 {
-    /* If (Castle.Pasukan >= 10 && Tower.Pasukan >= 10 && Fort.Pasukan >= 10 && Village.Pasukan >=10 )
+    addressB X;
+    
+    X = First(listB(*P));
+    while (X != NULL)
     {
-        Castle.Pasukan -= 10 ;
-        Tower.Pasukan -= 10;
-        Fort.Pasukan -= 10;
-        Village.Pasukan -=10;
+        NPskn(Elmt(*T,Info(X))) -= 5;
+        X = Next(X);
     }
-    */
 }

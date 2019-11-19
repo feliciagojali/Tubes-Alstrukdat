@@ -62,12 +62,6 @@ void Shield(); //-->Bonus
 //jika digunakan 2 kali berturut turut, durasi tidak bertambah
 //Namun nilai maksimum
 
-void ExtraTurn();
-//Pada stackt dan Queue int 3
-//Ketika diaktifkan, setelah gilirannya berakhir
-//pemain selanjutnya tetap pemain yang sama
-//Pemain mendapat skill ini jika Fort pemain tersebut direbut lawan
-
 void AttackUp(); //-->Bonus
 //Pada stackt dan Queue int 4
 //Pertahanan bangunan musuh tidak mempengaruhi penyerangan
