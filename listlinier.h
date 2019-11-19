@@ -101,7 +101,7 @@ void DelAfter (List *L, addressB *Pdel, addressB Prec);
 /* I.S. List tidak kosong. Prec adalah anggota list  */
 /* F.S. Menghapus Next(Prec): */
 /*      Pdel adalah alamat elemen list yang dihapus  */
-void DelBangunan(List *L, addressB X);
+void DelP (List *L, infotypeB X);
 
 int NbElmt (List L);
 /* Mengirimkan banyaknya elemen list; mengirimkan 0 jika list kosong */

@@ -25,21 +25,34 @@ void PrintJenisBangunan(Bangunan A) {
     }
 }
 
-void PrintBangunan(Player P, listIdxBangunan L, TabInt T){
-    addressB Y = First(L);
-    int i = 1;
-    while(Y != Nil) {
-        if(Pemilik(Elmt(T,Info(Y))) == ID(P)){
+void PrintBangunan(Player P, TabInt T){
+    addressB Y = First(listB(P));
+    if (!IsEmptyList(listB(P))) {
+        int i = 1;
+        while(Y != Nil) {
             printf("%d. ",i);
             PrintJenisBangunan(Elmt(T,Info(Y)));
-            TulisPOINT(Titik(Elmt(T,i)));
-            printf(" %d",NPskn(Elmt(T,i)));
-            printf(" lvl. %d \n",Lvl(Elmt(T,i)));
+            TulisPOINT(Titik(Elmt(T,Info(Y))));
+            printf(" %d",NPskn(Elmt(T,Info(Y))));
+            printf(" lvl. %d \n",Lvl(Elmt(T,Info(Y))));
             i++;
-        }
-        Y = Next(Y);
-    } 
+            Y = Next(Y);
+        } 
+    }
 }
+boolean cariBangunan(Bangunan A,Player *P,TabInt T)
+{
+    addressB X = First(listB(*P));
+    boolean ada = false;
+    while (X!=NULL){
+        if (EQ(Titik(Elmt(T,Info(X))),Titik(A))) {
+            ada = true;
+        }
+        X = Next(X);
+    }
+    return ada;
+}
+
 
 void InsBangunan(Player *P, Bangunan B, listIdxBangunan *L, TabInt *T)
 {
@@ -50,7 +63,7 @@ void InsBangunan(Player *P, Bangunan B, listIdxBangunan *L, TabInt *T)
         Pemilik(B) = 2;
     }
     AddAsLastEl(T, B);
-    InsVLast(L, NbElmtT(*T));
+    InsVLast(L, NbElmtTab(*T));
 }
 
 int countTower(Player P, TabInt T){
@@ -188,7 +201,7 @@ void InstantUpgrade(Player *P, TabInt *T)
 {
     addressB X = First(listB(*P));
     while (X != NULL){
-        Lvl(Elmt(T, Info(X))) += 1;
+        Lvl(Elmt(*T,Info(X))) += 1;
         X = Next(X);
     }
 }

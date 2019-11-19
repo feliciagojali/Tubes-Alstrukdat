@@ -22,7 +22,7 @@ void Dealokasi(TabInt *T){
 
 /* ********** SELEKTOR (TAMBAHAN) ********** */
 /* *** Banyaknya elemen *** */
-int NbElmtT(TabInt T){
+int NbElmtTab(TabInt T){
     return Neff(T);
 }
 /* Mengirimkan banyaknya elemen efektif tabel */
@@ -78,47 +78,22 @@ boolean IsFull(TabInt T){
 }
 /* Mengirimkan true jika tabel T penuh, mengirimkan false jika tidak */
 
-/* ********** BACA dan TULIS dengan INPUT/OUTPUT device ********** */
-/* *** Mendefinisikan isi tabel dari pembacaan *** */
-// void BacaIsi(TabInt *T){
-//     IdxType i, N;
-//     do{
-//         scanf("%d", &N);
-//     } while((N < 0) || (N > MaxEl(*T)));
-//     Neff(*T) = N;
-//     for(i = IdxMin; i <= Neff(*T); i++){
-//         scanf("%d", &N);
-//         Elmt(*T, i) = N;
-//     }
-// }
-/* I.S. T sembarang dan sudah dialokasikan sebelumnya */
-/* F.S. Tabel T terdefinisi */
-/* Proses : membaca banyaknya elemen T dan mengisi nilainya */
-/* 1. Baca banyaknya elemen diakhiri enter, misalnya N */
-/*    Pembacaan diulangi sampai didapat N yang benar yaitu 0 <= N <= MaxElement(T) */
-/*    Jika N tidak valid, tidak diberikan pesan kesalahan */
-/* 2. Jika 0 < N <= MaxElement(T); Lakukan N kali: Baca elemen mulai dari indeks
-      IdxMin satu per satu diakhiri enter */
-/*    Jika N = 0; hanya terbentuk T kosong */
-void TulisIsiTab(TabInt T){
-    IdxType i;
-    printf("[");
-    for(i = GetFirstIdx(T); i <= GetLastIdx(T); i++){
-        printf("%d", Elmt(T,i));
-        if(i != GetLastIdx(T)){
-            printf(",");
-        }
-    }
-    printf("]");
-}
-/* Proses : Menuliskan isi tabel dengan traversal, tabel ditulis di antara kurung siku;
-   antara dua elemen dipisahkan dengan separator "koma", tanpa tambahan karakter di depan,
-   di tengah, atau di belakang, termasuk spasi dan enter */
-/* I.S. T boleh kosong */
-/* F.S. Jika T tidak kosong: [e1,e2,...,en] */
-/* Contoh : jika ada tiga elemen bernilai 1, 20, 30 akan dicetak: [1,20,30] */
-/* Jika tabel kosong : menulis [] */
 
+
+
+
+/* ********** OPERASI LAIN ********** */
+void CopyTab(TabInt Tin, TabInt *Tout){
+    IdxType i;
+    MakeEmpty(Tout, MaxEl(Tin));
+    for(i = GetFirstIdx(Tin); i <= GetLastIdx(Tin); i++){
+        Elmt(*Tout,i) = Elmt(Tin, i);
+    }
+    Neff(*Tout) = Neff(Tin);
+}
+/* I.S. Tin terdefinisi tidak kosong, Tout sembarang */
+/* F.S. Tout berisi salinan dari Tin (identik, Neff dan MaxEl sama) */
+/* Proses : Menyalin isi Tin ke Tout */
 
 /* ********** MENAMBAH DAN MENGHAPUS ELEMEN DI AKHIR ********** */
 /* *** Menambahkan elemen terakhir *** */

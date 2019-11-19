@@ -25,11 +25,13 @@ Player initPlayer(int id);
 
 void PrintJenisBangunan(Bangunan A);
 
-void PrintBangunan(Player P, listIdxBangunan L, TabInt T);
+void PrintBangunan(Player P, TabInt T);
 
 void InsBangunan(Player *P, Bangunan B, listIdxBangunan *L, TabInt *T);
 
-int countTower (Player P);
+boolean cariBangunan(Bangunan A,Player *P,TabInt T);
+
+int countTower (Player P, TabInt T);
 
 void StartSkills(Player *P);
 //Prosedur yang digunakan saat pertama kali game diaktifkan

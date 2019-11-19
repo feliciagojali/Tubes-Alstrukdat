@@ -90,15 +90,34 @@ void DelVLast (List *L, infotypeB *X){
         DealokasiList(&P);
     }    
 }
-void DelBangunan(List *L, addressB X){
-    addressB P = First(*L);
-
-    while (Next(P) != NULL && Next(P) != X){
-        P = Next(P);
+void DelP (List *L, infotypeB X){
+    addressB Y = First(*L);
+    addressB prec;
+    int count = 0;
+    if(!IsEmptyList(*L)){
+        while(Info(Y) != X && Next(Y) != NULL){
+            prec = Y;
+            Y = Next(Y);
+            count++;
+        }
+        if(Info(Y) == X){
+            if(count != 0){
+                Next(prec) = Next(Y);
+                DealokasiList(&Y);
+            }
+            else{
+                if(NbElmt(*L) != 1){
+                    First(*L) = Next(First(*L));
+                }
+                else{
+                    CreateEmptyList(L);
+                }
+            }
+        }
     }
-    addressB A = Next(Next(P));
-    Next(P) = A;
 }
+
+
 
 /****************** PRIMITIF BERDASARKAN ALAMAT ******************/
 /*** PENAMBAHAN ELEMEN BERDASARKAN ALAMAT ***/

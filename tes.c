@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
-// #include "input_command.c"
-#include "player.h"
-#include "bangunan.h"
-#include "listlinier.h"
-#include "arraydin.h"
+#include "input_command.c"
+// #include "player.h"
+// #include "bangunan.h"
+// #include "listlinier.h"
+// #include "arraydin.h"
 int main(){
    // INPUT_COMMAND();
    TabInt TabBangunan;
    listIdxBangunan IdxBangunan;
+   boolean atk,ctrl = false;
    MakeEmpty(&TabBangunan,50);
    CreateEmptyList(&IdxBangunan);
     // kamus
@@ -29,40 +30,34 @@ int main(){
    MakeBangunan(&E,Po5,'T',2);
    MakeBangunan(&F,Po6,'T',2);
 
-   // AddAsLastEl(&TabBangunan,A);
-   // InsVLast(&IdxBangunan, 1);
-   // AddAsLastEl(&TabBangunan,B);
-   // InsVLast(&IdxBangunan, 2);
-   // AddAsLastEl(&TabBangunan,C);
-   // InsVLast(&IdxBangunan, 3);
-   // AddAsLastEl(&TabBangunan,D);
-   // InsVLast(&IdxBangunan, 4);
-   // AddAsLastEl(&TabBangunan,E);
-   // InsVLast(&IdxBangunan, 5);
-   // AddAsLastEl(&TabBangunan,F);
-   // InsVLast(&IdxBangunan, 6);
+   AddAsLastEl(&TabBangunan,A);
+   AddAsLastEl(&TabBangunan,B);
+   AddAsLastEl(&TabBangunan,C);
+   AddAsLastEl(&TabBangunan,D);
+   AddAsLastEl(&TabBangunan,E);
+   AddAsLastEl(&TabBangunan,F);
 
-   InsBangunan(&P1, A, &IdxBangunan, &TabBangunan);
-   InsBangunan(&P1, B, &IdxBangunan, &TabBangunan);
-   InsBangunan(&P1, C, &IdxBangunan, &TabBangunan);
-   InsBangunan(&P2, D, &IdxBangunan, &TabBangunan);
-   InsBangunan(&P2, E, &IdxBangunan, &TabBangunan);
-   InsBangunan(&P2, F, &IdxBangunan, &TabBangunan);
-
-   // for (int i = GetFirstIdx(TabBangunan); i<= GetLastIdx(TabBangunan); i++) {
-   //    if (Pemilik(Elmt(TabBangunan,i)) == 1) {
-   //       InsVLast(&listB(P1),i);
-   //    } else if (Pemilik(Elmt(TabBangunan,i)) == 2) {
-   //       InsVLast(&listB(P2),i);
-   //    }
+   for (int i = GetFirstIdx(TabBangunan); i<= GetLastIdx(TabBangunan); i++) {
+      if (Pemilik(Elmt(TabBangunan,i)) == 1) {
+         InsVLast(&listB(P1),i);
+      } else if (Pemilik(Elmt(TabBangunan,i)) == 2) {
+         InsVLast(&listB(P2),i);
+      }
+   }
    // }
+   // printf("Bangunan milik Player 1:\n");
+   // PrintBangunan(P1,TabBangunan);
+   // printf("Bangunan milik Player 2:\n");
+   // PrintBangunan(P2,TabBangunan);
+   // DelIndeksB(A,&P1,TabBangunan);
+   // printf("Bangunan milik Player 1:\n");
+   // PrintBangunan(P1,TabBangunan);
+   // InsIndeksB(A,&P2,TabBangunan);
+   // printf("Bangunan milik Player 2:\n");
+   // PrintBangunan(P2,TabBangunan);
 
-   printf("Bangunan milik Player 1:\n");
-   PrintBangunan(P1,IdxBangunan,TabBangunan);
-   printf("Bangunan milik Player 2:\n");
-   PrintBangunan(P2, IdxBangunan,TabBangunan);
 
-   // inputCommand(&P1, &P2);
+   ATTACK(&TabBangunan,&P1,&P2,&atk,&ctrl);
    
    return 0;
 }
