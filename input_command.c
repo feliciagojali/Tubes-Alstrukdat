@@ -18,19 +18,20 @@ boolean isSuccess(int OwnArmy , int OwnEnemy) {
     }
 }
 
+// addressB getAdrsBangunan(List L,int num){
+//     int i = 1;
+//     addressB P = First(L);
+//     while(i<num){
+//         P = Next(P);
+//     }
+//     return P;
+// }
 
-addressB getAdrsBangunan(List L,int num){
-    int i = 1;
-    addressB P = First(L);
-    while(i<num){
-        P = Next(P);
-    }
-    return P;
-}
-Bangunan getBangunan (List L, int num){
-    addressB P = getAdrsBangunan(L,num);
-    return(Info(P));
-}
+// Bangunan getBangunan (List L, int num){
+//     addressB P = getAdrsBangunan(L,num);
+//     return(Info(P));
+// }
+
 void assignBangunan(List L, int num, Bangunan *B){
     int i = 1;
     addressB P = First(L);
@@ -240,8 +241,6 @@ void EXIT(){
 }
 
 boolean GAME_OVER(Player P1, Player P2){
-   
-
     return ((IsEmptyList(listB(P1))) || (IsEmptyList(listB(P2))));
 }
 

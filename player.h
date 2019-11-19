@@ -6,7 +6,9 @@
 #include "bangunan.h"
 #include "queue.h"
 #include "stackt.h"
+#include "arraydin.h"
 
+typedef List listIdxBangunan;
 typedef struct {
     int active;
     int ID;
@@ -23,9 +25,9 @@ Player initPlayer(int id);
 
 void PrintJenisBangunan(Bangunan A);
 
-void PrintBangunan(Player P);
+void PrintBangunan(Player P, listIdxBangunan L, TabInt T);
 
-void InsBangunan(Bangunan A, Player *P);
+void InsBangunan(Player *P, Bangunan B, listIdxBangunan *L, TabInt *T);
 
 int countTower (Player P);
 

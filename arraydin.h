@@ -50,7 +50,7 @@ void Dealokasi(TabInt *T);
 
 /* ********** SELEKTOR (TAMBAHAN) ********** */
 /* *** Banyaknya elemen *** */
-int NbElmt(TabInt T);
+int NbElmtT(TabInt T);
 /* Mengirimkan banyaknya elemen efektif tabel */
 /* Mengirimkan nol jika tabel kosong */
 /* *** Daya tampung container *** */
@@ -101,58 +101,7 @@ void TulisIsiTab(TabInt T);
 /* Contoh : jika ada tiga elemen bernilai 1, 20, 30 akan dicetak: [1,20,30] */
 /* Jika tabel kosong : menulis [] */
 
-/* ********** OPERATOR ARITMATIKA ********** */
-/* *** Aritmatika tabel : Penjumlahan, pengurangan, perkalian, ... *** */
-TabInt PlusMinusTab(TabInt T1, TabInt T2, boolean plus);
-/* Prekondisi : T1 dan T2 memiliki Neff sama dan tidak kosong */
-/* Jika plus = true, mengirimkan  T1+T2, yaitu setiap elemen T1 dan T2 pada indeks yang sama dijumlahkan */
-/* Jika plus = false, mengirimkan T1-T2, yaitu setiap elemen T1 dikurangi elemen T2 pada indeks yang sama */
 
-/* ********** OPERATOR RELASIONAL ********** */
-/* *** Operasi pembandingan tabel : < =, > *** */
-boolean IsEQ(TabInt T1, TabInt T2);
-/* Mengirimkan true jika T1 sama dengan T2 yaitu jika Neff T1 = T2 dan semua elemennya sama */
-
-/* ********** SEARCHING ********** */
-/* ***  Perhatian : Tabel boleh kosong!! *** */
-IdxType Search1(TabInt T, ElType X);
-/* Search apakah ada elemen tabel T yang bernilai X */
-/* Jika ada, menghasilkan indeks i terkecil, dengan elemen ke-i = X */
-/* Jika tidak ada, mengirimkan IdxUndef */
-/* Menghasilkan indeks tak terdefinisi (IdxUndef) jika tabel T kosong */
-/* Skema Searching yang digunakan bebas */
-boolean SearchB(TabInt T, ElType X);
-/* Search apakah ada elemen tabel T yang bernilai X */
-/* Jika ada, menghasilkan true, jika tidak ada menghasilkan false */
-/* Skema searching yang digunakan bebas */
-
-/* ********** NILAI EKSTREM ********** */
-void MaxMin(TabInt T, ElType *Max, ElType *Min);
-/* I.S. Tabel T tidak kosong */
-/* F.S. Max berisi nilai maksimum T;
-        Min berisi nilai minimum T */
-
-/* ********** OPERASI LAIN ********** */
-void CopyTab(TabInt Tin, TabInt *Tout);
-/* I.S. Tin terdefinisi tidak kosong, Tout sembarang */
-/* F.S. Tout berisi salinan dari Tin (identik, Neff dan MaxEl sama) */
-/* Proses : Menyalin isi Tin ke Tout */
-ElType SumTab(TabInt T);
-/* Menghasilkan hasil penjumlahan semua elemen T */
-/* Jika T kosong menghasilkan 0 */
-int CountX(TabInt T, ElType X);
-/* Menghasilkan berapa banyak kemunculan X di T */
-/* Jika T kosong menghasilkan 0 */
-boolean IsAllGenap(TabInt T);
-/* Menghailkan true jika semua elemen T genap. T boleh kosong */
-
-/* ********** SORTING ********** */
-void Sort(TabInt *T, boolean asc);
-/* I.S. T boleh kosong */
-/* F.S. Jika asc = true, T terurut membesar */
-/*      Jika asc = false, T terurut mengecil */
-/* Proses : Mengurutkan T dengan salah satu algoritma sorting,
-   algoritma bebas */
 
 /* ********** MENAMBAH DAN MENGHAPUS ELEMEN DI AKHIR ********** */
 /* *** Menambahkan elemen terakhir *** */

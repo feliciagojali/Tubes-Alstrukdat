@@ -25,37 +25,46 @@ void PrintJenisBangunan(Bangunan A) {
     }
 }
 
-void PrintBangunan(Player P){
-    addressB Y = First(listB(P));
-    if (!IsEmptyList(listB(P))) {
-        int i = 1;
-        while(Y != Nil) {
+void PrintBangunan(Player P, listIdxBangunan L, TabInt T){
+    addressB Y = First(L);
+    int i = 1;
+    while(Y != Nil) {
+        if(Pemilik(Elmt(T,Info(Y))) == ID(P)){
             printf("%d. ",i);
-            PrintJenisBangunan(Info(Y));
-            TulisPOINT(Titik(Info(Y)));
-            printf(" %d",NPskn(Info(Y)));
-            printf(" lvl. %d \n",Lvl(Info(Y)));
+            PrintJenisBangunan(Elmt(T,Info(Y)));
+            TulisPOINT(Titik(Elmt(T,i)));
+            printf(" %d",NPskn(Elmt(T,i)));
+            printf(" lvl. %d \n",Lvl(Elmt(T,i)));
             i++;
-            Y = Next(Y);
-        } 
-    }
+        }
+        Y = Next(Y);
+    } 
 }
-void InsBangunan(Bangunan A,Player *P)
 
+void InsBangunan(Player *P, Bangunan B, listIdxBangunan *L, TabInt *T)
 {
-    InsVLast(&listB(*P), A);
+    if(ID(*P) == 1){
+        Pemilik(B) = 1;
+    }
+    else{
+        Pemilik(B) = 2;
+    }
+    AddAsLastEl(T, B);
+    InsVLast(L, NbElmtT(*T));
 }
+
 int countTower(Player P){
 
-    int jumlah = 0;
-    addressB X = First(listB(P));
-    while (X != NULL) {
-        if (Jenis(Info(X)) == 'T') {
-            jumlah +=1;
-        }
-    }
-    return jumlah;
+    // int jumlah = 0;
+    // addressB X = First(listB(P));
+    // while (X != NULL) {
+    //     if (Jenis(Elmt(X)) == 'T') {
+    //         jumlah +=1;
+    //     }
+    // }
+    // return jumlah;
 }
+
 /* ---- BAGIAN SKILL ---- */
 void printHeadSkills(Player *P) 
 // prosedur mengeluarkan skill yang ada di Head dari queue
@@ -173,27 +182,37 @@ void InputSkills(Player *P,int X)
     }
 
 void InstantUpgrade(Player *P)
-//Pada stackt dan Queue int 1
-//Bangunan akan naik 1 level
-//Skill hanya ada di daftar skill awal
-//PARAMETER TERGNTUNG INPUT BANGUNAN
 {
-    addressB X = First(listB(*P));
-    while (X != NULL){
-        Lvl(Info(X)) += 1;
-        X = Next(X);
-    }
+
 }
+// //Pada stackt dan Queue int 1
+// //Bangunan akan naik 1 level
+// //Skill hanya ada di daftar skill awal
+// //PARAMETER TERGNTUNG INPUT BANGUNAN
+// {
+//     addressB X = First(listB(*P));
+//     while (X != NULL){
+//         Lvl(Info(X)) += 1;
+//         X = Next(X);
+//     }
+// }
 
     
-void Shield() //-->Bonus
-//Pada stackt dan Queue int 2
-//Seluruh bangunan akan memiliki pertahanan selama 2 turn
-//jika digunakan 2 kali berturut turut, durasi tidak bertambah
-//Namun nilai maksimum
+void Shield(Player *P, int *isShield) //-->Bonus
 {
 
 }
+// //Pada stackt dan Queue int 2
+// //Seluruh bangunan akan memiliki pertahanan selama 2 turn
+// //jika digunakan 2 kali berturut turut, durasi tidak bertambah
+// //Namun nilai maksimum
+// {
+//     addressB X;
+//     while(X != NULL){
+//         Defense(Info(X)) = true;
+//     }
+//     (*isShield) = 2;
+// }
 void ExtraTurn()
 //Pada stackt dan Queue int 3
 //Ketika diaktifkan, setelah gilirannya berakhir
