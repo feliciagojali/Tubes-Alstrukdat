@@ -53,7 +53,6 @@ int main(){
    // MOVE(P2, &TabBangunan);
    // PrintBangunan(P2, TabBangunan);
 
-   LEVEL_UP(&P1,&TabBangunan);
-   // INPUT_COMMAND(&P1, &P2, &TabBangunan);
+   INPUT_COMMAND(&P1, &P2, &TabBangunan);
    return 0;
 }

@@ -80,11 +80,15 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
     }
     NPskn(Elmt(*TabBangunan,Info(X))) -= army;
 
-    if (!(*atkup)) { 
+    if (!(*atkup) && !(*critical)) { 
         if (Defense(Elmt(*TabBangunan,Info(Y)))) {
             army = 3*army/4;
         } 
     } 
+
+    if (*critical) {
+        army = 2*army;
+    }
     int x = Info(Y);
 
     if (army < NPskn(Elmt(*TabBangunan,Info(Y)))) {
@@ -108,6 +112,7 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
     printf("daftar : \n");
 
     PrintBangunan(*P2,*TabBangunan);
+    (*critical) = true;
 }
 boolean isCommandSame(char *strg1, char *strg2)
 {
@@ -301,9 +306,9 @@ void MOVE(Player P, TabInt *T){
     // tulis status: (jumlah_pasukan) pasukan dari (jenis building) (koordinat) telah berpindah ke (jenis building) (koordinat)
 }
 
-// void EXIT(){
-//     exit(0);
-// }
+void EXIT(){
+    exit(0);
+}
 
 boolean GAME_OVER(Player P1, Player P2, TabInt T){
     return ((IsEmptyList(listB(P1))) || (IsEmptyList(listB(P2))));
@@ -330,15 +335,23 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
     
     while(!GAME_OVER(*P1, *P2, *T)){
         if(act(*P1) == 1){
+            printHeadSkills(*P1);
             STARTKATA_KEYBOARD(str); 
             if (isCommandSame(str, "ATTACK")) {
                 ATTACK(T, P1, P2, &atkup, &critical);
             }
             else if(isCommandSame(str, "LEVEL_UP")){
-                LEVEL_UP(*P1, T);
+                LEVEL_UP(P1, T);
             }
             else if(isCommandSame(str, "SKILL")){
-                UseSkills(P1, T, &extra, &atkup, &isShieldP1);
+                if (InfoHead(skill(*P1)) == 3) {
+                    UseSkills(P1, &extra, &atkup,&critical,T, &isShieldP1);
+                    InputSkills(P1,5);
+                } else {
+                    UseSkills(P1, &extra, &atkup,&critical,T, &isShieldP1);
+
+                }
+                
             }
             // else if(isCommandSame(str, "UNDO")){
             //     UNDO();
@@ -347,8 +360,8 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
                 END_TURN(P1, P2, T, &extra, &atkup);
                 move = true;
                 isShieldP2 -= 1;
-                if(isShieldP1 == 0){
-                    ShieldDown(*P1, T);
+                if(isShieldP2 == 0){
+                    ShieldDown(*P2, T);
                 }
                 printf("Player 2's turn.\n");
             }
@@ -372,16 +385,23 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
             }
         }
         else if(act(*P2) == 1){
+            printHeadSkills(*P2);
             STARTKATA_KEYBOARD(str); 
             if (isCommandSame(str, "ATTACK")) {
                 ATTACK(T,P2,P1,&atkup,&critical);
             }
             else if(isCommandSame(str, "LEVEL_UP")){
-                LEVEL_UP(*P2, T);
+                LEVEL_UP(P2, T);
             }
             else if(isCommandSame(str, "SKILL")){
                 // UseSkills(P1, T, &extra, &atkup, &isShieldP2);
-                Shield(*P1, T, &isShieldP2);
+                if (InfoHead(skill(*P1)) == 3) {
+                    UseSkills(P2, &extra, &atkup,&critical,T, &isShieldP1);
+                    InputSkills(P2,5);
+                } else {
+                    UseSkills(P2, &extra, &atkup,&critical,T, &isShieldP1);
+
+                }
 
             }
             // else if(isCommandSame(str, "UNDO")){
