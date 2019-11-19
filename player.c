@@ -53,12 +53,12 @@ void InsBangunan(Player *P, Bangunan B, listIdxBangunan *L, TabInt *T)
     InsVLast(L, NbElmtT(*T));
 }
 
-int countTower(Player P){
+int countTower(Player P, TabInt T){
 
     int jumlah = 0;
     addressB X = First(listB(P));
     while (X != NULL) {
-        if (Jenis(Info(X)) == 'T') {
+        if (Jenis(Elmt(T, Info(X))) == 'T') {
             jumlah +=1;
         }
     }
@@ -180,7 +180,7 @@ void InputSkills(Player *P,int X)
         }
     }
 
-void InstantUpgrade(Player *P)
+void InstantUpgrade(Player *P, TabInt *T)
 //Pada stackt dan Queue int 1
 //Bangunan akan naik 1 level
 //Skill hanya ada di daftar skill awal
@@ -188,7 +188,7 @@ void InstantUpgrade(Player *P)
 {
     addressB X = First(listB(*P));
     while (X != NULL){
-        Lvl(Info(X)) += 1;
+        Lvl(Elmt(T, Info(X))) += 1;
         X = Next(X);
     }
 }

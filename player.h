@@ -6,7 +6,9 @@
 #include "bangunan.h"
 #include "queue.h"
 #include "stackt.h"
+#include "arraydin.h"
 
+typedef List listIdxBangunan;
 typedef struct {
     int active;
     int ID;
