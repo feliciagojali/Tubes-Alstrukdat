@@ -120,10 +120,14 @@ void UseSkills(Player *P, boolean *extra, boolean *atkup)
         int X;
 
         //Algoritma
-        if (IsEmpty_Queue(skill(*P))) {
+        if (IsEmpty_Queue(skill(*P))) 
+        {
             printf("Kamu tidak memiliki skill apapun ! \n");
-        } else {
+        } 
+        else 
+        {
             Del(&skill(*P), &X);
+            //Kosongin stactk
             if (X == 1)
             {
                 InstantUpgrade();
@@ -162,7 +166,11 @@ void InputSkills(Player *P,int X)
 //dimana membuat seorang pemain mendapatkan skills tertentu
 //int yang terdefinisi adalah 2-7
     {
-        if (X >=2 && X <= 6)
+        if (IsFull_Queue(skill(*P)))
+        {
+            printf("Skill gagal kamu dapatkan! Kamu masih memiliki 10 Skill!");
+        }
+        else if (X >=2 && X <= 6)
         {
             Add(&skill(*P),X);
             printf("Selamat Anda mendapatkan Skill ");
@@ -200,8 +208,12 @@ void InstantUpgrade(Player *P, TabInt *T)
 //PARAMETER TERGNTUNG INPUT BANGUNAN
 {
     addressB X = First(listB(*P));
-    while (X != NULL){
-        Lvl(Elmt(*T,Info(X))) += 1;
+    while (X != NULL)
+    {
+        if (Lvl(Elmt(*T,Info(X))) != 4)
+        {
+            Lvl(Elmt(*T,Info(X))) += 1;
+        }
         X = Next(X);
     }
 }
