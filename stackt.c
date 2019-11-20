@@ -14,15 +14,19 @@
 #include <stdio.h>
 
 
+
 /* ************ Prototype ************ */
 /* *** Konstruktor/Kreator *** */
-void CreateEmpty_Stackt (Stack *S)
+void CreateEmpty_Stackt (Stack *S, int maxel)
 /* I.S. sembarang; */
 /* F.S. Membuat sebuah stack S yang kosong berkapasitas MaxEl */
 /* jadi indeksnya antara 1.. MaxEl+1 karena 0 tidak dipakai */
 /* Ciri stack kosong : TOP bernilai Nil */
 {
-  Top(*S) = Nil;
+  TI(InfoTop(*S)) = (Bangunan *) malloc (sizeof(Bangunan) * (maxel+1));
+  Neff(InfoTop(*S)) = 0;
+  MaxEl(InfoTop(*S)) = maxel;
+
 }
 
 /* ************ Predikat Untuk test keadaan KOLEKSI ************ */
@@ -43,8 +47,13 @@ void Push (Stack * S, infotypeS X)
 /* I.S. S mungkin kosong, tabel penampung elemen stack TIDAK penuh */
 /* F.S. X menjadi TOP yang baru,TOP bertambah 1 */
 {
+  int i;
   Top(*S) +=1;
-  InfoTop(*S) = X;
+  MaxEl(InfoTop(*S)) = MaxEl(X);
+  Neff(InfoTop(*S)) = Neff(X);
+  for(i = GetFirstIdx(X);i<= GetLastIdx(X); i++){
+    AddAsLastEl(&InfoTop(*S), Elmt(X, i));
+  }
 }
 
 /* ************ Menghapus sebuah elemen Stack ************ */

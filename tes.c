@@ -8,6 +8,7 @@
 int main(){
    // INPUT_COMMAND();
    TabInt TabBangunan;
+   Stack S;
    listIdxBangunan IdxBangunan;
    boolean atk,ctrl = false;
    MakeEmpty(&TabBangunan,50);
@@ -49,7 +50,7 @@ int main(){
    // InsIndeksB(A,&P2,TabBangunan);
    // printf("Bangunan milik Player 2:\n");
    // PrintBangunan(P2,TabBangunan);
-   ATTACK(&TabBangunan, &P1, &P2, &atk, &ctrl);
+   // ATTACK(&TabBangunan, &P1, &P2, &atk, &ctrl, &S);
    // MOVE(P2, &TabBangunan);
    // PrintBangunan(P2, TabBangunan);
 

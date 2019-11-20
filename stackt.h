@@ -9,6 +9,7 @@
 #define stackt_H
 
 #include "boolean.h"
+#include "arraydin.h"
 
 #define Nil 0
 #define MaxElS 10
@@ -36,10 +37,10 @@ typedef struct {
 
 /* ************ Prototype ************ */
 /* *** Konstruktor/Kreator *** */
-void CreateEmpty_Stackt (Stack *S);
+void CreateEmpty_Stackt (Stack *S, int maxel);
 /* I.S. sembarang; */
 /* F.S. Membuat sebuah stack S yang kosong berkapasitas MaxEl */
-/* jadi indeksnya antara 1.. MaxEl+1 karena 0 tidak dipakai */
+/* jadi indeksnya antara 1.. MaxEl+1 karena 0 tiak dipakai */
 /* Ciri stack kosong : TOP bernilai Nil */
 
 /* ************ Predikat Untuk test keadaan KOLEKSI ************ */
@@ -49,13 +50,13 @@ boolean IsFull_Stackt (Stack S);
 /* Mengirim true jika tabel penampung nilai elemen stack penuh */
 
 /* ************ Menambahkan sebuah elemen ke Stack ************ */
-void Push (Stack * S, infotype X);
+void Push (Stack * S, infotypeS X);
 /* Menambahkan X sebagai elemen Stack S. */
 /* I.S. S mungkin kosong, tabel penampung elemen stack TIDAK penuh */
 /* F.S. X menjadi TOP yang baru,TOP bertambah 1 */
 
 /* ************ Menghapus sebuah elemen Stack ************ */
-void Pop (Stack * S, infotype* X);
+void Pop (Stack * S, infotypeS* X);
 /* Menghapus X dari Stack S. */
 /* I.S. S  tidak mungkin kosong */
 /* F.S. X adalah nilai elemen TOP yang lama, TOP berkurang 1 */

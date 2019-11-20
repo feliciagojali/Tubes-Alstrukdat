@@ -19,7 +19,7 @@ boolean isSuccess(int OwnArmy , int OwnEnemy) {
 }
 
 // addressB getAdrsBangunan(List L,int num){
-//     int i = 1;
+//     int i = 1;F
 //     addressB P = First(L);
 //     while(i<num){
 //         P = Next(P);
@@ -235,7 +235,7 @@ void LEVEL_UP(Player *P, TabInt *T, Stack *undo){
 void UNDO(Player P, Stack *undo, TabInt *T){
     Pop(undo, T), 
     printf("Undo done. The buildings have been updated!\n");
-    PrintBangunan(P, *T);
+    PrintBangunan(P, InfoTop(*undo));
 }
 
 void END_TURN(Player *P1, Player *P2, TabInt *T, boolean *extra, boolean *atkup){
@@ -337,6 +337,7 @@ void splitToPlayerList(Player *P1, Player *P2, TabInt T){
 }
 
 void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
+    printf("masuk input command\n");
     char str[50];
     boolean atkup, critical, extra;
     boolean move = true;
@@ -345,8 +346,9 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
     act(*P1) = 1;
     act(*P2) = 0;
     Stack undo;
-    CreateEmpty_Stackt(&undo);
-
+    TabInt T1;
+    CreateEmpty_Stackt(&undo,MaxEl(*T));
+    
     Push(&undo, *T);
     
     while(!GAME_OVER(*P1, *P2, *T)){
@@ -364,7 +366,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
                     UseSkills(P1, &extra, &atkup,&critical,T, &isShieldP1);
                     InputSkills(P1,5);
                 } else {
-                    UseSkills(P1, T, &extra, &atkup,&critical, &isShieldP1);
+                    UseSkills(P1, &extra, &atkup,&critical,T, &isShieldP1);
 
                 }
                 
@@ -401,7 +403,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
             }
         }
         else if(act(*P2) == 1){
-            CreateEmpty_Stackt(&undo);
+            CreateEmpty_Stackt(&undo,MaxEl(*T));
             printHeadSkills(*P2);
             STARTKATA_KEYBOARD(str); 
             if (isCommandSame(str, "ATTACK")) {
