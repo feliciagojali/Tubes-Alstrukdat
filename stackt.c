@@ -23,10 +23,11 @@ void CreateEmpty_Stackt (Stack *S, int maxel)
 /* jadi indeksnya antara 1.. MaxEl+1 karena 0 tidak dipakai */
 /* Ciri stack kosong : TOP bernilai Nil */
 {
-  TI(InfoTop(*S)) = (Bangunan *) malloc (sizeof(Bangunan) * (maxel+1));
+  Top(*S) = Nil;
   Neff(InfoTop(*S)) = 0;
   MaxEl(InfoTop(*S)) = maxel;
-
+  TI(InfoTop(*S)) = (ElType *) malloc (sizeof(TabInt) * (maxel+1));
+  // printf("berhasil malloc\n");
 }
 
 /* ************ Predikat Untuk test keadaan KOLEKSI ************ */
@@ -49,11 +50,12 @@ void Push (Stack * S, infotypeS X)
 {
   int i;
   Top(*S) +=1;
-  MaxEl(InfoTop(*S)) = MaxEl(X);
-  Neff(InfoTop(*S)) = Neff(X);
+  MakeEmpty(&InfoTop(*S), MaxEl(X));
   for(i = GetFirstIdx(X);i<= GetLastIdx(X); i++){
     AddAsLastEl(&InfoTop(*S), Elmt(X, i));
   }
+  
+  Neff(InfoTop(*S)) = Neff(X);
 }
 
 /* ************ Menghapus sebuah elemen Stack ************ */

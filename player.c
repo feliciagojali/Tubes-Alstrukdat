@@ -28,20 +28,23 @@ void PrintJenisBangunan(Bangunan A) {
 }
 
 void PrintBangunan(Player P, TabInt T){
-    addressB Y = First(listB(P));
-    if (!IsEmptyList(listB(P))) {
-        int i = 1;
-        while(Y != Nil) {
-            printf("%d. ",i);
-            PrintJenisBangunan(Elmt(T,Info(Y)));
-            TulisPOINT(Titik(Elmt(T,Info(Y))));
-            printf(" %d",NPskn(Elmt(T,Info(Y))));
-            printf(" lvl. %d \n",Lvl(Elmt(T,Info(Y))));
-            i++;
-            Y = Next(Y);
-        } 
-    }
+    // addressB Y = First(listB(P));
+        int j = 1;
+        // while(Y != Nil) {
+        for(int i = 1; i <= NbElmtTab(T); i++){
+            if(ID(P) == Pemilik(Elmt(T,i))){
+                printf("%d. ",j);
+                PrintJenisBangunan(Elmt(T,i));
+                TulisPOINT(Titik(Elmt(T,i)));
+                printf(" %d",NPskn(Elmt(T,i)));
+                printf(" lvl. %d \n",Lvl(Elmt(T,i)));
+                j++;
+            }
+        }
+
+            // Y = Next(Y);
 }
+
 boolean cariBangunan(Bangunan A,Player *P,TabInt T)
 {
     addressB X = First(listB(*P));

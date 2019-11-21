@@ -53,6 +53,8 @@ boolean isSuccess(int OwnArmy , int OwnEnemy) {
 
 void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean *critical, Stack *undo){
     int pasukan,numOwn,numEnemy,army;
+    TabInt myBangunan, enemyBangunan;
+
     boolean claim = false;
     printf("Daftar bangunan: \n"); //buat procedure aja kali ya
     // ngeprint list bangunan yng ada menggunakan adt list
@@ -101,6 +103,9 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
             DelP(&listB(*P2),x);
         }
         InsVFirst(&listB(*P1),x);
+        if(ID(*P1) == 1){
+            
+        }
         claim = true;
         if (CountBangunan(P1, TabBangunan) == 10)
         {
@@ -233,9 +238,16 @@ void LEVEL_UP(Player *P, TabInt *T, Stack *undo){
 // }
 
 void UNDO(Player P, Stack *undo, TabInt *T){
-    Pop(undo, T), 
-    printf("Undo done. The buildings have been updated!\n");
-    PrintBangunan(P, InfoTop(*undo));
+    if(IsEmpty_Stackt(*undo)){
+        printf("Cannot do that! This is your earliest status. \n");
+    }
+    else{
+        
+        infotypeS temp;
+        Pop(undo, &temp); 
+        printf("Undo done. The buildings have been updated!\n");
+        PrintBangunan(P, InfoTop(*undo));
+    }
 }
 
 void END_TURN(Player *P1, Player *P2, TabInt *T, boolean *extra, boolean *atkup){
@@ -337,7 +349,6 @@ void splitToPlayerList(Player *P1, Player *P2, TabInt T){
 }
 
 void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
-    printf("masuk input command\n");
     char str[50];
     boolean atkup, critical, extra;
     boolean move = true;
@@ -346,8 +357,9 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
     act(*P1) = 1;
     act(*P2) = 0;
     Stack undo;
-    TabInt T1;
-    CreateEmpty_Stackt(&undo,MaxEl(*T));
+    // TabInt T1;
+    printf("masuk input command\n");
+    CreateEmpty_Stackt(&undo, MaxEl(*T));
     
     Push(&undo, *T);
     
@@ -403,7 +415,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
             }
         }
         else if(act(*P2) == 1){
-            CreateEmpty_Stackt(&undo,MaxEl(*T));
+            CreateEmpty_Stackt(&undo, MaxEl(*T));
             printHeadSkills(*P2);
             STARTKATA_KEYBOARD(str); 
             if (isCommandSame(str, "ATTACK")) {
