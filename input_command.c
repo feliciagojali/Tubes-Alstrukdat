@@ -175,6 +175,25 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
         printf("You've already attacked with this building! \n");
     }
 }
+
+boolean isCommandSame(char *strg1, char *strg2)
+{
+    while( ( *strg1 != '\0' && *strg2 != '\0' ) && *strg1 == *strg2 )
+    {
+        strg1++;
+        strg2++;
+    }
+ 
+    if(*strg1 == *strg2)
+    {
+        return true; // strings are identical
+    }
+ 
+    else
+    {
+        return false;
+    }
+}
 // bikin boolean cek ada yg bisa diserang atau ga
 // buat fungsi mengurangi pasukan 
 boolean isCanLevel (Bangunan A) {
