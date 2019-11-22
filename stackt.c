@@ -34,7 +34,7 @@ void CreateEmpty_Stackt (Stack *S, int maxel)
 boolean IsEmpty_Stackt (Stack S)
 /* Mengirim true jika Stack kosong: lihat definisi di atas */
 {
-  return (Top(S) == Nil);
+  return (Top(S) == 1);
 }
 boolean IsFull_Stackt (Stack S)
 /* Mengirim true jika tabel penampung nilai elemen stack penuh */
@@ -66,4 +66,14 @@ void Pop (Stack * S, infotypeS* X)
 {
   *X = InfoTop(*S);
   Top(*S) -= 1;
+}
+
+void DelAll (Stack *S){
+  infotypeS temp, tempPop;
+  temp = InfoTop(*S);
+  while(!IsEmpty_Stackt(*S)){
+    Pop(S, &tempPop);
+  }
+  Pop(S, &tempPop);
+  Push(S, temp);
 }

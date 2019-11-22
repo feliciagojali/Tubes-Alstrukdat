@@ -28,40 +28,47 @@ void PrintJenisBangunan(Bangunan A) {
 }
 
 void PrintBangunan(Player P, TabInt T){
-    // addressB Y = First(listB(P));
-        int j = 1;
-        // while(Y != Nil) {
-        for(int i = 1; i <= NbElmtTab(T); i++){
-            if(ID(P) == Pemilik(Elmt(T,i))){
-                printf("%d. ",j);
-                PrintJenisBangunan(Elmt(T,i));
-                TulisPOINT(Titik(Elmt(T,i)));
-                printf(" %d",NPskn(Elmt(T,i)));
-                printf(" lvl. %d \n",Lvl(Elmt(T,i)));
-                j++;
-            }
+    addressB Y = First(listB(P));
+    int j = 1;
+    while(Y != Nil) {
+            printf("%d. ",j);
+            PrintJenisBangunan(Elmt(T,Info(Y)));
+            TulisPOINT(Titik(Elmt(T,Info(Y))));
+            printf(" %d",NPskn(Elmt(T,Info(Y))));
+            printf(" lvl. %d \n",Lvl(Elmt(T,Info(Y))));
+            
+            Y = Next(Y);
+            j++;
         }
 
-            // Y = Next(Y);
 }
 
-boolean cariBangunan(Bangunan A,Player *P,TabInt T)
+boolean cariBangunan(Bangunan A,Player P,TabInt T)
 {
-    addressB X = First(listB(*P));
-    boolean ada = false;
-    while (X!=NULL){
-        if (EQ(Titik(Elmt(T,Info(X))),Titik(A))) {
-            ada = true;
+    int numBuilding;
+    TabInt myBangunan;
+    int arr[50],j;
+    MakeEmpty(&myBangunan, MaxEl(T));
+    j = 1;
+    for(int i = GetFirstIdx(T); i <= GetLastIdx(T); i++){
+
+        if(Pemilik(Elmt(T,i)) == ID(P)){
+            AddAsLastEl(&myBangunan, Elmt(T, i));
+            arr[j] = i;
+            j++;
         }
-        X = Next(X);
     }
-    return ada;
+    int k = GetFirstIdx(myBangunan);
+    while(k <= GetLastIdx(myBangunan) && !EQ(Titik(Elmt(T, k)), Titik(A))){
+        k++;
+    }
+    return (EQ(Titik(Elmt(T, k)), Titik(A)));
 }
 
 
-void InsBangunan(Player *P, Bangunan B, listIdxBangunan *L, TabInt *T)
+void InsBangunan(Player P, Bangunan B, listIdxBangunan *L, TabInt *T)
 {
-    if(ID(*P) == 1){
+    if(ID(P) == 1){
         Pemilik(B) = 1;
     }
     else{
@@ -114,7 +121,7 @@ void StartSkills(Player *P)
         Add(&skill(*P),1);
     }
 
-void UseSkills(Player *P, boolean *extra, boolean *atkup, boolean *critical, TabInt *T,int *isShield)
+void UseSkills(Player *P1, Player *P2, boolean *extra, boolean *atkup, boolean *critical, TabInt *T,int *isShield, Stack *S)
 //Prosedur yang digunakan untuk menggunakan skills yang dimiliki pemain
 // Q dan S telah terdefinisi sebelumnya
 //Ketika command skill di input
@@ -126,21 +133,21 @@ void UseSkills(Player *P, boolean *extra, boolean *atkup, boolean *critical, Tab
         int X;
 
         //Algoritma
-        if (IsEmpty_Queue(skill(*P))) 
+        if (IsEmpty_Queue(skill(*P1))) 
         {
             printf("Kamu tidak memiliki skill apapun ! \n");
         } 
         else 
         {
-            Del(&skill(*P), &X);
-            //Kosongin stactk
+            Del(&skill(*P1), &X);
+            DelAll(S); // kosongin stack
             if (X == 1)
             {
-                InstantUpgrade(P,T);
+                InstantUpgrade(*P1,T);
             }
             else if (X == 2)
             {
-                Shield(*P,T, isShield);
+                Shield(*P1,T, isShield);
             }
             else if (X == 3)
             {
@@ -156,15 +163,15 @@ void UseSkills(Player *P, boolean *extra, boolean *atkup, boolean *critical, Tab
             }
             else if (X == 6)
             {
-                InstantReinforcement(P,T);
+                InstantReinforcement(*P1,T);
             }
             else if (X == 7)
             {
-                Barrage(P,T);
+                Barrage(*P1, *P2, T);
             }
         }
     printf("daftar : \n");
-    PrintBangunan(*P,*T);
+    PrintBangunan(*P1,*T);
     }
 
 void InputSkills(Player *P,int X)
@@ -209,21 +216,24 @@ void InputSkills(Player *P,int X)
         }
     }
 
-void InstantUpgrade(Player *P, TabInt *T)
+void InstantUpgrade(Player P, TabInt *T)
 //Pada stackt dan Queue int 1
 //Bangunan akan naik 1 level
 //Skill hanya ada di daftar skill awal
 //PARAMETER TERGNTUNG INPUT BANGUNAN
 {
-    addressB X = First(listB(*P));
-    while (X != NULL)
-    {
-        if (Lvl(Elmt(*T,Info(X))) != 4)
-        {
+    addressB X = First(listB(P));
+
+    while (X!=Nil){
+        if(Lvl(Elmt(*T,Info(X)))!= 4) {
             Lvl(Elmt(*T,Info(X))) += 1;
-        }
+            LevelUpBangunan(T,Info(X));
+        } 
         X = Next(X);
     }
+
+
+
 }
 
     
@@ -233,33 +243,31 @@ void Shield(Player P, TabInt *T, int *isShield) //-->Bonus
 //jika digunakan 2 kali berturut turut, durasi tidak bertambah
 //Namun nilai maksimum
 {
-    addressB B = First(listB(P));
-
-    while(B != Nil){
-        Defense(Elmt(*T,Info(B))) = true;
-        B = Next(B);
+    for(int i = GetFirstIdx(*T); i <= GetLastIdx(*T); i++){
+        if(Pemilik(Elmt(*T,i)) == ID(P)){
+            Defense(Elmt(*T,i)) = true;
+        }
     }
     (*isShield) = 2;
-    printf("Your buildings' defenses have been updated!\n");
+    printf("Your buildings' defenses are all on!\n");
 }
 
 void ShieldDown(Player P, TabInt *T)
 // untuk mengembalikan bangunan seperti semula setelah efek shield habis
 {
-    addressB B = First(listB(P));
-
-    while(B != Nil){
-        if(Jenis(Elmt(*T, Info(B))) == 'C' || Jenis(Elmt(*T, Info(B))) == 'V' || (Jenis(Elmt(*T, Info(B))) == 'F' && Lvl(Elmt(*T, Info(B))) <= 2)){
-            Defense(Elmt(*T, Info(B))) = false;
+    for(int i = GetFirstIdx(*T); i <= GetLastIdx(*T); i++){
+        if(Pemilik(Elmt(*T,i)) == ID(P)){
+            if(Jenis(Elmt(*T, i)) == 'C' || Jenis(Elmt(*T, i)) == 'V' || (Jenis(Elmt(*T, i)) == 'F' && Lvl(Elmt(*T, i)) <= 2)){
+                Defense(Elmt(*T,i)) = true;
+            }
         }
-        B = Next(B);
     }
     printf("The effect of 'shield' ran out! Your buildings' defenses are back to normal.\n");
 }
 
 
 
-void InstantReinforcement(Player *P, TabInt *T)
+void InstantReinforcement(Player P, TabInt *T)
 //Pada stackt dan Queue int 6
 //Seluruh bangunan pasukan +5
 //Skill didapat jika bangunan yang dimiliki pemain
@@ -267,62 +275,106 @@ void InstantReinforcement(Player *P, TabInt *T)
 //didapatkan diakhir gilirannya
 
 {
-    addressB X;
-    
-    X = First(listB(*P));
-    while (X != NULL)
-    {
-        NPskn(Elmt(*T,Info(X))) += 5;
-        X = Next(X);
+    for(int i = GetFirstIdx(*T); i <= GetLastIdx(*T); i++){
+        if(Pemilik(Elmt(*T,i)) == ID(P)){
+            NPskn(Elmt(*T,i)) += 5;
+        }
     }
 }
-void Barrage(Player *P, TabInt *T)
+
+void Barrage(Player P1, Player P2, TabInt *T)
 //Pada stackt dan Queue int 7
 //Jumlah pasukan musuh berkurang 10 di seluruh bangunannya
 //Skill didapat jika lawan baru saja bertambah bangunannya
 //menjadi 10 bangunan
 {
-    addressB X;
-    
-    X = First(listB(*P));
-    while (X != NULL)
-    {
-        NPskn(Elmt(*T,Info(X))) -= 10;
-        X = Next(X);
+    if(ID(P1) == 1){
+        ID(P2) = 2;
+    }
+    else if(ID(P1) == 2){
+        ID(P2) = 1;
+
+    }
+    for(int i = GetFirstIdx(*T); i <= GetLastIdx(*T); i++){
+        if(Pemilik(Elmt(*T,i)) == ID(P2)){
+            NPskn(Elmt(*T,i)) -= 10;
+            if(NPskn(Elmt(*T,i)) < 0){
+                NPskn(Elmt(*T,i)) = 0;
+            }
+        }
     }
 }
 
-int CountBangunan(Player *P, TabInt *T)
+int CountBangunan(Player P, TabInt T)
 //fungsi hitung banyaknya bangunan yang dimiliki oleh suatu player
 {
-    addressB X;
-    int Count;
+    int Count = 0;
     
-    Count =0;
-    X = First(listB(*P));
-    while (X != NULL)
-    {
-        Count +=1;
-        X = Next(X);
+    for(int i = GetFirstIdx(T); i <= GetLastIdx(T); i++){
+        if(Pemilik(Elmt(T,i)) == ID(P)){
+            Count++;
+        }
     }
+
     return Count;
 }
 
-boolean IsLevelFour(Player *P, TabInt *T)
+boolean IsLevelFour(Player P, TabInt *T)
 //boolean cek apakah seluruh bangunan pemain levelnya 4
 {
-    addressB X;
-    boolean LevelFour;
-    
-    LevelFour = true;
-    X = First(listB(*P));
-    while ((X != NULL) && (LevelFour))
-    {
-        if (Lvl(Elmt(*T,Info(X))) != 4)
-        {
-            LevelFour = false;
+    int i = GetFirstIdx(*T);
+    while(i <= GetLastIdx(*T)){
+        if(Pemilik(Elmt(*T,i)) == ID(P)){
+            if(Lvl(Elmt(*T,i)) != 4){
+                return false;
+            }
+        i++;
         }
-        X = Next(X);
     }
-    return LevelFour;
+    return true;
+}
+
+void LevelUpBangunan (TabInt *T, int idDipilih){
+    if(Lvl(Elmt(*T,idDipilih)) == 2){
+			if(Jenis(Elmt(*T,idDipilih))=='C'){
+				UbahBangunan(&Elmt(*T,idDipilih),15,60,false);
+			}
+			else if(Jenis(Elmt(*T,idDipilih))=='T'){
+				UbahBangunan(&Elmt(*T,idDipilih),10,30,true);
+			}
+			else if(Jenis(Elmt(*T,idDipilih))=='F'){
+				UbahBangunan(&Elmt(*T,idDipilih),20,40,false);
+			}
+			else if(Jenis(Elmt(*T,idDipilih))=='V'){
+				UbahBangunan(&Elmt(*T,idDipilih),10,30,false);
+			}
+		}
+		else if(Lvl(Elmt(*T,idDipilih)) == 3){
+			if(Jenis(Elmt(*T,idDipilih)) =='C'){
+				UbahBangunan(&Elmt(*T,idDipilih),20,80,false);
+			}
+			else if(Jenis(Elmt(*T,idDipilih))=='T'){
+				UbahBangunan(&Elmt(*T,idDipilih),20,40,true);
+			}
+			else if(Jenis(Elmt(*T,idDipilih))=='F'){
+				UbahBangunan(&Elmt(*T,idDipilih),30,60,true);
+			}
+			else if(Jenis(Elmt(*T,idDipilih))=='V'){
+				UbahBangunan(&Elmt(*T,idDipilih),15,40,false);
+			}
+		}
+		else if(Lvl(Elmt(*T,idDipilih)) == 4){
+			if(Jenis(Elmt(*T,idDipilih))=='C'){
+				UbahBangunan(&Elmt(*T,idDipilih),25,100,false);
+			}
+			else if(Jenis(Elmt(*T,idDipilih))=='T'){
+				UbahBangunan(&Elmt(*T,idDipilih),30,50,true);
+			}
+			else if(Jenis(Elmt(*T,idDipilih))=='F'){
+				UbahBangunan(&Elmt(*T,idDipilih),40,80,true);
+			}
+			else if(Jenis(Elmt(*T,idDipilih))=='V'){
+				UbahBangunan(&Elmt(*T,idDipilih),20,50,false);
+			}
+		}
 }

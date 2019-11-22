@@ -9,7 +9,7 @@ typedef char jns;			//tipe jenis bangunan 'C','T','F','V'
 typedef int noMilik;		//tipe kepemilikan, player 1 '1', player 2 '2'
 typedef int psknType;		//tipe jumlah pasukan
 typedef int lvl;			//tipe lvl bangunan
-typedef boolean defense;	//tipe pertahanan
+typedef boolean defense,hasAtk;	//tipe pertahanan
 typedef struct {
 	POINT titik;
 	jns jenis;
@@ -20,6 +20,7 @@ typedef struct {
 	psknType mxTmPskn;
 	defense pertahanan;
 	psknType psknAwal;
+	hasAtk hasAtk;
 }Bangunan;
 
 /* **********SELEKTOR********** */
@@ -32,6 +33,7 @@ typedef struct {
 #define MxTmPskn(B)	(B).mxTmPskn
 #define Defense(B)	(B).pertahanan
 #define AwalPskn(B)	(B).psknAwal
+#define hasAtk(B)	(B).hasAtk
 
 /* **********KONSTRUKTOR********** */
 void MakeBangunan(Bangunan *B, POINT T, jns J, noMilik player);

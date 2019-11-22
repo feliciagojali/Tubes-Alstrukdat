@@ -9,6 +9,7 @@
 #include "mesinkar.h"
 #include "player.h"
 #include "arraydin.h"
+#include "graph.h"
 
 boolean isSuccess(int OwnArmy , int OwnEnemy) {
     if (OwnArmy < OwnEnemy) {
@@ -51,79 +52,121 @@ boolean isSuccess(int OwnArmy , int OwnEnemy) {
 
 // }
 
-void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean *critical, Stack *undo){
+void PrintBG(TabInt T){
+    for(int i = 1; i <= GetLastIdx(T); i++){
+        printf("%d. ",i);
+        PrintJenisBangunan(Elmt(T, i));
+        TulisPOINT(Titik(Elmt(T, i)));
+        printf(" %d",NPskn(Elmt(T, i)));
+        printf(" lvl. %d \n",Lvl(Elmt(T,i)));
+    }
+}
+
+void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean *critical, Graph G, Stack *undo){
     int pasukan,numOwn,numEnemy,army;
     TabInt myBangunan, enemyBangunan;
+    int arr[50];
+
+    // MakeEmpty(&myBangunan, MaxEl(*TabBangunan));
+    MakeEmpty(&enemyBangunan, MaxEl(*TabBangunan));
+    // int j = 1;
+    // for(int i = GetFirstIdx(*TabBangunan); i <= GetLastIdx(*TabBangunan); i++){
+    //     if(Pemilik(Elmt(*TabBangunan,i)) == ID(*P1)){
+    //         AddAsLastEl(&myBangunan, Elmt(*TabBangunan, i));
+    //         arr[j] = i;
+    //         j++;
+    //     }
+    // }
 
     boolean claim = false;
     printf("Daftar bangunan: \n"); //buat procedure aja kali ya
     // ngeprint list bangunan yng ada menggunakan adt list
-    PrintBangunan(*P1, *TabBangunan);
+    PrintBangunan(*P1,*TabBangunan);
+    // PrintBG(myBangunan);
     printf("Bangunan yang digunakan untuk menyerang: "); scanf("%d",&numOwn);
-    printf("Daftar bangunan yang dapat diserang: \n");
-    PrintBangunan(*P2, *TabBangunan);
-    printf("Bangunan yang diserang: "); scanf("%d",&numEnemy);
-    printf("Jumlah pasukan: "); scanf("%d",&army);
-    int i = 1;
     addressB X = First(listB(*P1));
-    addressB Y = First(listB(*P2));
-    while(i<numOwn){
+    int i = 1;
+    while (i < numOwn){
         X = Next(X);
         i++;
     }
-    i = 1;
-    while(i<numEnemy){
-        Y = Next(Y);
-        i++;
-    }
-    
-    if ((Jenis(Elmt(*TabBangunan, Info(Y))) == 'F') && (cariBangunan(Elmt(*TabBangunan,Info(Y)),P2,*TabBangunan))){
-         InputSkills(P2,3);   
-    }
-    NPskn(Elmt(*TabBangunan,Info(X))) -= army;
+    int idDipilih = Info(X);
+    if (hasAtk(Elmt(*TabBangunan,idDipilih)) == false) {
 
-    if (!(*atkup) && !(*critical)) { 
-        if (Defense(Elmt(*TabBangunan,Info(Y)))) {
-            army = 3*army/4;
-        } 
-    } 
+        adrNode t = SearchNode(G, idDipilih);
+        adrSuccNode w = Adj(t);
+        int j = 1;
+        while(w != NilGraph){
+            int q = Id(Origin(w));
+            if(Pemilik(Elmt(*TabBangunan, q)) != ID(*P1)){
+                AddAsLastEl(&enemyBangunan, Elmt(*TabBangunan, q));
+                arr[j] = q;
+                j++;
+            }
+            w = NextG(w);
+        }
+        if (arr[1] != 0) {
+            printf("Daftar bangunan yang dapat diserang: \n");
+            PrintBG(enemyBangunan);
+            printf("Bangunan yang diserang: "); scanf("%d",&numEnemy);
+            int idDiserang = arr[numEnemy];
+            printf("Jumlah pasukan: "); scanf("%d",&army);
+            while (army > NPskn(Elmt(*TabBangunan,idDipilih))) {
+                printf("Jumlah pasukan lebih banyak daripada yang kau miliki!\n");
+                scanf("%d",&army);
+            }
+            if ((Jenis(Elmt(*TabBangunan, idDiserang)) == 'F') && (Pemilik(Elmt(*TabBangunan,idDipilih)) != 0)){
+                InputSkills(P2,3);   
+            }
+            NPskn(Elmt(*TabBangunan,idDipilih)) -= army;
 
-    if (*critical) {
-        army = 2*army;
-    }
-    int x = Info(Y);
+            if (!(*atkup) && !(*critical)) { 
+                if (Defense(Elmt(*TabBangunan,idDiserang))) {
+                    army = 3*army/4;
+                } 
+            } 
 
-    if (army < NPskn(Elmt(*TabBangunan,Info(Y)))) {
-        printf("Bangunan gagal direbut\n");
-        NPskn(Elmt(*TabBangunan,x)) -= army;
-    } else {
-        printf("Bangunan menjadi milikmu!\n");
-        NPskn(Elmt(*TabBangunan,x)) = army - NPskn(Elmt(*TabBangunan,x));
-        if (cariBangunan(Elmt(*TabBangunan,x),P2,*TabBangunan)) {
-            DelP(&listB(*P2),x);
-        }
-        InsVFirst(&listB(*P1),x);
-        if(ID(*P1) == 1){
-            
-        }
-        claim = true;
-        if (CountBangunan(P1, TabBangunan) == 10)
-        {
-            InputSkills(P2, 7);
-        }
+            if (*critical) {
+                army = 2*army;
+            }
+            int x = idDiserang;
+
+            if (army < NPskn(Elmt(*TabBangunan,idDiserang))) {
+                printf("Bangunan gagal direbut\n");
+                NPskn(Elmt(*TabBangunan,x)) -= army;
+            } else {
+                printf("Bangunan menjadi milikmu!\n");
+                NPskn(Elmt(*TabBangunan,x)) = army - NPskn(Elmt(*TabBangunan,x));
+                Pemilik(Elmt(*TabBangunan, x)) = ID(*P1);
+                DelP(&listB(*P2),x);
+                InsVLast(&listB(*P1),x);
+
+                claim = true;
+                if (CountBangunan(*P1, *TabBangunan) == 10)
+                {
+                    InputSkills(P2, 7);
+                }
+                
+            }
         
-    }
-   
-    if ((Jenis(Elmt(*TabBangunan, x)) == 'T') && (Pemilik(Elmt(*TabBangunan,x)) != 0) && (countTower(*P1,*TabBangunan) == 3) && (claim)) {
-        InputSkills(P1,4);
-    }
-    printf("Daftar P1: \n");
-    PrintBangunan(*P1,*TabBangunan);
-    printf("Daftar P2: \n");
+            if ((Jenis(Elmt(*TabBangunan, x)) == 'T') && (Pemilik(Elmt(*TabBangunan,x)) != 0) && (countTower(*P1,*TabBangunan) == 3) && (claim)) {
+                InputSkills(P1,4);
+            }
 
-    PrintBangunan(*P2,*TabBangunan);
-    (*critical) = true;
-    Push(undo, *TabBangunan);
+            printf("Daftar P1: \n");
+            PrintBangunan(*P1,*TabBangunan);
+            printf("Daftar P2: \n");
+
+            PrintBangunan(*P2,*TabBangunan);
+            (*critical) = true;
+            hasAtk(Elmt(*TabBangunan,idDipilih)) = true;
+            Push(undo, *TabBangunan);
+        } else {
+            printf("Tidak ada bangunan yang bisa diserang! \n");
+        }
+    }else {
+        printf("You've already attacked with this building! \n");
+    }
 }
 boolean isCommandSame(char *strg1, char *strg2)
 {
@@ -154,80 +197,42 @@ boolean isCanLevel (Bangunan A) {
     }
 }
 
-void changeLevel(Player *P, TabInt *T, addressB numInList){
-    Lvl(Elmt(*T,Info(numInList))) += 1;
-    NPskn(Elmt(*T,Info(numInList))) -= (MxTmPskn(Elmt(*T,Info(numInList)))/2);
+void changeLevel(Player *P, TabInt *T, int idDipilih){
+    Lvl(Elmt(*T,idDipilih)) += 1;
+    NPskn(Elmt(*T,idDipilih)) -= (MxTmPskn(Elmt(*T,idDipilih))/2);
 }
 
 void LEVEL_UP(Player *P, TabInt *T, Stack *undo){
     int numBuilding;
-    
     printf("Daftar bangunan: \n");
 
     PrintBangunan(*P, *T);
     // // print list bangunan yang dimiliki
     printf("Bangunan yang akan di level up: ");
     scanf("%d", &numBuilding); 
-    addressB NumInList = First(listB(*P));
+    addressB X = First(listB(*P));
     int i = 1;
-    while(i < numBuilding){
-        NumInList = Next(NumInList);
-        i ++;
+    while (i < numBuilding){
+        X = Next(X);
+        i++;
     }
+
+    int idDipilih = Info(X);
+    
     // assignBangunan(listB(*P),numBuilding,&A);
 
-    if(!isCanLevel(Elmt(*T, Info(NumInList)))){
+    if(!isCanLevel(Elmt(*T, idDipilih))){
         printf("Jumlah pasukan ");
-        PrintJenisBangunan(Elmt(*T, Info(NumInList)));
+        PrintJenisBangunan(Elmt(*T, idDipilih));
         printf("kurang untuk level up");
-        
+    } else if (Lvl(Elmt(*T,idDipilih)) == 4) {
+        printf("Level Bangunan sudah maksimum! \n");   
     } else {
-        Lvl(Elmt(*T,Info(NumInList))) += 1;
-        NPskn(Elmt(*T,Info(NumInList))) -= (MxTmPskn(Elmt(*T,Info(NumInList)))/2);
+        Lvl(Elmt(*T,idDipilih)) += 1;
+        NPskn(Elmt(*T,idDipilih)) -= (MxTmPskn(Elmt(*T,idDipilih))/2);
         printf("Your building has been updated!\n");
         PrintBangunan(*P, *T);
-        if(Lvl(Elmt(*T,Info(NumInList))) == 2){
-			if(Jenis(Elmt(*T,Info(NumInList)))=='C'){
-				UbahBangunan(&Elmt(*T,Info(NumInList)),15,60,false);
-			}
-			else if(Jenis(Elmt(*T,Info(NumInList)))=='T'){
-				UbahBangunan(&Elmt(*T,Info(NumInList)),10,30,true);
-			}
-			else if(Jenis(Elmt(*T,Info(NumInList)))=='F'){
-				UbahBangunan(&Elmt(*T,Info(NumInList)),20,40,false);
-			}
-			else if(Jenis(Elmt(*T,Info(NumInList)))=='V'){
-				UbahBangunan(&Elmt(*T,Info(NumInList)),10,30,false);
-			}
-		}
-		else if(Lvl(Elmt(*T,Info(NumInList))) == 3){
-			if(Jenis(Elmt(*T,Info(NumInList))) =='C'){
-				UbahBangunan(&Elmt(*T,Info(NumInList)),20,80,false);
-			}
-			else if(Jenis(Elmt(*T,Info(NumInList)))=='T'){
-				UbahBangunan(&Elmt(*T,Info(NumInList)),20,40,true);
-			}
-			else if(Jenis(Elmt(*T,Info(NumInList)))=='F'){
-				UbahBangunan(&Elmt(*T,Info(NumInList)),30,60,true);
-			}
-			else if(Jenis(Elmt(*T,Info(NumInList)))=='V'){
-				UbahBangunan(&Elmt(*T,Info(NumInList)),15,40,false);
-			}
-		}
-		else if(Lvl(Elmt(*T,Info(NumInList))) == 4){
-			if(Jenis(Elmt(*T,Info(NumInList)))=='C'){
-				UbahBangunan(&Elmt(*T,Info(NumInList)),25,100,false);
-			}
-			else if(Jenis(Elmt(*T,Info(NumInList)))=='T'){
-				UbahBangunan(&Elmt(*T,Info(NumInList)),30,50,true);
-			}
-			else if(Jenis(Elmt(*T,Info(NumInList)))=='F'){
-				UbahBangunan(&Elmt(*T,Info(NumInList)),40,80,true);
-			}
-			else if(Jenis(Elmt(*T,Info(NumInList)))=='V'){
-				UbahBangunan(&Elmt(*T,Info(NumInList)),20,50,false);
-			}
-		}
+        LevelUpBangunan(T,idDipilih);
 	}
     Push(undo, *T);
 }
@@ -242,11 +247,11 @@ void UNDO(Player P, Stack *undo, TabInt *T){
         printf("Cannot do that! This is your earliest status. \n");
     }
     else{
-        
         infotypeS temp;
         Pop(undo, &temp); 
+        CopyTab(InfoTop(*undo), T);
         printf("Undo done. The buildings have been updated!\n");
-        PrintBangunan(P, InfoTop(*undo));
+        PrintBangunan(P, *T);
     }
 }
 
@@ -266,7 +271,7 @@ void END_TURN(Player *P1, Player *P2, TabInt *T, boolean *extra, boolean *atkup)
         (*extra) = false;
     }
     (*atkup) = false;
-    if (IsLevelFour(P1, T))
+    if (IsLevelFour(*P1, T))
     {
         InputSkills(P1, 6);
     }
@@ -278,50 +283,65 @@ void END_TURN(Player *P1, Player *P2, TabInt *T, boolean *extra, boolean *atkup)
 //     //nama file
 // }
 
-void MOVE(Player P, TabInt *T, Stack *undo){
-    printf("Daftar Bangunan: \n");
-    PrintBangunan(P, *T);
-
+void MOVE(Player P, TabInt *T, Graph G, Stack *undo){
+    TabInt terdekat;
     int num,numrcv,army;
+    int numBuilding,arr2[50];
+    int i=1;
+    MakeEmpty(&terdekat, MaxEl(*T));
 
+    printf("Daftar Bangunan: \n");
+    PrintBangunan(P,*T);
     printf("Pilih Bangunan : "); scanf("%d",&num);
-    printf("Daftar Bangunan terdekat : \n"); // print bangunan terdekat
-    PrintBangunan(P, *T);
-    printf("Bangungan yang menerima : "); scanf("%d",&numrcv);
-    printf("Jumlah Pasukan : "); scanf("%d",&army);
-    
     addressB X = First(listB(P));
-    addressB Y = First(listB(P));
-
-    int i =1;
-
-    while(i<num){
+    while (i<num){
         X = Next(X);
         i++;
     }
+    
+    int idDipilih = Info(X);
 
-    i = 1;
-    while(i<numrcv){
-        Y = Next(Y);
-        i++;
+    int j = 1;
+    adrNode t = SearchNode(G, idDipilih);
+    adrSuccNode w = Adj(t);
+    while(w != NilGraph){
+        int q = Id(Origin(w));
+        if(Pemilik(Elmt(*T, q)) == ID(P)){
+            AddAsLastEl(&terdekat, Elmt(*T, q));
+            arr2[j] = q;
+            j++;
+        }
+        w = NextG(w);
     }
 
-    if (NPskn(Elmt(*T, Info(X))) < army) {
+    printf("Daftar Bangunan terdekat : \n"); // print bangunan terdekat
+    PrintBG(terdekat);
+    printf("Bangunan yang menerima : "); scanf("%d",&numrcv);
+    int idRcvDipilih = arr2[numrcv];
+    printf("Jumlah Pasukan : "); scanf("%d",&army);
+    
+
+    if (NPskn(Elmt(*T, idDipilih)) < army) {
         printf("Jumlah pasukan tidak cukup! \n");
     } else {
-        if (army + NPskn(Elmt(*T, Info(Y))) <= MxTmPskn(Elmt(*T, Info(Y)))) {
-            NPskn(Elmt(*T, Info(Y))) = MxTmPskn(Elmt(*T, Info(Y)));
-            NPskn(Elmt(*T, Info(Y))) += army;
-            NPskn(Elmt(*T, Info(X))) -= army;
-            printf("%d pasukan dari "); PrintJenisBangunan(Elmt(*T, Info(X)));
-            TulisPOINT(Titik(Elmt(*T, Info(X))));
-            printf(" telah berpindah ke ");
-            PrintJenisBangunan(Elmt(*T, Info(Y)));
-            TulisPOINT(Titik(Elmt(*T, Info(Y))));
-            printf("\n");
-        } else{
-            printf("Building hanya mampu menampung %d pasukan.\n", MxTmPskn(Elmt(*T, Info(Y))));
+        if(army + NPskn(Elmt(*T, idRcvDipilih)) > MxTmPskn(Elmt(*T, idRcvDipilih))){
+            printf("Building hanya mampu menampung %d pasukan.\n", MxTmPskn(Elmt(*T, idRcvDipilih)));
             printf("Perpindahan GAGAL!\n");
+        }
+        else{
+            if (army + NPskn(Elmt(*T, idRcvDipilih)) == MxTmPskn(Elmt(*T, idRcvDipilih))) {
+                NPskn(Elmt(*T, idRcvDipilih)) = MxTmPskn(Elmt(*T, idRcvDipilih));
+            }
+            else if(army + NPskn(Elmt(*T, idRcvDipilih)) < MxTmPskn(Elmt(*T, idRcvDipilih))){
+                NPskn(Elmt(*T, idRcvDipilih)) += army;
+            }
+                NPskn(Elmt(*T, idDipilih)) -= army;
+                printf("%d pasukan dari "); PrintJenisBangunan(Elmt(*T, num));
+                TulisPOINT(Titik(Elmt(*T, idDipilih)));
+                printf(" telah berpindah ke ");
+                PrintJenisBangunan(Elmt(*T, idRcvDipilih));
+                TulisPOINT(Titik(Elmt(*T, idRcvDipilih)));
+                printf("\n");
         }
     }
     Push(undo, *T);
@@ -334,8 +354,19 @@ void EXIT(){
     exit(0);
 }
 
-boolean GAME_OVER(Player P1, Player P2, TabInt T){
-    return ((IsEmptyList(listB(P1))) || (IsEmptyList(listB(P2))));
+boolean GAME_OVER(TabInt T){
+    int count1 = 0;
+    int count2 = 0;
+
+    for(int i = GetFirstIdx(T); i <= GetLastIdx(T); i++){
+        if(Pemilik(Elmt(T, i)) == 1){
+            count1++;
+        }
+        else if(Pemilik(Elmt(T, i)) == 2){
+            count2++;
+        }
+    }
+    return ((count1 == 0) || (count2 == 0));
 }
 
 void splitToPlayerList(Player *P1, Player *P2, TabInt T){
@@ -348,8 +379,8 @@ void splitToPlayerList(Player *P1, Player *P2, TabInt T){
    }
 }
 
-void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
-    char str[50];
+void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
+    char str[50], confirm;
     boolean atkup, critical, extra;
     boolean move = true;
     int isShieldP1 = 0;
@@ -358,33 +389,53 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
     act(*P2) = 0;
     Stack undo;
     // TabInt T1;
-    printf("masuk input command\n");
     CreateEmpty_Stackt(&undo, MaxEl(*T));
     
     Push(&undo, *T);
+    if(IsEmpty_Stackt(undo)) {
+        printf("berhasil");
+    }
+    splitToPlayerList(P1,P2,*T);
+    printf("DAFTAR BANGUNAN PLAYER 1 : \n");
+    PrintBangunan(*P1,*T);
+    printf("DAFTAR BANGUNAN PLAYER 2 : \n");
+    PrintBangunan(*P2,*T);
+
     
-    while(!GAME_OVER(*P1, *P2, *T)){
+    while(!GAME_OVER(*T)){
         if(act(*P1) == 1){
-            printHeadSkills(*P1);
-            STARTKATA_KEYBOARD(str); 
+            printf("ENTER COMMAND: ");
+            scanf(" %s", str);
             if (isCommandSame(str, "ATTACK")) {
-                ATTACK(T, P1, P2, &atkup, &critical, &undo);
+                ATTACK(T, P1, P2, &atkup, &critical, G, &undo);
             }
             else if(isCommandSame(str, "LEVEL_UP")){
                 LEVEL_UP(P1, T, &undo);
             }
             else if(isCommandSame(str, "SKILL")){
-                if (InfoHead(skill(*P1)) == 3) {
-                    UseSkills(P1, &extra, &atkup,&critical,T, &isShieldP1);
-                    InputSkills(P1,5);
-                } else {
-                    UseSkills(P1, &extra, &atkup,&critical,T, &isShieldP1);
-
+                printHeadSkills(*P1);
+                printf("Do you want to use that skill? (Y/N) \n");
+                // do{
+                scanf(" %c", &confirm);
+                // } while(confirm == 'Y' || confirm == 'N');
+                if(confirm == 'Y'){
+                    printf("hallo\n");
+                    /*if (InfoHead(skill(*P1)) == 3) {
+                        UseSkills(P1, P2, &extra, &atkup,&critical,T, &isShieldP1, &undo);
+                        InputSkills(P1,5);
+                    } else { */
+                        UseSkills(P1, P2, &extra, &atkup,&critical,T, &isShieldP1, &undo);
+                    // }
                 }
-                
             }
             else if(isCommandSame(str, "UNDO")){
+                if (!IsEmpty_Stackt(undo)) {
+                    printf("hayoo");
+                }
                 UNDO(*P1, &undo, T);
+                if (!IsEmpty_Stackt(undo)) {
+                    printf("hayoo");
+                }
             }
             else if(isCommandSame(str, "END_TURN")){
                 END_TURN(P1, P2, T, &extra, &atkup);
@@ -393,6 +444,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
                 if(isShieldP2 == 0){
                     ShieldDown(*P2, T);
                 }
+                DelAll(&undo);
                 printf("Player 2's turn.\n");
             }
             // else if(isCommandSame(str, "SAVE")){
@@ -403,7 +455,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
             }
             else if(isCommandSame(str, "MOVE")){
                 if(move){
-                    MOVE(*P1, T, &undo);
+                    MOVE(*P1, T, G, &undo);
                     move = false;
                 } else {
                     printf("Kau sudah melakukan MOVE untuk giliran ini! \n");
@@ -415,29 +467,34 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
             }
         }
         else if(act(*P2) == 1){
-            CreateEmpty_Stackt(&undo, MaxEl(*T));
+            
             printHeadSkills(*P2);
-            STARTKATA_KEYBOARD(str); 
+            printf("ENTER COMMAND: ");
+            scanf(" %s", str);
             if (isCommandSame(str, "ATTACK")) {
-                ATTACK(T, P2, P1, &atkup, &critical, &undo);
+                ATTACK(T, P2, P1, &atkup, &critical, G, &undo);
             }
             else if(isCommandSame(str, "LEVEL_UP")){
                 LEVEL_UP(P2, T, &undo);
             }
             else if(isCommandSame(str, "SKILL")){
-                // UseSkills(P1, T, &extra, &atkup, &isShieldP2);
-                if (InfoHead(skill(*P1)) == 3) {
-                    UseSkills(P2, &extra, &atkup,&critical,T, &isShieldP1);
-                    InputSkills(P2,5);
-                } else {
-                    UseSkills(P2, &extra, &atkup,&critical,T, &isShieldP1);
-
+                printHeadSkills(*P2);
+                printf("Do you want to use that skill? (Y/N) \n");
+                do{
+                    scanf(" %c", &confirm);
+                } while(confirm == 'Y' || confirm == 'N');
+                if(confirm == 'Y'){
+                    if (InfoHead(skill(*P2)) == 3) {
+                        UseSkills(P2, P1, &extra, &atkup,&critical,T, &isShieldP1, &undo);
+                        InputSkills(P2,5);
+                    } else {
+                        UseSkills(P2, P1, &extra, &atkup,&critical,T, &isShieldP1, &undo);
+                    }
                 }
-
             }
-            // else if(isCommandSame(str, "UNDO")){
-            //     UNDO();
-            // }
+            else if(isCommandSame(str, "UNDO")){
+                UNDO(*P2, &undo, T);
+            }
             else if(isCommandSame(str, "END_TURN")){
                 END_TURN(P2, P1, T, &extra, &atkup);
                 move = true;
@@ -445,6 +502,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
                 if(isShieldP1 == 0){
                     ShieldDown(*P1, T);
                 }
+                DelAll(&undo);
                 printf("Player 1's turn.\n");
             }
             // else if(isCommandSame(str, "SAVE")){
@@ -455,7 +513,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T){
             }
             else if(isCommandSame(str, "MOVE")){
                 if(move){
-                    MOVE(*P2, T, &undo);
+                    MOVE(*P2, T, G, &undo);
                     move = false;
                 } else {
                     printf("Kau sudah melakukan MOVE untuk giliran ini! \n");

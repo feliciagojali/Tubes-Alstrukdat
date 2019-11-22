@@ -10,6 +10,7 @@ void MakeBangunan(Bangunan *B, POINT T, jns J, noMilik player){
 	Jenis(*B)=J;
 	Pemilik(*B)=player;
 	Lvl(*B)=1;
+	hasAtk(*B)=false;
 	if(J=='C'){
 		NTbhPskn(*B)=10;
 		MxTmPskn(*B)=40;

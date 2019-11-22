@@ -30,6 +30,7 @@ int main(){
    MakeBangunan(&D,Po4,'T',2);
    MakeBangunan(&E,Po5,'F',2);
    MakeBangunan(&F,Po6,'T',2);
+  
 
    AddAsLastEl(&TabBangunan,A);
    AddAsLastEl(&TabBangunan,B);
@@ -38,7 +39,15 @@ int main(){
    AddAsLastEl(&TabBangunan,E);
    AddAsLastEl(&TabBangunan,F);
 
-   splitToPlayerList(&P1, &P2, TabBangunan);
+   Graph G;
+   CreateGraph(1, &G);
+   InsertEdge(&G, 1, 2);
+   InsertEdge(&G, 1, 4);
+   InsertEdge(&G, 2, 1);
+   InsertEdge(&G, 4, 1);
+   InsertEdge(&G, 1, 5);
+   InsertEdge(&G, 5, 1);
+
    // }
    // printf("Bangunan milik Player 1:\n");
    // PrintBangunan(P1,TabBangunan);
@@ -54,6 +63,6 @@ int main(){
    // MOVE(P2, &TabBangunan);
    // PrintBangunan(P2, TabBangunan);
 
-   INPUT_COMMAND(&P1, &P2, &TabBangunan);
+   INPUT_COMMAND(&P1, &P2, &TabBangunan, G);
    return 0;
 }
