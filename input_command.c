@@ -88,21 +88,27 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
     int i = 1;
     while (i < numOwn){
         X = Next(X);
+        printf("haiii\n"); //buat procedure aja kali ya
         i++;
     }
     int idDipilih = Info(X);
+    printf("huuu\n"); //buat procedure aja kali ya
     if (hasAtk(Elmt(*TabBangunan,idDipilih)) == false) {
 
         adrNode t = SearchNode(G, idDipilih);
         adrSuccNode w = Adj(t);
         int j = 1;
+        printf("uuuuu\n");
         while(w != NilGraph){
             int q = Id(Origin(w));
             if(Pemilik(Elmt(*TabBangunan, q)) != ID(*P1)){
                 AddAsLastEl(&enemyBangunan, Elmt(*TabBangunan, q));
                 arr[j] = q;
                 j++;
+                 //buat procedure aja kali ya
+
             }
+            
             w = NextG(w);
         }
         if (arr[1] != 0) {
@@ -114,9 +120,6 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
             while (army > NPskn(Elmt(*TabBangunan,idDipilih))) {
                 printf("Jumlah pasukan lebih banyak daripada yang kau miliki!\n");
                 scanf("%d",&army);
-            }
-            if ((Jenis(Elmt(*TabBangunan, idDiserang)) == 'F') && (Pemilik(Elmt(*TabBangunan,idDipilih)) != 0)){
-                InputSkills(P2,3);   
             }
             NPskn(Elmt(*TabBangunan,idDipilih)) -= army;
 
@@ -142,6 +145,10 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                 InsVLast(&listB(*P1),x);
 
                 claim = true;
+                if ((Jenis(Elmt(*TabBangunan, idDiserang)) == 'F') && (Pemilik(Elmt(*TabBangunan,idDipilih)) != 0))
+                {
+                    InputSkills(P2,3);  
+                }
                 if (CountBangunan(*P1, *TabBangunan) == 10)
                 {
                     InputSkills(P2, 7);
@@ -212,29 +219,38 @@ void LEVEL_UP(Player *P, TabInt *T, Stack *undo){
     scanf("%d", &numBuilding); 
     addressB X = First(listB(*P));
     int i = 1;
-    while (i < numBuilding){
+    if (CountBangunan(*P, *T) >= numBuilding)
+    {
+        while (i < numBuilding){
         X = Next(X);
         i++;
+        }
+
+        int idDipilih = Info(X);
+        printf("%d\n", idDipilih);
+
+        
+        // assignBangunan(listB(*P),numBuilding,&A);
+
+        if(!isCanLevel(Elmt(*T, idDipilih))){
+            printf("Jumlah pasukan ");
+            PrintJenisBangunan(Elmt(*T, idDipilih));
+            printf("kurang untuk level up\n");
+        } else if (Lvl(Elmt(*T,idDipilih)) == 4) {
+            printf("Level Bangunan sudah maksimum! \n");   
+        } else {
+            Lvl(Elmt(*T,idDipilih)) += 1;
+            NPskn(Elmt(*T,idDipilih)) -= (MxTmPskn(Elmt(*T,idDipilih))/2);
+            printf("Your building has been updated!\n");
+            PrintBangunan(*P, *T);
+            LevelUpBangunan(T,idDipilih);
+        }
+        Push(undo, *T);
     }
-
-    int idDipilih = Info(X);
-    
-    // assignBangunan(listB(*P),numBuilding,&A);
-
-    if(!isCanLevel(Elmt(*T, idDipilih))){
-        printf("Jumlah pasukan ");
-        PrintJenisBangunan(Elmt(*T, idDipilih));
-        printf("kurang untuk level up");
-    } else if (Lvl(Elmt(*T,idDipilih)) == 4) {
-        printf("Level Bangunan sudah maksimum! \n");   
-    } else {
-        Lvl(Elmt(*T,idDipilih)) += 1;
-        NPskn(Elmt(*T,idDipilih)) -= (MxTmPskn(Elmt(*T,idDipilih))/2);
-        printf("Your building has been updated!\n");
-        PrintBangunan(*P, *T);
-        LevelUpBangunan(T,idDipilih);
-	}
-    Push(undo, *T);
+    else
+    {
+        printf("Bangunan pilihanmu tidak valid! \n");
+    }
 }
 
 // void SKILL(){
