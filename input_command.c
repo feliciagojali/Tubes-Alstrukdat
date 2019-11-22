@@ -227,9 +227,7 @@ void LEVEL_UP(Player *P, TabInt *T, Stack *undo){
         }
 
         int idDipilih = Info(X);
-        printf("%d\n", idDipilih);
 
-        
         // assignBangunan(listB(*P),numBuilding,&A);
 
         if(!isCanLevel(Elmt(*T, idDipilih))){
