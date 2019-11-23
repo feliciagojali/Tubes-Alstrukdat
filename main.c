@@ -18,7 +18,7 @@ Stack S;
 Graph G;
 MATRIKS peta;
 
-void saveMap(){
+void saveMapS(){
     for(int i = 1; i <= n + 2; i++){
         for(int j = 1; j <= m + 2; j++){
             if(i == 1 || j == 1 || i == n + 2 || j == m + 2){
@@ -45,7 +45,7 @@ void saveMap(){
     }
 }
 
-void viewMap(){
+void viewMapS(){
     TulisMATRIKS(peta);
 }
 int main(){
@@ -84,10 +84,10 @@ int main(){
         }
     }
     MakeMATRIKS(n + 2, m + 2, &peta);
-    saveMap();
-    viewMap();
+    saveMapS();
+    viewMapS();
     Player P1 = initPlayer(1);
     Player P2 = initPlayer(2);
-    INPUT_COMMAND(&P1, &P2, &TabBangunan, G);
+    INPUT_COMMAND(&P1, &P2, &TabBangunan, G, peta);
     return 0;
 }
