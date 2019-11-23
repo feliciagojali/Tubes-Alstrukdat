@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "matriks/matriks.h"
 #include "mesinkata/mesinkata.h"
 #include "mesinkata/mesinkatak.h"
 #include "boolean/boolean.h"
@@ -99,14 +100,14 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
         X = Next(X);
         i++;
     }
-    printf("num own ketemu\n");
+    // printf("num own ketemu\n");
     if (X != Nil) {
-        printf("X!=Nil\n");
+        // printf("X!=Nil\n");
         int idDipilih = Info(X);
         if (hasAtk(Elmt(*TabBangunan,idDipilih)) == false) {
             printf("hasatk = false\n");
             adrNode t = SearchNode(G, idDipilih);
-            printf("t : %d\n", t);
+            // printf("t : %d\n", t);
             int j = 1;
             if(t != NilGraph){
                 adrSuccNode w = Adj(t);
@@ -119,7 +120,7 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                     }
                     w = NextG(w);
                 }
-                printf("j : %d\n", j);
+                // printf("j : %d\n", j);
                 if(j == 1){
                     printf("Tidak ada bangunan yang berdekatan.\n");
                 } else {
@@ -181,11 +182,10 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                         InputSkills(P1,4);
                     }
 
-                    printf("Daftar P1: \n");
-                    PrintBangunan(*P1,*TabBangunan);
-                    printf("Daftar P2: \n");
-
-                    PrintBangunan(*P2,*TabBangunan);
+                    // printf("Daftar P1: \n");
+                    // PrintBangunan(*P1,*TabBangunan);
+                    // printf("Daftar P2: \n");
+                    // PrintBangunan(*P2,*TabBangunan);
                     (*critical) = true;
                     hasAtk(Elmt(*TabBangunan,idDipilih)) = true;
                     Push(undo, *TabBangunan);
@@ -316,17 +316,28 @@ void UNDO(Player *P1, Player *P2, Stack *undo, TabInt *T){
     }
 }
 
+void hasAtkOff(Player P, TabInt *T){
+    addressB B;
+    
+    B = First(listB(P));
+    while(B!=Nil){
+        hasAtk(Elmt(*T, Info(B))) = false;
+        B = Next(B);
+    }
+}
+
 void END_TURN(Player *P1, Player *P2, TabInt *T, boolean *extra, boolean *atkup){
     //ganti pemain berikutnya
     if (!(*extra)) {
         if(act(*P1) == 1 && act(*P2) == 0){
             act(*P1) = 0;
             act(*P2) = 1;
-            printf("sampe sini\n");
+            printf("Player 2's turn.\n");
         }
         else if(act(*P1) == 0 && act(*P2) == 1){
             act(*P1) = 1;
             act(*P2) = 0;
+            printf("Player 1's turn.\n");
         }
     } else {
         printf("Wah! Giliran kamu lagi! \n");
@@ -337,7 +348,7 @@ void END_TURN(Player *P1, Player *P2, TabInt *T, boolean *extra, boolean *atkup)
     {
         InputSkills(P1, 6);
     }
-    printf("%d %d\n", act(*P1), act(*P2));
+    // printf("%d %d\n", act(*P1), act(*P2));
 }
 
 // void SAVE(){
@@ -446,8 +457,38 @@ boolean GAME_OVER(TabInt T){
     }
     return ((count1 == 0) || (count2 == 0));
 }
+void saveMap(MATRIKS *peta, TabInt TabBangunan){
+    for(int i = 1; i <= GetLastIdxBrs(*peta); i++){
+        for(int j = 1; j <= GetLastIdxKol(*peta); j++){
+            if(i == 1 || j == 1 || i == GetLastIdxBrs(*peta) || j == GetLastIdxKol(*peta)){
+                Cell(*peta, i, j) = '*';
+                Owner(*peta, i, j) = 0;
+            } else {
+                int xpos = i - 1;
+                int ypos = j - 1;
+                boolean ada = false;
+                for(int k = 1; k <= GetLastIdx(TabBangunan); k++){
+                    POINT t = Titik(Elmt(TabBangunan, k));
+                    if(EQ(t, MakePOINT(xpos, ypos))){
+                        ada = true;
+                        Cell(*peta, i, j) = Jenis(Elmt(TabBangunan, k));
+                        Owner(*peta, i, j) = Pemilik(Elmt(TabBangunan, k));
+                    }
+                }
+                if(!ada){
+                    Cell(*peta, i, j) = ' ';
+                    Owner(*peta, i, j) = 0;
+                }
+            }
+        }
+    }
+}
 
-void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
+void viewMap(MATRIKS peta){
+    TulisMATRIKS(peta);
+}
+
+void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
     char confirm;
     boolean atkup = false;
     boolean critical = false;
@@ -466,6 +507,8 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
     //     printf("berhasil");
     // }
     splitToPlayerList(P1,P2,*T);
+
+    
     printf("DAFTAR BANGUNAN PLAYER 1 : \n");
     PrintBangunan(*P1,*T);
     printf("DAFTAR BANGUNAN PLAYER 2 : \n");
@@ -478,9 +521,12 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
             InputK(&str);
             if (isCommandSame(str, "ATTACK")) {
                 ATTACK(T, P1, P2, &atkup, &critical, G, &undo);
+                saveMap(&peta, *T);
+                viewMap(peta);
             }
             else if(isCommandSame(str, "LEVEL_UP")){
                 LEVEL_UP(P1, T, &undo);
+                saveMap(&peta, *T);
             }
             else if(isCommandSame(str, "SKILL")){
                 if(IsEmpty_Queue(skill(*P1))){
@@ -500,6 +546,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
                         } else {
                             UseSkills(P1, P2, &extra, &atkup,&critical,T, &isShieldP1, &undo);
                         }
+                        saveMap(&peta, *T);
                     }
                     else{
                         printf("You cancel the skill.\n");
@@ -508,6 +555,8 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
             }
             else if(isCommandSame(str, "UNDO")){
                 UNDO(P1, P2, &undo, T);
+                saveMap(&peta, *T);
+                viewMap(peta);
             }
             else if(isCommandSame(str, "END_TURN")){
                 END_TURN(P1, P2, T, &extra, &atkup);
@@ -518,8 +567,10 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
                         ShieldDown(*P2, T);
                     }
                 }
+                hasAtkOff(*P1, T);
+                saveMap(&peta, *T);
+                viewMap(peta);
                 DelAll(&undo);
-                printf("Player 2's turn.\n");
             }
             // else if(isCommandSame(str, "SAVE")){
             //     SAVE();
@@ -530,6 +581,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
             else if(isCommandSame(str, "MOVE")){
                 if(move){
                     MOVE(*P1, T, G, &undo,&move);
+                    saveMap(&peta, *T);
                 } else {
                     printf("Kau sudah melakukan MOVE untuk giliran ini! \n");
                     printf("Tunggu giliran berikutnya!\n");
@@ -545,9 +597,11 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
             InputK(&str);
             if (isCommandSame(str, "ATTACK")) {
                 ATTACK(T, P2, P1, &atkup, &critical, G, &undo);
+                saveMap(&peta, *T);
             }
             else if(isCommandSame(str, "LEVEL_UP")){
                 LEVEL_UP(P2, T, &undo);
+                saveMap(&peta, *T);
             }
             else if(isCommandSame(str, "SKILL")){
                 if(IsEmpty_Queue(skill(*P2))){
@@ -567,6 +621,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
                         } else {
                             UseSkills(P2, P1, &extra, &atkup,&critical,T, &isShieldP1, &undo);
                         }
+                        saveMap(&peta, *T);
                     }
                     else{
                         printf("You cancel the skill.\n");
@@ -575,6 +630,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
             }
             else if(isCommandSame(str, "UNDO")){
                 UNDO(P2, P1, &undo, T);
+                saveMap(&peta, *T);
             }
             else if(isCommandSame(str, "END_TURN")){
                 END_TURN(P1, P2, T, &extra, &atkup);
@@ -585,8 +641,9 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
                         ShieldDown(*P1, T);
                     }
                 }
+                hasAtkOff(*P2, T);
+                saveMap(&peta, *T);
                 DelAll(&undo);
-                printf("Player 1's turn.\n");
             }
             // else if(isCommandSame(str, "SAVE")){
             //     SAVE();
@@ -597,6 +654,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
             else if(isCommandSame(str, "MOVE")){
                 if(move){
                     MOVE(*P2, T, G, &undo,&move);
+                    saveMap(&peta, *T);
                 } else {
                     printf("Kau sudah melakukan MOVE untuk giliran ini! \n");
                     printf("Tunggu giliran berikutnya!\n");
