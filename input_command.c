@@ -161,13 +161,17 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                         Pemilik(Elmt(*TabBangunan, x)) = ID(*P1);
                         DelP(&listB(*P2),x);
                         InsVLast(&listB(*P1),x);
-
                         claim = true;
+                        //Dapet skill barrage
                         if (CountBangunan(*P1, *TabBangunan) == 10)
                         {
                             InputSkills(P2, 7);
                         }
-                        
+                        //Lawan Dapet skill shield
+                        if (CountBangunan(*P2, *TabBangunan) == 2)
+                        {
+                            InputSkills(P2, 2);
+                        }
                     }
                 
                     if ((Jenis(Elmt(*TabBangunan, x)) == 'T') && (Pemilik(Elmt(*TabBangunan,x)) != 0) && (countTower(*P1,*TabBangunan) == 3) && (claim)) {
@@ -564,7 +568,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
                         // printf("hallo\n");
                         if (InfoHead(skill(*P2)) == 3) {
                             UseSkills(P2, P1, &extra, &atkup,&critical,T, &isShieldP1, &undo);
-                            InputSkills(P2,5);
+                            InputSkills(P1,5);
                         } else {
                             UseSkills(P2, P1, &extra, &atkup,&critical,T, &isShieldP1, &undo);
                         }
