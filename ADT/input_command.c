@@ -172,6 +172,38 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                             int pemilikasli = Pemilik(Elmt(*TabBangunan, x));
                             Pemilik(Elmt(*TabBangunan, x)) = ID(*P1);
                             Lvl(Elmt(*TabBangunan, x)) = 1;
+                            if(Jenis(Elmt(*TabBangunan,x))=='C'){
+                                // NTbhPskn(*B)=10;
+                                // MxTmPskn(*B)=40;
+                                // Defense(*B)=false;
+                                // AwalPskn(*B)=40;
+                                // NPskn(*B)=40;
+                                UbahBangunan(&Elmt(*TabBangunan, x), 10, 40, false);
+                            }
+                            else if(Jenis(Elmt(*TabBangunan,x))=='T'){
+                                // NTbhPskn(*B)=5;
+                                // MxTmPskn(*B)=20;
+                                // Defense(*B)=true;
+                                // AwalPskn(*B)=30;
+                                // NPskn(*B)=20;
+                                UbahBangunan(&Elmt(*TabBangunan, x), 5, 20, true);
+                            }
+                            else if(Jenis(Elmt(*TabBangunan,x))=='F'){
+                                // NTbhPskn(*B)=10;
+                                // MxTmPskn(*B)=20;
+                                // Defense(*B)=false;
+                                // AwalPskn(*B)=80;
+                                // NPskn(*B)=20;
+                                UbahBangunan(&Elmt(*TabBangunan, x), 10, 20, false);
+                            }
+                            else if(Jenis(Elmt(*TabBangunan,x))=='V'){
+                                // NTbhPskn(*B)=5;
+                                // MxTmPskn(*B)=20;
+                                // Defense(*B)=false;
+                                // AwalPskn(*B)=20;
+                                // NPskn(*B)=20;
+                                UbahBangunan(&Elmt(*TabBangunan, x), 5, 20, false);
+                            }
                             DelP(&listB(*P2),x);
                             InsVLast(&listB(*P1),x);
                             claim = true;
