@@ -84,6 +84,10 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
     PrintBangunan(*P1,*TabBangunan);
     // PrintBG(myBangunan);
     printf("Bangunan yang digunakan untuk menyerang: "); scanf("%d",&numOwn);
+    while(numOwn > NbElmt(listB(*P1)) || numOwn < 1){
+        printf("Invalid! Check again please. \n");
+        printf("Bangunan yang digunakan untuk menyerang: "); scanf("%d",&numOwn);
+    }
     addressB X = First(listB(*P1));
     int i = 1;
     while (X != Nil){
@@ -93,13 +97,17 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
         X = Next(X);
         i++;
     }
+    printf("num own ketemu\n");
     if (X != Nil) {
+        printf("X!=Nil\n");
         int idDipilih = Info(X);
         if (hasAtk(Elmt(*TabBangunan,idDipilih)) == false) {
+            printf("hasatk = false\n");
             adrNode t = SearchNode(G, idDipilih);
+            printf("t : %d\n", t);
+            int j = 1;
             if(t != NilGraph){
                 adrSuccNode w = Adj(t);
-                int j = 1;
                 while(w != NilGraph){
                     int q = Id(Origin(w));
                     if(Pemilik(Elmt(*TabBangunan, q)) != ID(*P1)){
@@ -109,7 +117,7 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                     }
                     w = NextG(w);
                 }
-
+                printf("j : %d\n", j);
                 if(j == 1){
                     printf("Tidak ada bangunan yang berdekatan.\n");
                 } else {
@@ -175,9 +183,9 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                     hasAtk(Elmt(*TabBangunan,idDipilih)) = true;
                     Push(undo, *TabBangunan);
                 }
-            } else {
-                printf("There are no connected enemy's buildings with yours.\n");
-            }
+            } /* else {
+            //     printf("There are no connected enemy's buildings with yours.\n");
+            // }*/
         }else {
             printf("You've already attacked with this building! \n");
         }
@@ -269,11 +277,18 @@ void LEVEL_UP(Player *P, TabInt *T, Stack *undo){
 
 void splitToPlayerList(Player *P1, Player *P2, TabInt T){
     for (int i = GetFirstIdx(T); i<= GetLastIdx(T); i++) {
-      if (Pemilik(Elmt(T,i)) == 1) {
+      if (Pemilik(Elmt(T,i)) == 1 && ID(*P1) == 1) {
          InsVLast(&listB(*P1),i);
-      } else if (Pemilik(Elmt(T,i)) == 2) {
+      } else if (Pemilik(Elmt(T,i)) == 2 && ID(*P2) == 2) {
          InsVLast(&listB(*P2),i);
       }
+      else if (Pemilik(Elmt(T,i)) == 1 && ID(*P2) == 1) {
+         InsVLast(&listB(*P2),i);
+      }
+      else if (Pemilik(Elmt(T,i)) == 2 && ID(*P1) == 2) {
+         InsVLast(&listB(*P1),i);
+      }
+
    }
 }
 
@@ -309,6 +324,7 @@ void END_TURN(Player *P1, Player *P2, TabInt *T, boolean *extra, boolean *atkup)
         if(act(*P1) == 1 && act(*P2) == 0){
             act(*P1) = 0;
             act(*P2) = 1;
+            printf("sampe sini\n");
         }
         else if(act(*P1) == 0 && act(*P2) == 1){
             act(*P1) = 1;
@@ -323,7 +339,7 @@ void END_TURN(Player *P1, Player *P2, TabInt *T, boolean *extra, boolean *atkup)
     {
         InputSkills(P1, 6);
     }
-    
+    printf("%d %d\n", act(*P1), act(*P2));
 }
 
 // void SAVE(){
@@ -348,18 +364,19 @@ void MOVE(Player P, TabInt *T, Graph G, Stack *undo, boolean *move){
     }
     if (X!= Nil & num > 0) {
         int idDipilih = Info(X);
-
         int j = 1;
         adrNode t = SearchNode(G, idDipilih);
-        adrSuccNode w = Adj(t);
-        while(w != NilGraph){
-            int q = Id(Origin(w));
-            if(Pemilik(Elmt(*T, q)) == ID(P)){
-                AddAsLastEl(&terdekat, Elmt(*T, q));
-                arr2[j] = q;
-                j++;
+        if(t!=NilGraph){
+            adrSuccNode w = Adj(t);
+            while(w != NilGraph){
+                int q = Id(Origin(w));
+                if(Pemilik(Elmt(*T, q)) == ID(P)){
+                    AddAsLastEl(&terdekat, Elmt(*T, q));
+                    arr2[j] = q;
+                    j++;
+                }
+                w = NextG(w);
             }
-            w = NextG(w);
         }
         if (j==1){
             printf("Tidak ada bangunan yang berdekatan! \n");
@@ -434,7 +451,9 @@ boolean GAME_OVER(TabInt T){
 
 void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
     char str[50], confirm;
-    boolean atkup, critical, extra;
+    boolean atkup = false;
+    boolean critical = false;
+    boolean extra = false;
     boolean move = true;
     int isShieldP1 = 0;
     int isShieldP2 = 0;
@@ -445,9 +464,9 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
     CreateEmpty_Stackt(&undo, MaxEl(*T));
     
     Push(&undo, *T);
-    if(IsEmpty_Stackt(undo)) {
-        printf("berhasil");
-    }
+    // if(IsEmpty_Stackt(undo)) {
+    //     printf("berhasil");
+    // }
     splitToPlayerList(P1,P2,*T);
     printf("DAFTAR BANGUNAN PLAYER 1 : \n");
     PrintBangunan(*P1,*T);
@@ -490,20 +509,16 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
                 }
             }
             else if(isCommandSame(str, "UNDO")){
-                if (!IsEmpty_Stackt(undo)) {
-                    printf("hayoo");
-                }
                 UNDO(P1, P2, &undo, T);
-                if (!IsEmpty_Stackt(undo)) {
-                    printf("hayoo");
-                }
             }
             else if(isCommandSame(str, "END_TURN")){
                 END_TURN(P1, P2, T, &extra, &atkup);
                 move = true;
-                isShieldP2 -= 1;
-                if(isShieldP2 == 0){
-                    ShieldDown(*P2, T);
+                if(isShieldP2 > 0){
+                    isShieldP2 -= 1;
+                    if(isShieldP2 == 0){
+                        ShieldDown(*P2, T);
+                    }
                 }
                 DelAll(&undo);
                 printf("Player 2's turn.\n");
@@ -560,23 +575,19 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
                 }
             }
             else if(isCommandSame(str, "UNDO")){
-                if (!IsEmpty_Stackt(undo)) {
-                    printf("hayoo");
-                }
                 UNDO(P2, P1, &undo, T);
-                if (!IsEmpty_Stackt(undo)) {
-                    printf("hayoo");
-                }
             }
             else if(isCommandSame(str, "END_TURN")){
-                END_TURN(P2, P1, T, &extra, &atkup);
+                END_TURN(P1, P2, T, &extra, &atkup);
                 move = true;
-                isShieldP2 -= 1;
-                if(isShieldP2 == 0){
-                    ShieldDown(*P2, T);
+                if(isShieldP1 > 0){
+                    isShieldP1 -= 1;
+                    if(isShieldP1 == 0){
+                        ShieldDown(*P1, T);
+                    }
                 }
                 DelAll(&undo);
-                printf("Player 2's turn.\n");
+                printf("Player 1's turn.\n");
             }
             // else if(isCommandSame(str, "SAVE")){
             //     SAVE();

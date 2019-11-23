@@ -47,6 +47,7 @@ int main(){
    InsertEdge(&G, 4, 1);
    InsertEdge(&G, 1, 5);
    InsertEdge(&G, 5, 1);
+   InsertEdge(&G, 3, 4);
 
    // }
    // printf("Bangunan milik Player 1:\n");
