@@ -105,7 +105,7 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
         // printf("X!=Nil\n");
         int idDipilih = Info(X);
         if (hasAtk(Elmt(*TabBangunan,idDipilih)) == false) {
-            printf("hasatk = false\n");
+            // printf("hasatk = false\n");
             adrNode t = SearchNode(G, idDipilih);
             // printf("t : %d\n", t);
             int j = 1;
@@ -491,6 +491,21 @@ void viewMap(MATRIKS peta){
     TulisMATRIKS(peta);
 }
 
+void AddPasukan(Player P, TabInt *T){
+    addressB B;
+
+    B = First(listB(P));
+    while(B!=Nil){
+        if( NPskn(Elmt(*T, Info(B)))+NTbhPskn(Elmt(*T, Info(B))) >= MxTmPskn(Elmt(*T, Info(B))) ){
+            NPskn(Elmt(*T, Info(B))) = MxTmPskn(Elmt(*T, Info(B)));
+        }
+        else{
+            NPskn(Elmt(*T, Info(B))) += NTbhPskn(Elmt(*T, Info(B)));
+        }
+        B = Next(B);
+    }
+}
+
 void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
     char confirm;
     boolean atkup = false;
@@ -511,12 +526,28 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
     // }
     splitToPlayerList(P1,P2,*T);
 
-    
-    printf("DAFTAR BANGUNAN PLAYER 1 : \n");
-    PrintBangunan(*P1,*T);
-    printf("DAFTAR BANGUNAN PLAYER 2 : \n");
-    PrintBangunan(*P2,*T);
+    AddPasukan(*P1, T);
+    // printf("DAFTAR BANGUNAN PLAYER 1 : \n");
+    // PrintBangunan(*P1,*T);
+    // printf("DAFTAR BANGUNAN PLAYER 2 : \n");
+    // PrintBangunan(*P2,*T);
     while(!GAME_OVER(*T)){
+        viewMap(peta);
+        printf("Details:\n");
+        printf("Player : ");
+        if(act(*P1) == 1){
+            printf("1\n");
+            printf("Buildings:\n");
+            PrintBangunan(*P1, *T);
+            printHeadSkills(*P1);
+        }
+        else{
+            printf("2\n");
+            printf("Buildings:\n");
+            PrintBangunan(*P2, *T);
+            printHeadSkills(*P2);
+        }
+
         if(act(*P1) == 1){
             printf("ENTER COMMAND: ");
             STARTKATAK();
@@ -525,7 +556,6 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
             if (isCommandSame(str, "ATTACK")) {
                 ATTACK(T, P1, P2, &atkup, &critical, G, &undo);
                 saveMap(&peta, *T);
-                viewMap(peta);
             }
             else if(isCommandSame(str, "LEVEL_UP")){
                 LEVEL_UP(P1, T, &undo);
@@ -559,7 +589,6 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
             else if(isCommandSame(str, "UNDO")){
                 UNDO(P1, P2, &undo, T);
                 saveMap(&peta, *T);
-                viewMap(peta);
             }
             else if(isCommandSame(str, "END_TURN")){
                 END_TURN(P1, P2, T, &extra, &atkup);
@@ -571,8 +600,8 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                     }
                 }
                 hasAtkOff(*P1, T);
+                AddPasukan(*P2, T);
                 saveMap(&peta, *T);
-                viewMap(peta);
                 DelAll(&undo);
             }
             // else if(isCommandSame(str, "SAVE")){
@@ -645,6 +674,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                     }
                 }
                 hasAtkOff(*P2, T);
+                AddPasukan(*P1, T);
                 saveMap(&peta, *T);
                 DelAll(&undo);
             }
