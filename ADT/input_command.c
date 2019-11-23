@@ -160,6 +160,7 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                     } else {
                         printf("Bangunan menjadi milikmu!\n");
                         NPskn(Elmt(*TabBangunan,x)) = army - NPskn(Elmt(*TabBangunan,x));
+                        int pemilikasli = Pemilik(Elmt(*TabBangunan, x));
                         Pemilik(Elmt(*TabBangunan, x)) = ID(*P1);
                         DelP(&listB(*P2),x);
                         InsVLast(&listB(*P1),x);
@@ -170,7 +171,7 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                             InputSkills(P2, 7);
                         }
                         //Lawan Dapet skill shield
-                        if (CountBangunan(*P2, *TabBangunan) == 2)
+                        if ((CountBangunan(*P2, *TabBangunan) == 2) && (pemilikasli != 0))
                         {
                             InputSkills(P2, 2);
                         }
@@ -495,7 +496,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G){
                         // printf("hallo\n");
                         if (InfoHead(skill(*P1)) == 3) {
                             UseSkills(P1, P2, &extra, &atkup,&critical,T, &isShieldP1, &undo);
-                            InputSkills(P1,5);
+                            InputSkills(P2,5);
                         } else {
                             UseSkills(P1, P2, &extra, &atkup,&critical,T, &isShieldP1, &undo);
                         }
