@@ -105,7 +105,7 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
         // printf("X!=Nil\n");
         int idDipilih = Info(X);
         if (hasAtk(Elmt(*TabBangunan,idDipilih)) == false) {
-            printf("hasatk = false\n");
+            // printf("hasatk = false\n");
             adrNode t = SearchNode(G, idDipilih);
             // printf("t : %d\n", t);
             int j = 1;
@@ -593,6 +593,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
             if (isCommandSame(str, "ATTACK")) {
                 ATTACK(T, P2, P1, &atkup, &critical, G, &undo);
                 saveMap(&peta, *T);
+                viewMap(peta);
             }
             else if(isCommandSame(str, "LEVEL_UP")){
                 LEVEL_UP(P2, T, &undo);
@@ -626,6 +627,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
             else if(isCommandSame(str, "UNDO")){
                 UNDO(P2, P1, &undo, T);
                 saveMap(&peta, *T);
+                viewMap(peta);
             }
             else if(isCommandSame(str, "END_TURN")){
                 END_TURN(P1, P2, T, &extra, &atkup);
@@ -638,6 +640,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                 }
                 hasAtkOff(*P2, T);
                 saveMap(&peta, *T);
+                viewMap(peta);
                 DelAll(&undo);
             }
             // else if(isCommandSame(str, "SAVE")){
