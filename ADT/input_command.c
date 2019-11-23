@@ -161,16 +161,21 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                     } else {
                         printf("Bangunan menjadi milikmu!\n");
                         NPskn(Elmt(*TabBangunan,x)) = army - NPskn(Elmt(*TabBangunan,x));
+                        int pemilikasli = Pemilik(Elmt(*TabBangunan, x));
                         Pemilik(Elmt(*TabBangunan, x)) = ID(*P1);
                         DelP(&listB(*P2),x);
                         InsVLast(&listB(*P1),x);
-
                         claim = true;
+                        //Dapet skill barrage
                         if (CountBangunan(*P1, *TabBangunan) == 10)
                         {
                             InputSkills(P2, 7);
                         }
-                        
+                        //Lawan Dapet skill shield
+                        if ((CountBangunan(*P2, *TabBangunan) == 2) && (pemilikasli != 0))
+                        {
+                            InputSkills(P2, 2);
+                        }
                     }
                 
                     if ((Jenis(Elmt(*TabBangunan, x)) == 'T') && (Pemilik(Elmt(*TabBangunan,x)) != 0) && (countTower(*P1,*TabBangunan) == 3) && (claim)) {
@@ -483,6 +488,21 @@ void viewMap(MATRIKS peta){
     TulisMATRIKS(peta);
 }
 
+void AddPasukan(Player P, TabInt *T){
+    addressB B;
+
+    B = First(listB(P));
+    while(B!=Nil){
+        if( NPskn(Elmt(*T, Info(B)))+NTbhPskn(Elmt(*T, Info(B))) >= MxTmPskn(Elmt(*T, Info(B))) ){
+            NPskn(Elmt(*T, Info(B))) = MxTmPskn(Elmt(*T, Info(B)));
+        }
+        else{
+            NPskn(Elmt(*T, Info(B))) += NTbhPskn(Elmt(*T, Info(B)));
+        }
+        B = Next(B);
+    }
+}
+
 void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
     char confirm;
     boolean atkup = false;
@@ -503,12 +523,28 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
     // }
     splitToPlayerList(P1,P2,*T);
 
-    
-    printf("DAFTAR BANGUNAN PLAYER 1 : \n");
-    PrintBangunan(*P1,*T);
-    printf("DAFTAR BANGUNAN PLAYER 2 : \n");
-    PrintBangunan(*P2,*T);
+    AddPasukan(*P1, T);
+    // printf("DAFTAR BANGUNAN PLAYER 1 : \n");
+    // PrintBangunan(*P1,*T);
+    // printf("DAFTAR BANGUNAN PLAYER 2 : \n");
+    // PrintBangunan(*P2,*T);
     while(!GAME_OVER(*T)){
+        viewMap(peta);
+        printf("Details:\n");
+        printf("Player : ");
+        if(act(*P1) == 1){
+            printf("1\n");
+            printf("Buildings:\n");
+            PrintBangunan(*P1, *T);
+            printHeadSkills(*P1);
+        }
+        else{
+            printf("2\n");
+            printf("Buildings:\n");
+            PrintBangunan(*P2, *T);
+            printHeadSkills(*P2);
+        }
+
         if(act(*P1) == 1){
             printf("ENTER COMMAND: ");
             STARTKATAK();
@@ -517,7 +553,6 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
             if (isCommandSame(str, "ATTACK")) {
                 ATTACK(T, P1, P2, &atkup, &critical, G, &undo);
                 saveMap(&peta, *T);
-                viewMap(peta);
             }
             else if(isCommandSame(str, "LEVEL_UP")){
                 LEVEL_UP(P1, T, &undo);
@@ -537,7 +572,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                         // printf("hallo\n");
                         if (InfoHead(skill(*P1)) == 3) {
                             UseSkills(P1, P2, &extra, &atkup,&critical,T, &isShieldP1, &undo);
-                            InputSkills(P1,5);
+                            InputSkills(P2,5);
                         } else {
                             UseSkills(P1, P2, &extra, &atkup,&critical,T, &isShieldP1, &undo);
                         }
@@ -551,7 +586,6 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
             else if(isCommandSame(str, "UNDO")){
                 UNDO(P1, P2, &undo, T);
                 saveMap(&peta, *T);
-                viewMap(peta);
             }
             else if(isCommandSame(str, "END_TURN")){
                 END_TURN(P1, P2, T, &extra, &atkup);
@@ -563,8 +597,8 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                     }
                 }
                 hasAtkOff(*P1, T);
+                AddPasukan(*P2, T);
                 saveMap(&peta, *T);
-                viewMap(peta);
                 DelAll(&undo);
             }
             // else if(isCommandSame(str, "SAVE")){
@@ -593,7 +627,6 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
             if (isCommandSame(str, "ATTACK")) {
                 ATTACK(T, P2, P1, &atkup, &critical, G, &undo);
                 saveMap(&peta, *T);
-                viewMap(peta);
             }
             else if(isCommandSame(str, "LEVEL_UP")){
                 LEVEL_UP(P2, T, &undo);
@@ -613,7 +646,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                         // printf("hallo\n");
                         if (InfoHead(skill(*P2)) == 3) {
                             UseSkills(P2, P1, &extra, &atkup,&critical,T, &isShieldP1, &undo);
-                            InputSkills(P2,5);
+                            InputSkills(P1,5);
                         } else {
                             UseSkills(P2, P1, &extra, &atkup,&critical,T, &isShieldP1, &undo);
                         }
@@ -627,7 +660,6 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
             else if(isCommandSame(str, "UNDO")){
                 UNDO(P2, P1, &undo, T);
                 saveMap(&peta, *T);
-                viewMap(peta);
             }
             else if(isCommandSame(str, "END_TURN")){
                 END_TURN(P1, P2, T, &extra, &atkup);
@@ -639,8 +671,8 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                     }
                 }
                 hasAtkOff(*P2, T);
+                AddPasukan(*P1, T);
                 saveMap(&peta, *T);
-                viewMap(peta);
                 DelAll(&undo);
             }
             // else if(isCommandSame(str, "SAVE")){
