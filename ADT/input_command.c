@@ -138,10 +138,6 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                         printf("Masukkan jumlah pasukan dengan benar!\n");
                         printf("Jumlah pasukan: "); scanf("%d",&army);
                     }
-                  
-                    if ((Jenis(Elmt(*TabBangunan, idDiserang)) == 'F') && (Pemilik(Elmt(*TabBangunan,idDipilih)) != 0)){
-                        InputSkills(P2,3);   
-                    }
                     NPskn(Elmt(*TabBangunan,idDipilih)) -= army;
 
                     if (!(*atkup) && !(*critical)) { 
@@ -176,17 +172,24 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                         {
                             InputSkills(P2, 2);
                         }
+                        //Lawan dapet skill Extraturn
+                        if ((Jenis(Elmt(*TabBangunan, idDiserang)) == 'F') && (pemilikasli != 0))
+                        {
+                            InputSkills(P2,3);   
+                        }
+                        //Dapet skill attack up
+                        if ((Jenis(Elmt(*TabBangunan, idDiserang)) == 'T') && (pemilikasli != 0) && (countTower(*P1,*TabBangunan) == 3))
+                        {
+                            InputSkills(P1,4);
+                        }
                     }
-                
-                    if ((Jenis(Elmt(*TabBangunan, x)) == 'T') && (Pemilik(Elmt(*TabBangunan,x)) != 0) && (countTower(*P1,*TabBangunan) == 3) && (claim)) {
-                        InputSkills(P1,4);
-                    }
+            
 
                     // printf("Daftar P1: \n");
                     // PrintBangunan(*P1,*TabBangunan);
                     // printf("Daftar P2: \n");
                     // PrintBangunan(*P2,*TabBangunan);
-                    (*critical) = true;
+                    //(*critical) = true;
                     hasAtk(Elmt(*TabBangunan,idDipilih)) = true;
                     Push(undo, *TabBangunan);
                 }
