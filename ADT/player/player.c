@@ -170,7 +170,7 @@ void UseSkills(Player *P1, Player *P2, boolean *extra, boolean *atkup, boolean *
                 Barrage(*P1, *P2, T);
             }
         }
-    printf("daftar : \n");
+    printf("Your buildings have been updated!\n");
     PrintBangunan(*P1,*T);
     }
 
@@ -183,12 +183,12 @@ void InputSkills(Player *P,int X)
     {
         if (IsFull_Queue(skill(*P)))
         {
-            printf("Skill gagal kamu dapatkan! Kamu masih memiliki 10 Skill!");
+            printf("Failed to obtain the skill! You still have 10 skills!");
         }
         else if (X >=2 && X <= 6)
         {
             Add(&skill(*P),X);
-            printf("Selamat P%d, Anda mendapatkan Skill ", ID(*P));
+            printf("Congrats! Player %d, You got a skill! It is ", ID(*P));
             if (X == 2)
             {
                 printf("Shield\n");

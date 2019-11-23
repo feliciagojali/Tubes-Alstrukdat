@@ -91,14 +91,14 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
     // }
 
     boolean claim = false;
-    printf("Daftar bangunan: \n"); //buat procedure aja kali ya
+    printf("Your buildings: \n"); //buat procedure aja kali ya
     // ngeprint list bangunan yng ada menggunakan adt list
     PrintBangunan(*P1,*TabBangunan);
     // PrintBG(myBangunan);
-    printf("Bangunan yang digunakan untuk menyerang: "); scanf("%d",&numOwn);
+    printf("Choose a building to attack: "); scanf("%d",&numOwn);
     while(numOwn > NbElmt(listB(*P1)) || numOwn < 1){
         printf("Invalid! Check again please. \n");
-        printf("Bangunan yang digunakan untuk menyerang: "); scanf("%d",&numOwn);
+        printf("Choose a building to attack: "); scanf("%d",&numOwn);
     }
     addressB X = First(listB(*P1));
     int i = 1;
@@ -131,21 +131,22 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                 }
                 // printf("j : %d\n", j);
                 if(j == 1){
-                    printf("Tidak ada bangunan yang berdekatan.\n");
+                    printf("No buildings connected to yours.\n");
                 } else {
-                    printf("Daftar bangunan yang dapat diserang: \n");
+                    printf("Buildings that can be attacked: \n");
                     PrintBG(enemyBangunan);
-                    printf("Bangunan yang diserang: "); scanf("%d",&numEnemy);
+                    printf("Choose a building to be attacked: "); scanf("%d",&numEnemy);
 
                     while (numEnemy > j-1 || numEnemy < 0) {
-                        printf("Pilihlah bangunan yang benar : ");
+                        printf("Choose the right building please.\n");
+                        printf("Buildings that can be attacked: \n");
                         scanf("%d",&numEnemy);
                     }
                     int idDiserang = arr[numEnemy];
-                    printf("Jumlah pasukan: "); scanf("%d",&army);
+                    printf("Amount of army: "); scanf("%d",&army);
                     while (army > NPskn(Elmt(*TabBangunan,idDipilih)) || army < 0) {
-                        printf("Masukkan jumlah pasukan dengan benar!\n");
-                        printf("Jumlah pasukan: "); scanf("%d",&army);
+                        printf("Input the correct amount of army, please! Can't you see your own army?!\n");
+                        printf("Amount of army: "); scanf("%d",&army);
                     }
 
                     /*
@@ -160,16 +161,17 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                             }
                         }
                         if(ans == -1){
-                            printf("Bangunan gagal direbut\n");
+                            printf("Not enough amount of army! Failed to claim the building.\n");
                             NPskn(Elmt(*TabBangunan, idDiserang)) -= army;
                             NPskn(Elmt(*TabBangunan, idDipilih)) -= army;
                         } else {
                             int x = idDiserang;
-                            printf("Bangunan menjadi milikmu!\n");
+                            printf("The building is claimed! It's yours now.\n");
                             NPskn(Elmt(*TabBangunan, idDiserang)) = vmin(MxTmPskn(Elmt(*TabBangunan, idDiserang)), army - ans);
                             NPskn(Elmt(*TabBangunan, idDipilih)) -= army;
                             int pemilikasli = Pemilik(Elmt(*TabBangunan, x));
                             Pemilik(Elmt(*TabBangunan, x)) = ID(*P1);
+                            Lvl(Elmt(*TabBangunan, x)) = 1;
                             DelP(&listB(*P2),x);
                             InsVLast(&listB(*P1),x);
                             claim = true;
@@ -198,10 +200,10 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                         int x = idDiserang;
                         NPskn(Elmt(*TabBangunan, idDipilih)) -= army;
                         if(army < NPskn(Elmt(*TabBangunan,idDiserang))) {
-                            printf("Bangunan gagal direbut\n");
+                            printf("Failed to claim the building.\n");
                             NPskn(Elmt(*TabBangunan,x)) -= army;
                         } else {
-                            printf("Bangunan menjadi milikmu!\n");
+                            printf("The building is claimed! It's yours now.\n");
                             NPskn(Elmt(*TabBangunan,x)) = vmin(MxTmPskn(Elmt(*TabBangunan, idDiserang)), army - NPskn(Elmt(*TabBangunan,x)));
                             int pemilikasli = Pemilik(Elmt(*TabBangunan, x));
                             Pemilik(Elmt(*TabBangunan, x)) = ID(*P1);
@@ -238,12 +240,12 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                             }
                         }
                         if(ans == -1){
-                            printf("Bangunan gagal direbut\n");
+                            printf("Failed to claim the building.\n");
                             NPskn(Elmt(*TabBangunan, idDipilih)) -= army;
                             NPskn(Elmt(*TabBangunan, idDiserang)) -= (3 * army) / 4;
                         } else {
                             int x = idDiserang;
-                            printf("Bangunan menjadi milikmu!\n");
+                            printf("The building is claimed! It's yours now.\n");
                             NPskn(Elmt(*TabBangunan, idDipilih)) -= army;
                             NPskn(Elmt(*TabBangunan, idDiserang)) = vmin(MxTmPskn(Elmt(*TabBangunan, idDiserang)), army - ans + (3 * ans) / 4 - NPskn(Elmt(*TabBangunan, idDiserang)));
                             int pemilikasli = Pemilik(Elmt(*TabBangunan, x));
@@ -339,7 +341,7 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
             printf("You've already attacked with this building! \n");
         }
     } else {
-        printf("Pilihlah bangunan yang benar ! \n");
+        printf("Choose the building on the list, please! \n");
     }
 }
 
@@ -370,11 +372,11 @@ void changeLevel(Player *P, TabInt *T, int idDipilih){
 
 void LEVEL_UP(Player *P, TabInt *T, Stack *undo){
     int numBuilding;
-    printf("Daftar bangunan: \n");
+    printf("Your buildings: \n");
 
     PrintBangunan(*P, *T);
     // // print list bangunan yang dimiliki
-    printf("Bangunan yang akan di level up: ");
+    printf("The building to be levelled up: ");
     scanf("%d", &numBuilding); 
     addressB X = First(listB(*P));
     int i = 1;
@@ -390,11 +392,11 @@ void LEVEL_UP(Player *P, TabInt *T, Stack *undo){
         // assignBangunan(listB(*P),numBuilding,&A);
 
         if(!isCanLevel(Elmt(*T, idDipilih))){
-            printf("Jumlah pasukan ");
+            printf("Amount of army ");
             PrintJenisBangunan(Elmt(*T, idDipilih));
-            printf("kurang untuk level up\n");
+            printf("is not enough for the building to be levelled up!\n");
         } else if (Lvl(Elmt(*T,idDipilih)) == 4) {
-            printf("Level Bangunan sudah maksimum! \n");   
+            printf("The building's level is maximum! \n");   
         } else {
             Lvl(Elmt(*T,idDipilih)) += 1;
             NPskn(Elmt(*T,idDipilih)) -= (MxTmPskn(Elmt(*T,idDipilih))/2);
@@ -406,7 +408,7 @@ void LEVEL_UP(Player *P, TabInt *T, Stack *undo){
     }
     else
     {
-        printf("Bangunan pilihanmu tidak valid! \n");
+        printf("Choose the building on the list, please! \n");
     }
 }
 
@@ -482,7 +484,7 @@ void END_TURN(Player *P1, Player *P2, TabInt *T, boolean *extra, boolean *atkup)
             printf("Player 1's turn.\n");
         }
     } else {
-        printf("Wah! Giliran kamu lagi! \n");
+        printf("Wow! It's your turn again! Lucky you. \n");
         (*extra) = false;
     }
     (*atkup) = false;
@@ -505,9 +507,9 @@ void MOVE(Player P, TabInt *T, Graph G, Stack *undo, boolean *move){
     int i=1;
     MakeEmpty(&terdekat, MaxEl(*T));
 
-    printf("Daftar Bangunan: \n");
+    printf("Your buildings: \n");
     PrintBangunan(P,*T);
-    printf("Pilih Bangunan : "); scanf("%d",&num);
+    printf("Choose buildings to send the army : "); scanf("%d",&num);
     addressB X = First(listB(P));
     while (i<num){
         X = Next(X);
@@ -530,29 +532,29 @@ void MOVE(Player P, TabInt *T, Graph G, Stack *undo, boolean *move){
             }
         }
         if (j==1){
-            printf("Tidak ada bangunan yang berdekatan! \n");
+            printf("No buildings are connected to yours! \n");
         } else {
-            printf("Daftar Bangunan terdekat : \n"); // print bangunan terdekat
+            printf("Connected buildings : \n"); // print bangunan terdekat
             PrintBG(terdekat);
-            printf("Bangunan yang menerima : "); scanf("%d",&numrcv);
+            printf("Choose a building to receive the army : "); scanf("%d",&numrcv);
             while (numrcv < 0 || numrcv > j -1) {
-                printf("Pilihlah bangunan yang benar! \n");
-                printf("Bangunan yang menerima : "); scanf("%d",&numrcv);
+                printf("Choose a building on the list, please! Can't you see it?! \n");
+                printf("Choose a building to receive the army : "); scanf("%d",&numrcv);
             }
             int idRcvDipilih = arr2[numrcv];
-            printf("Jumlah Pasukan : "); scanf("%d",&army);
-            while (army < 0)
+            printf("Amount of army : "); scanf("%d",&army);
+            while (NPskn(Elmt(*T, idDipilih)) < army)
             {
-                printf("Masukkan jumlah pasukan yang benar ! \n");
-                printf("Jumlah Pasukan : "); scanf("%d",&army);
+                printf("Input the right amount of army please! \n");
+                printf("Amount of army : "); scanf("%d",&army);
 
             }
-            if (NPskn(Elmt(*T, idDipilih)) < army) {
-                printf("Jumlah pasukan tidak cukup! \n");
-            } else {
+            // if (NPskn(Elmt(*T, idDipilih)) < army) {
+            //     printf("The amount of army is not enough! \n");
+            // } else {
                 if(army + NPskn(Elmt(*T, idRcvDipilih)) > MxTmPskn(Elmt(*T, idRcvDipilih))){
-                    printf("Building hanya mampu menampung %d pasukan.\n", MxTmPskn(Elmt(*T, idRcvDipilih)));
-                    printf("Perpindahan GAGAL!\n");
+                    printf("The building could only accomodate %d soldiers.\n", MxTmPskn(Elmt(*T, idRcvDipilih)));
+                    printf("MOVE FAILED!\n");
                 }
                 else{
                     if (army + NPskn(Elmt(*T, idRcvDipilih)) == MxTmPskn(Elmt(*T, idRcvDipilih))) {
@@ -562,19 +564,19 @@ void MOVE(Player P, TabInt *T, Graph G, Stack *undo, boolean *move){
                         NPskn(Elmt(*T, idRcvDipilih)) += army;
                     }
                         NPskn(Elmt(*T, idDipilih)) -= army;
-                        printf("%d pasukan dari ", army); PrintJenisBangunan(Elmt(*T, num));
+                        printf("%d soldiers from ", army); PrintJenisBangunan(Elmt(*T, num));
                         TulisPOINT(Titik(Elmt(*T, idDipilih)));
-                        printf(" telah berpindah ke ");
+                        printf(" has been moved to ");
                         PrintJenisBangunan(Elmt(*T, idRcvDipilih));
                         TulisPOINT(Titik(Elmt(*T, idRcvDipilih)));
                         printf("\n");
                         Push(undo, *T);
                         *move = false;
                 }
-            }
+            // }
         }
     } else {
-        printf("Pilihlah bangunan yang tepat! \n");
+        printf("Choose the building on the list, please! You're not blind, right? \n");
     }
     // pilih bangunan target
     // masukan jumlah pasukan
@@ -650,14 +652,10 @@ void LIST_COMMAND()
 {
     printf("\n");
     printf("Command available   :\n");
-    printf("1. ATTACK\n");
-    printf("2. LEVEL_UP\n");
-    printf("3. SKILL\n");
-    printf("4. UNDO\n");
-    printf("5. MOVE\n");
-    printf("6. END_TURN\n");
-    printf("7. SAVE\n");
-    printf("8. EXIT\n");
+    printf("1. ATTACK   "); printf("5. MOVE\n");
+    printf("2. LEVEL_UP "); printf("6. END_TURN\n");
+    printf("3. SKILL    "); printf("7. SAVE\n");
+    printf("4. UNDO     "); printf("8. EXIT\n");
     printf("\n");
 }
 
@@ -687,6 +685,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
     // printf("DAFTAR BANGUNAN PLAYER 2 : \n");
     // PrintBangunan(*P2,*T);
     while(!GAME_OVER(*T)){
+        system("cls");
         viewMap(peta);
         printf("\n");
         printf("Details:\n");
@@ -788,8 +787,8 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                     MOVE(*P1, T, G, &undo,&move);
                     saveMap(&peta, *T);
                 } else {
-                    printf("Kau sudah melakukan MOVE untuk giliran ini! \n");
-                    printf("Tunggu giliran berikutnya!\n");
+                    printf("You have used MOVE for this turn! \n");
+                    printf("Wait for the next turn please!\n");
                 }
             }
             else{
@@ -866,8 +865,8 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                     MOVE(*P2, T, G, &undo,&move);
                     saveMap(&peta, *T);
                 } else {
-                    printf("Kau sudah melakukan MOVE untuk giliran ini! \n");
-                    printf("Tunggu giliran berikutnya!\n");
+                    printf("You have used MOVE for this turn! \n");
+                    printf("Wait for the next turn please!\n");
                 }
             }
             else{
