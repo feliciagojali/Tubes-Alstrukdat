@@ -85,7 +85,6 @@ int main(){
     }
     MakeMATRIKS(n + 2, m + 2, &peta);
     saveMapS();
-    viewMapS();
     Player P1 = initPlayer(1);
     Player P2 = initPlayer(2);
     INPUT_COMMAND(&P1, &P2, &TabBangunan, G, peta);
