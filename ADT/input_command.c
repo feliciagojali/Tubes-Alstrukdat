@@ -706,7 +706,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
     boolean atkup = false;
     boolean critical = false;
     boolean extra = false;
-    boolean move = true;
+    boolean move = false;
     int isShieldP1 = 0;
     int isShieldP2 = 0;
     act(*P1) = 1;
@@ -830,6 +830,8 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                 Push(&undo, *T);
                 saveMap(&peta, *T);
                 DelAll(&undo);
+                Absis(Titik(Elmt(mov, 1))) = 1;
+                Ordinat(Titik(Elmt(mov, 1))) = 1;
                 Push(&undo2, mov);
                 DelAll(&undo2);
             }
@@ -907,6 +909,8 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                 Push(&undo, *T);
                 saveMap(&peta, *T);
                 DelAll(&undo);
+                Absis(Titik(Elmt(mov, 1))) = 1;
+                Ordinat(Titik(Elmt(mov, 1))) = 1;
                 Push(&undo2, mov);
                 DelAll(&undo2);
             }
