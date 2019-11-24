@@ -108,7 +108,10 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
         }
         X = Next(X);
         i++;
+    
+    
     }
+
     // printf("num own ketemu\n");
     if (X != Nil) {
         // printf("X!=Nil\n");
