@@ -781,7 +781,9 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                         } else {
                             UseSkills(P1, P2, &extra, &atkup,&critical,T, &isShieldP1, &undo);
                         }
+                        Push(&undo, *T);
                         saveMap(&peta, *T);
+                        DelAll(&undo);
                     }
                     // else{
                     //     printf("You cancel the skill.\n");
@@ -805,6 +807,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                 }
                 hasAtkOff(*P1, T);
                 AddPasukan(*P2, T);
+                Push(&undo, *T);
                 saveMap(&peta, *T);
                 DelAll(&undo);
             }
@@ -845,25 +848,16 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                     printf("You don't have any skill left! \n");
                 }
                 else{
-                    // printHeadSkills(*P2);
-                    // printf("Do you want to use that skill? (Y/N) \n");
-                    // // do{
-                    // scanf(" %c", &confirm);
-                    // // } while(confirm == 'Y' || confirm == 'N');
-                    // if(confirm == 'Y'){
-                        // printf("hallo\n");
                         if (InfoHead(skill(*P2)) == 3) {
                             UseSkills(P2, P1, &extra, &atkup,&critical,T, &isShieldP1, &undo);
                             InputSkills(P1,5);
                         } else {
                             UseSkills(P2, P1, &extra, &atkup,&critical,T, &isShieldP1, &undo);
                         }
+                        Push(&undo, *T);
                         saveMap(&peta, *T);
+                        DelAll(&undo);
                     }
-                    // else{
-                    //     printf("You cancel the skill.\n");
-                    // }
-                // }
             }
             else if(isCommandSame(str, "UNDO")){
                 if(!move){
@@ -883,6 +877,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                 }
                 hasAtkOff(*P2, T);
                 AddPasukan(*P1, T);
+                Push(&undo, *T);
                 saveMap(&peta, *T);
                 DelAll(&undo);
             }

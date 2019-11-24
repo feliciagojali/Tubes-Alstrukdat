@@ -70,7 +70,7 @@ void Pop (Stack * S, infotypeS* X)
 
 void DelAll (Stack *S){
   infotypeS temp, tempPop;
-  temp = InfoTop(*S);
+  CopyTab(InfoTop(*S), &temp);
   while(!IsEmpty_Stackt(*S)){
     Pop(S, &tempPop);
   }
