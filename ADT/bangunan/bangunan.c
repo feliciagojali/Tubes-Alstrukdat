@@ -23,14 +23,14 @@ void MakeBangunan(Bangunan *B, POINT T, jns J, noMilik player){
 		MxTmPskn(*B)=20;
 		Defense(*B)=true;
 		AwalPskn(*B)=30;
-		NPskn(*B)=20;
+		NPskn(*B)=30;
 	}
 	else if(J=='F'){
 		NTbhPskn(*B)=10;
 		MxTmPskn(*B)=20;
 		Defense(*B)=false;
 		AwalPskn(*B)=80;
-		NPskn(*B)=20;
+		NPskn(*B)=80;
 	}
 	else if(J=='V'){
 		NTbhPskn(*B)=5;
