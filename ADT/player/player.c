@@ -204,7 +204,7 @@ void InputSkills(Player *P,int X)
         {
             printf("Failed to obtain the skill! You still have 10 skills!");
         }
-        else if (X >=2 && X <= 6)
+        else if (X >=2 && X <= 7)
         {
             Add(&skill(*P),X);
             printf("Congrats! Player %d, You got a skill! It is ", ID(*P));
