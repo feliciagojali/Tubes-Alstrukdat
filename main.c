@@ -72,7 +72,7 @@ printf("      _            Y    Y                Y                     \n\n");
 printf("                                                             Welcome my loyal netizens!\n\n");
 printf("                                       In this world, one person can win if the other have no more buildings. \n");
 printf("                     You can input various commands that are written after you start the game to make your kingdom greater and bigger.\n");
-printf("                                              It's all about strategy and perharps, a little dark magic.\n\n");
+printf("                                              It's all about strategy and perhaps, a little dark magic.\n\n");
 printf("                                                Good luck and may the Gods of Internet be with you!\n\n");
 printf("                                                           Press any key to start the game\n");
 _getch();
