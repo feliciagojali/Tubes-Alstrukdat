@@ -160,7 +160,6 @@ void UseSkills(Player *P1, Player *P2, boolean *extra, boolean *atkup, boolean *
         else 
         {
             Del(&skill(*P1), &X);
-            DelAll(S); // kosongin stack
             if (X == 1)
             {
                 InstantUpgrade(*P1,T);
