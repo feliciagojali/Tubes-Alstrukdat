@@ -508,11 +508,19 @@ void END_TURN(Player *P1, Player *P2, TabInt *T, boolean *extra, boolean *atkup)
         if(act(*P1) == 1 && act(*P2) == 0){
             act(*P1) = 0;
             act(*P2) = 1;
+            if (IsLevelFour(*P1, *T))
+            {
+                InputSkills(P1, 6);
+            }
             printf("Player 2's turn.\n");
         }
         else if(act(*P1) == 0 && act(*P2) == 1){
             act(*P1) = 1;
             act(*P2) = 0;
+            if (IsLevelFour(*P2, *T))
+            {
+                InputSkills(P2, 6);
+            }
             printf("Player 1's turn.\n");
         }
     } else {
@@ -520,10 +528,6 @@ void END_TURN(Player *P1, Player *P2, TabInt *T, boolean *extra, boolean *atkup)
         (*extra) = false;
     }
     (*atkup) = false;
-    if (IsLevelFour(*P1, T))
-    {
-        InputSkills(P1, 6);
-    }
     // printf("%d %d\n", act(*P1), act(*P2));
 }
 

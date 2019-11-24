@@ -338,22 +338,19 @@ int CountBangunan(Player P, TabInt T)
     return Count;
 }
 
-boolean IsLevelFour(Player P, TabInt *T)
+boolean IsLevelFour(Player P, TabInt T)
 //boolean cek apakah seluruh bangunan pemain levelnya 4
 {
-    int i = GetFirstIdx(*T);
-    int count;
-    count=0;
-    while((i <= GetLastIdx(*T)))
-    {
-        if(Pemilik(Elmt(*T,i)) == ID(P)){
-            if(Lvl(Elmt(*T,i)) == 4){
-                count =+ 1;
-            }
-        i++;
+    int jumlah = 0;
+    addressB X = First(listB(P));
+    while (X != NULL) {
+        if (Lvl(Elmt(T, Info(X))) == 4) {
+            jumlah +=1;
         }
+        X = Next(X);
     }
-    if (count == CountBangunan(P,*T))
+
+    if (jumlah == CountBangunan(P,T))
     {
         return true;
     }
