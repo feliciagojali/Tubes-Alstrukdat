@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "../graph/graph.h"
 
-/* ----- KONSTRUKTOR ----- */
+
 void CreateGraph(int X, Graph* G)
 {
     FirstG(*G) = NilGraph;
@@ -10,7 +10,7 @@ void CreateGraph(int X, Graph* G)
     InsertNode(G, X, &dummy);
 }
 
-/* ----- MANAJEMEN MEMORI ----- */
+
 adrNode AlokNodeGraph(int X)
 {
     adrNode P = (adrNode) malloc (sizeof(NodeGraph));
@@ -46,7 +46,6 @@ boolean isNodeEqual(adrNode P, int X){
 	return (Id(P)==X);
 }
 
-/* ----- OPERASI GRAF ----- */
 adrNode SearchNode(Graph G, int X)
 {
     adrNode P = FirstG(G);
