@@ -478,7 +478,7 @@ void UpdateList(Player *P1, Player *P2, TabInt T){
     splitToPlayerList(P1, P2, T);
 }
 
-void UNDO(Player *P1, Player *P2, Stack *undo, TabInt *T){
+void UNDO(Player *P1, Player *P2, Stack *undo, TabInt *T, Stack *undo2, TabInt *mov){
     if(IsEmpty_Stackt(*undo)){
         printf("Cannot do that! This is your earliest status. \n");
     }
@@ -486,6 +486,9 @@ void UNDO(Player *P1, Player *P2, Stack *undo, TabInt *T){
         infotypeS temp;
         Pop(undo, &temp); 
         CopyTab(InfoTop(*undo), T);
+        infotypeS temp2;
+        Pop(undo2, &temp2); 
+        CopyTab(InfoTop(*undo2), mov);
         UpdateList(P1, P2, *T);
         printf("Undo done. The buildings have been updated!\n");
         PrintBangunan(*P1, *T);
@@ -532,7 +535,7 @@ void END_TURN(Player *P1, Player *P2, TabInt *T, boolean *extra, boolean *atkup)
 //     //nama file
 // }
 
-void MOVE(Player P, TabInt *T, Graph G, Stack *undo, boolean *move){
+boolean MOVE(Player P, TabInt *T, Graph G, Stack *undo, boolean *move){
     TabInt terdekat;
     int num,numrcv,army;
     int numBuilding,arr2[50];
@@ -565,6 +568,7 @@ void MOVE(Player P, TabInt *T, Graph G, Stack *undo, boolean *move){
         }
         if (j==1){
             printf("No buildings are connected to yours! \n");
+            return false;
         } else {
             printf("Connected buildings : \n"); // print bangunan terdekat
             PrintBG(terdekat);
@@ -587,6 +591,7 @@ void MOVE(Player P, TabInt *T, Graph G, Stack *undo, boolean *move){
                 if(army + NPskn(Elmt(*T, idRcvDipilih)) > MxTmPskn(Elmt(*T, idRcvDipilih))){
                     printf("The building could only accomodate %d soldiers.\n", MxTmPskn(Elmt(*T, idRcvDipilih)));
                     printf("MOVE FAILED!\n");
+                    return false;
                 }
                 else{
                     if (army + NPskn(Elmt(*T, idRcvDipilih)) == MxTmPskn(Elmt(*T, idRcvDipilih))) {
@@ -604,6 +609,7 @@ void MOVE(Player P, TabInt *T, Graph G, Stack *undo, boolean *move){
                         printf("\n");
                         Push(undo, *T);
                         *move = false;
+                    return true;
                 }
             // }
         }
@@ -702,6 +708,16 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
     act(*P1) = 1;
     act(*P2) = 0;
     Stack undo;
+    Stack undo2;
+    CreateEmpty_Stackt(&undo2, MaxEl(*T));
+    /* buat move */
+    TabInt mov;
+    MakeEmpty(&mov, 50);
+    Bangunan mov1;
+    MakeBangunan(&mov1, MakePOINT(1, 1), 'T', 0);
+    AddAsLastEl(&mov, mov1);
+    Push(&undo2, mov);
+
     // TabInt T1;
     CreateEmpty_Stackt(&undo, MaxEl(*T));
     
@@ -758,10 +774,12 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
             if (isCommandSame(str, "ATTACK")) {
                 ATTACK(T, P1, P2, &atkup, &critical, G, &undo);
                 saveMap(&peta, *T);
+                Push(&undo2, mov);
             }
             else if(isCommandSame(str, "LEVEL_UP")){
                 LEVEL_UP(P1, T, &undo);
                 saveMap(&peta, *T);
+                Push(&undo2, mov);
             }
             else if(isCommandSame(str, "SKILL")){
                 if(IsEmpty_Queue(skill(*P1))){
@@ -784,21 +802,19 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                         Push(&undo, *T);
                         saveMap(&peta, *T);
                         DelAll(&undo);
+                        Push(&undo2, mov);
+                        DelAll(&undo2);
                     }
                     // else{
                     //     printf("You cancel the skill.\n");
                     // }
                 }
             else if(isCommandSame(str, "UNDO")){
-                if(!move){
-                    move = true;
-                }
-                UNDO(P1, P2, &undo, T);
+                UNDO(P1, P2, &undo, T, &undo2, &mov);
                 saveMap(&peta, *T);
             }
             else if(isCommandSame(str, "END_TURN")){
                 END_TURN(P1, P2, T, &extra, &atkup);
-                move = true;
                 if(isShieldP2 > 0){
                     isShieldP2 -= 1;
                     if(isShieldP2 == 0){
@@ -810,6 +826,8 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                 Push(&undo, *T);
                 saveMap(&peta, *T);
                 DelAll(&undo);
+                Push(&undo2, mov);
+                DelAll(&undo2);
             }
             // else if(isCommandSame(str, "SAVE")){
             //     SAVE();
@@ -818,9 +836,14 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                 EXIT();
             }
             else if(isCommandSame(str, "MOVE")){
-                if(move){
-                    MOVE(*P1, T, G, &undo,&move);
+                int t = Absis(Titik(Elmt(mov, 1)));
+                if(t == 1){
+                    boolean k = MOVE(*P1, T, G, &undo, &move);
                     saveMap(&peta, *T);
+                    if(k){
+                        Absis(Titik(Elmt(mov, 1))) = 0;
+                    }
+                    Push(&undo2, mov);
                 } else {
                     printf("You have used MOVE for this turn! \n");
                     printf("Wait for the next turn please!\n");
@@ -838,10 +861,12 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
             if (isCommandSame(str, "ATTACK")) {
                 ATTACK(T, P2, P1, &atkup, &critical, G, &undo);
                 saveMap(&peta, *T);
+                Push(&undo2, mov);
             }
             else if(isCommandSame(str, "LEVEL_UP")){
                 LEVEL_UP(P2, T, &undo);
                 saveMap(&peta, *T);
+                Push(&undo2, mov);
             }
             else if(isCommandSame(str, "SKILL")){
                 if(IsEmpty_Queue(skill(*P2))){
@@ -857,18 +882,16 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                         Push(&undo, *T);
                         saveMap(&peta, *T);
                         DelAll(&undo);
+                        Push(&undo2, mov);
+                        DelAll(&undo2);
                     }
             }
             else if(isCommandSame(str, "UNDO")){
-                if(!move){
-                    move = true;
-                }
-                UNDO(P2, P1, &undo, T);
+                UNDO(P2, P1, &undo, T, &undo2, &mov);
                 saveMap(&peta, *T);
             }
             else if(isCommandSame(str, "END_TURN")){
                 END_TURN(P1, P2, T, &extra, &atkup);
-                move = true;
                 if(isShieldP1 > 0){
                     isShieldP1 -= 1;
                     if(isShieldP1 == 0){
@@ -880,6 +903,8 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                 Push(&undo, *T);
                 saveMap(&peta, *T);
                 DelAll(&undo);
+                Push(&undo2, mov);
+                DelAll(&undo2);
             }
             // else if(isCommandSame(str, "SAVE")){
             //     SAVE();
@@ -888,8 +913,13 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
                 EXIT();
             }
             else if(isCommandSame(str, "MOVE")){
-                if(move){
-                    MOVE(*P2, T, G, &undo,&move);
+                int t = Ordinat(Titik(Elmt(mov, 1)));
+                if(t == 1){
+                    boolean k = MOVE(*P2, T, G, &undo,&move);
+                    if(k){
+                        Ordinat(Titik(Elmt(mov, 1))) = 0;
+                    }
+                    Push(&undo2, mov);
                     saveMap(&peta, *T);
                 } else {
                     printf("You have used MOVE for this turn! \n");
