@@ -100,7 +100,7 @@ void Barrage(Player P1, Player P2,TabInt *T);
 int CountBangunan(Player P, TabInt T);
 //fungsi hitung banyaknya bangunan yang dimiliki oleh suatu player
 
-boolean IsLevelFour(Player P, TabInt *T);
+boolean IsLevelFour(Player P, TabInt T);
 //boolean cek apakah seluruh bangunan pemain levelnya 4
 
 void LevelUpBangunan (TabInt *T, int idDipilih);
