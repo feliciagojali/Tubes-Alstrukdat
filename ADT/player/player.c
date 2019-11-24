@@ -5,7 +5,10 @@
 
 int Max_Queue = 10;
 
-Player initPlayer(int id){
+Player initPlayer(int id)
+//Prosedur menginisiasi type bentukan player
+//Masukan berupa ID
+{
     Player P;
     ID(P) = id;
     act(P) = 0;
@@ -15,7 +18,10 @@ Player initPlayer(int id){
     return P;  
 }
 
-void PrintJenisBangunan(Bangunan A) {
+void PrintJenisBangunan(Bangunan A) 
+//PRosedur untuk menampilkan jenis bangunan
+//dari bangunan A
+{
     if (Jenis(A) == 'C' ) {
         printf("Castle ");
     } else if (Jenis(A) == 'F') {
@@ -27,7 +33,11 @@ void PrintJenisBangunan(Bangunan A) {
     }
 }
 
-void PrintBangunan(Player P, TabInt T){
+void PrintBangunan(Player P, TabInt T)
+//Prosedur menampilkan bangunan yang ada
+//MEnampilkan jenis bangunan, koordinat bangunan
+//jumlah pasukan, serta level
+{
     addressB Y = First(listB(P));
     int j = 1;
     while(Y != Nil) {
@@ -44,6 +54,9 @@ void PrintBangunan(Player P, TabInt T){
 }
 
 boolean cariBangunan(Bangunan A,Player P,TabInt T)
+//Fungsi digunakan untuk mencari bangunan
+//Keluaran berupa boolean, ture jika bangunan A ditemukan
+//Dibangunan yang dimiliki oleh P
 {
     int numBuilding;
     TabInt myBangunan;
@@ -67,6 +80,8 @@ boolean cariBangunan(Bangunan A,Player P,TabInt T)
 
 
 void InsBangunan(Player P, Bangunan B, listIdxBangunan *L, TabInt *T)
+//Prosedur yang digunakan untuk menambahkan banguna
+//MEnambahkan bangunan menjadi kepemilikan salah satu player
 {
     if(ID(P) == 1){
         Pemilik(B) = 1;
@@ -78,8 +93,10 @@ void InsBangunan(Player P, Bangunan B, listIdxBangunan *L, TabInt *T)
     InsVLast(L, NbElmtTab(*T));
 }
 
-int countTower(Player P, TabInt T){
-
+int countTower(Player P, TabInt T)
+//Fungsi yang digunakan untuk menghitung jumlah tower
+//yang merupakan kepimilikan salah satu pemain
+{
     int jumlah = 0;
     addressB X = First(listB(P));
     while (X != NULL) {
@@ -92,7 +109,10 @@ int countTower(Player P, TabInt T){
 }
 /* ---- BAGIAN SKILL ---- */
 void printHeadSkills(Player P) 
-// prosedur mengeluarkan skill yang ada di Head dari queue
+//Prosedur yang digunakan untuk menampilkan infohead 
+//dari queue skill. Info head merepresentasikan 
+//fungsi yang dapat digunakan
+
 {
     printf("Skill Available : ");
     int x = InfoHead(skill(P));
@@ -334,7 +354,9 @@ boolean IsLevelFour(Player P, TabInt *T)
     return true;
 }
 
-void LevelUpBangunan (TabInt *T, int idDipilih){
+void LevelUpBangunan (TabInt *T, int idDipilih)
+//prosedur menaikan level bangunannya 
+{
     if(Lvl(Elmt(*T,idDipilih)) == 2){
 			if(Jenis(Elmt(*T,idDipilih))=='C'){
 				UbahBangunan(&Elmt(*T,idDipilih),15,60,false);

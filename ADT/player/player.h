@@ -22,18 +22,35 @@ typedef struct {
 #define skill(P) (P).skill // skill yang dimiliki oleh player
 
 Player initPlayer(int id);
+//Prosedur menginisiasi type bentukan player
+//Masukan berupa ID
 
 void PrintJenisBangunan(Bangunan A);
+//PRosedur untuk menampilkan jenis bangunan
+//dari bangunan A
 
 void PrintBangunan(Player P, TabInt T);
+//Prosedur menampilkan bangunan yang ada
+//MEnampilkan jenis bangunan, koordinat bangunan
+//jumlah pasukan, serta level
 
 void InsBangunan(Player P, Bangunan B, listIdxBangunan *L, TabInt *T);
+//Prosedur yang digunakan untuk menambahkan banguna
+//MEnambahkan bangunan menjadi kepemilikan salah satu player
 
 boolean cariBangunan(Bangunan A,Player P,TabInt T);
+//Fungsi digunakan untuk mencari bangunan
+//Keluaran berupa boolean, ture jika bangunan A ditemukan
+//Dibangunan yang dimiliki oleh P
 
 int countTower (Player P, TabInt T);
+//Fungsi yang digunakan untuk menghitung jumlah tower
+//yang merupakan kepimilikan salah satu pemain
 
 void printHeadSkills(Player P);
+//Prosedur yang digunakan untuk menampilkan infohead 
+//dari queue skill. Info head merepresentasikan 
+//fungsi yang dapat digunakan
 
 void StartSkills(Player *P);
 //Prosedur yang digunakan saat pertama kali game diaktifkan
@@ -87,5 +104,6 @@ boolean IsLevelFour(Player P, TabInt *T);
 //boolean cek apakah seluruh bangunan pemain levelnya 4
 
 void LevelUpBangunan (TabInt *T, int idDipilih);
+//prosedur menaikan level bangunannya 
 
 #endif
