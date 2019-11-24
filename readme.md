@@ -12,7 +12,7 @@ Kelompok 01 K-02
 
 
 ## Deskripsi Program
-Program ini dibuat sesuai dengan spesifikasi dari tugas besar Algoritma & Struktur Data dengan beberapa perubahan
+Program ini dibuat sesuai dengan spesifikasi dari tugas besar Algoritma & Struktur Data
 
 ## Menjalankan Program
 Untuk menjalankan program ini dapat menggunakan command prompt di windows, namun agar mudah kami menambahkan shell script (test.sh) untuk mengkompilasi
