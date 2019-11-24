@@ -156,21 +156,15 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                         COBA NGUBAH
                     */
                     if(*critical){
-                        int ans = -1;
-                        for(int i = 1; i <= army; i++){
-                            if(i * 2 > NPskn(Elmt(*TabBangunan, idDiserang))){
-                                ans = i - 1;
-                                break;
-                            }
-                        }
-                        if(ans == -1){
+                        int armyAtk = army*2;
+                         if(armyAtk < NPskn(Elmt(*TabBangunan,idDiserang))){
                             printf("Not enough amount of army! Failed to claim the building.\n");
-                            NPskn(Elmt(*TabBangunan, idDiserang)) -= army;
+                            NPskn(Elmt(*TabBangunan, idDiserang)) -= armyAtk;
                             NPskn(Elmt(*TabBangunan, idDipilih)) -= army;
                         } else {
                             int x = idDiserang;
                             printf("The building is claimed! It's yours now.\n");
-                            NPskn(Elmt(*TabBangunan, idDiserang)) = vmin(MxTmPskn(Elmt(*TabBangunan, idDiserang)), army - ans);
+                            NPskn(Elmt(*TabBangunan, idDiserang)) = vmin(MxTmPskn(Elmt(*TabBangunan, idDiserang)), armyAtk - NPskn(Elmt(*TabBangunan,idDiserang)));
                             NPskn(Elmt(*TabBangunan, idDipilih)) -= army;
                             int pemilikasli = Pemilik(Elmt(*TabBangunan, x));
                             Pemilik(Elmt(*TabBangunan, x)) = ID(*P1);
@@ -365,7 +359,7 @@ void ATTACK(TabInt *TabBangunan, Player *P1, Player *P2, boolean *atkup, boolean
                     // PrintBangunan(*P1,*TabBangunan);
                     // printf("Daftar P2: \n");
                     // PrintBangunan(*P2,*TabBangunan);
-                    //(*critical) = true;
+                    (*critical) = false;
                     hasAtk(Elmt(*TabBangunan,idDipilih)) = true;
                     Push(undo, *TabBangunan);
                 }
