@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <conio.h>
 #include "matriks/matriks.h"
 #include "mesinkata/mesinkata.h"
 #include "mesinkata/mesinkatak.h"
@@ -643,6 +642,49 @@ boolean GAME_OVER(TabInt T){
 void saveMap(MATRIKS *peta, TabInt TabBangunan){
     for(int i = 1; i <= GetLastIdxBrs(*peta); i++){
         for(int j = 1; j <= GetLastIdxKol(*peta); j++){
+            boolean ada = false;
+                for(int k = 1; k <= GetLastIdx(TabBangunan); k++){
+                    POINT t = Titik(Elmt(TabBangunan, k));
+                    if(EQ(t, MakePOINT(i, j))){
+                        ada = true;
+                        Cell(*peta, i, j) = Jenis(Elmt(TabBangunan, k));
+                        Owner(*peta, i, j) = Pemilik(Elmt(TabBangunan, k));
+                    }
+                }
+                if(!ada){
+                    Cell(*peta, i, j) = ' ';
+                    Owner(*peta, i, j) = 0;
+                }
+        }
+    }
+    /*for(int i = 1; i <= n + 2; i++){
+        for(int j = 1; j <= m + 2; j++){
+            if(i == 1 || j == 1 || i == n + 2 || j == m + 2){
+                Cell(peta, i, j) = '*';
+                Owner(peta, i, j) = 0;
+            } else {
+                int xpos = i - 1;
+                int ypos = j - 1;
+                boolean ada = false;
+                for(int k = 1; k <= b; k++){
+                    POINT t = Titik(Elmt(TabBangunan, k));
+                    if(EQ(t, MakePOINT(xpos, ypos))){
+                        ada = true;
+                        Cell(peta, i, j) = Jenis(Elmt(TabBangunan, k));
+                        Owner(peta, i, j) = Pemilik(Elmt(TabBangunan, k));
+                    }
+                }
+                if(!ada){
+                    Cell(peta, i, j) = ' ';
+                    Owner(peta, i, j) = 0;
+                }
+            }
+        }
+    }*/
+}
+/*void saveMap(MATRIKS *peta, TabInt TabBangunan){
+    for(int i = 1; i <= GetLastIdxBrs(*peta); i++){
+        for(int j = 1; j <= GetLastIdxKol(*peta); j++){
             if(i == 1 || j == 1 || i == GetLastIdxBrs(*peta) || j == GetLastIdxKol(*peta)){
                 Cell(*peta, i, j) = '*';
                 Owner(*peta, i, j) = 0;
@@ -665,11 +707,85 @@ void saveMap(MATRIKS *peta, TabInt TabBangunan){
             }
         }
     }
-}
+}*/
 
 void viewMap(MATRIKS peta){
-    TulisMATRIKS(peta);
+    int bawah = 2 * GetLastIdxBrs(peta) + 1;
+    int samping = 4 * GetLastIdxKol(peta) + 1;
+
+    int ge = (samping - 15) / 2;
+    printf("\n");
+    print_cyan('+');
+    for(int i = 2; i <= ge; i++){
+        print_cyan('-');
+    }
+    print_cyan('/');
+    print_cyan('`');
+    print_cyan('`');
+    print_red('W');
+    print_red('O');
+    print_red('R');
+    print_red('L');
+    print_red('D');
+    printf(" ");
+    print_yellow('M');
+    print_yellow('A');
+    print_yellow('P');
+    print_cyan('`');
+    print_cyan('`');
+    print_cyan('\\');
+    for(int i = 2; i <= ge; i++){
+        print_cyan('-');
+    }
+    print_cyan('+');
+    printf("\n");
+    
+    for(int i = 1; i <= bawah; i++){
+        for(int j = 1; j <= samping; j++){
+            if(i % 2 == 1){
+                if(j % 4 == 1){
+                    if(i == 1 || j == 1 || i == bawah || j == samping){
+                        print_cyan('+');
+                    } else {
+                        print_green('+');
+                    }
+                } else {
+                    if(i == 1 || j == 1 || i == bawah || j == samping){
+                        print_cyan('-');
+                    } else {
+                        print_green('-');
+                    }
+                }
+            } else {
+                if(j % 4 == 1){
+                    if(i == 1 || j == 1 || i == bawah || j == samping){
+                        print_cyan('|');
+                    } else {
+                        print_green('|');
+                    }
+                } else if(j % 4 == 3){
+                    int r = i / 2;
+                    int c = (j + 1) / 4;
+                    //printf("%d %d", r, c);
+                    if(Owner(peta, r, c) == 0){
+                        printf("%c", Cell(peta, r, c));
+                    } else if(Owner(peta, r, c) == 1){
+                        print_magenta(Cell(peta, r, c));
+                    } else {
+                        print_red(Cell(peta, r, c));
+                    }
+                } else {
+                    printf(" ");
+                }
+            }
+        }
+        printf("\n");
+    }
 }
+
+/*void viewMap(MATRIKS peta){
+    TulisMATRIKS(peta);
+}*/
 
 void AddPasukan(Player P, TabInt *T){
     addressB B;
@@ -734,7 +850,7 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
     // printf("DAFTAR BANGUNAN PLAYER 2 : \n");
     // PrintBangunan(*P2,*T);
     while(!GAME_OVER(*T)){
-        system("cls");
+        system("clear");
         viewMap(peta);
         printf("\n");
         printf("Details:\n");
@@ -936,6 +1052,5 @@ void INPUT_COMMAND(Player *P1, Player *P2, TabInt *T, Graph G, MATRIKS peta){
             }
         }
         printf("Press any key to continue...\n\n");
-        _getch();
     }
 }

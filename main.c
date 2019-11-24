@@ -19,7 +19,24 @@ Graph G;
 MATRIKS peta;
 
 void saveMapS(){
-    for(int i = 1; i <= n + 2; i++){
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= m; j++){
+            boolean ada = false;
+                for(int k = 1; k <= b; k++){
+                    POINT t = Titik(Elmt(TabBangunan, k));
+                    if(EQ(t, MakePOINT(i, j))){
+                        ada = true;
+                        Cell(peta, i, j) = Jenis(Elmt(TabBangunan, k));
+                        Owner(peta, i, j) = Pemilik(Elmt(TabBangunan, k));
+                    }
+                }
+                if(!ada){
+                    Cell(peta, i, j) = ' ';
+                    Owner(peta, i, j) = 0;
+                }
+        }
+    }
+    /*for(int i = 1; i <= n + 2; i++){
         for(int j = 1; j <= m + 2; j++){
             if(i == 1 || j == 1 || i == n + 2 || j == m + 2){
                 Cell(peta, i, j) = '*';
@@ -42,11 +59,7 @@ void saveMapS(){
                 }
             }
         }
-    }
-}
-
-void viewMapS(){
-    TulisMATRIKS(peta);
+    }*/
 }
 int main(){
     MakeEmpty(&TabBangunan, 50);
@@ -83,7 +96,7 @@ int main(){
             ADVKATA('#');
         }
     }
-    MakeMATRIKS(n + 2, m + 2, &peta);
+    MakeMATRIKS(n, m, &peta);
     saveMapS();
     Player P1 = initPlayer(1);
     Player P2 = initPlayer(2);

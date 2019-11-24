@@ -73,11 +73,17 @@ void InputInteger(int *outp)
 }
 
 int conv(Kata x){
+    int m[100];
+    int ptr = 1;
+    for(int i = 1; i <= x.Length; i++){
+        if(x.TabKata[i] >= '0' && x.TabKata[i] <= '9'){
+            m[ptr] = x.TabKata[i] - '0';
+            ptr++;
+        }
+    }
     int res = 0;
-    int ten = 1;
-    for(int i = x.Length; i >= 1; i--){
-        res += ten * (x.TabKata[i] - '0');
-        ten *= 10;
+    for(int i = 1; i < ptr; i++){
+        res = 10 * res + m[i];
     }
     return res;
 }
