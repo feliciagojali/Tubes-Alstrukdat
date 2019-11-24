@@ -15,11 +15,11 @@ Kelompok 01 K-02
 Program ini dibuat sesuai dengan spesifikasi dari tugas besar Algoritma & Struktur Data
 
 ## Menjalankan Program
-Untuk menjalankan program ini dapat menggunakan command prompt di windows, namun agar mudah kami menambahkan shell script (test.sh) untuk mengkompilasi
+Untuk menjalankan program ini dapat menggunakan command prompt di windows, namun agar mudah kami menambahkan shell script (compile.sh) untuk mengkompilasi
 program menjadi sebuah file .exe, lalu file .exe tersebut dapat dijalankan untuk memulai game.
 
 ```
-D:\Tempat menaruh Tubes > test.sh
+D:\Tempat menaruh Tubes > compile.sh
 \\ ini akan menjalankan shell script, perlu perhatian bahwa diperlukan bash untuk menjalankan shell script ini (gitbash misalnya)
 \\ setelah dijalankan akan membuat file main.exe, untuk menjalankan tinggal di buka seperti biasa saja
 ```
